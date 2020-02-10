@@ -13,7 +13,7 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public void main(String[] args) {
+    public static void main(String[] args) {
         // TODO code application logic here
 //        Vector<Alumno> vecAlumnos=new Vector<Alumno>();
         String cadena=new String ("datos.txt");
@@ -30,7 +30,7 @@ public class Main {
        } 
     
     
-    Vector<Alumno> leerArchivos(String nombreArchivo){
+    static Vector<Alumno> leerArchivos(String nombreArchivo){
         Vector<Alumno> vecAl=null;
         int contVec=0;
         
@@ -39,15 +39,17 @@ public class Main {
             
             String linea=br.readLine();
             while(linea!=null){
-                System.out.println("linea");
+                System.out.println(linea);
                 
                 //vecAl.set(contVec,);
                 linea=br.readLine();                
             }
         
+            br.close();
         }catch(IOException e){
             System.out.println("Error leerArchivos: "+e);
         }
+        
         return vecAl;
     }
 
