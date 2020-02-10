@@ -1,6 +1,7 @@
-
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Vector;
 
@@ -16,7 +17,7 @@ public class Main {
         // TODO code application logic here
 //        Vector<Alumno> vecAlumnos=new Vector<Alumno>();
         String cadena=new String ("datos.txt");
-//        Alumno [] vectoAlum=null;
+        Alumno [] vectoAlum=null;
         
 //        Alumno ana("Ana","50617459W","correo@gmai.com");
 //        Alumno alemol=new Alumno();
@@ -26,7 +27,12 @@ public class Main {
 //        felipe.calcularNotaMedia();
         
 //        Vector<Alumno> vecAlumnos=leerArchivos(cadena);
-        Alumno [] vectoAlum=leerArchivos(cadena);
+//        Alumno [] vectoAlum=leerArchivos(cadena);
+        
+        vectoAlum[0]=new Alumno("Felipe", "2250", "felipe@gmail.com");
+        vectoAlum[1]=new Alumno_IA(6,1,"Alemol", "2665", "Alemol@gomez.com");
+        vectoAlum[2]=new Alumno();
+        boolean wanda=guardarArchivos(cadena,vectoAlum);
         
        } 
     
@@ -62,6 +68,22 @@ public class Main {
         return vecAl;
     }
 
-
     
+    static boolean guardarArchivos(String nombreArchivo,Alumno [] vecAl){
+        
+        try {
+            BufferedWriter bw= new BufferedWriter(new FileWriter(nombreArchivo));
+            for(int cont=0;cont<vecAl.length;cont++){
+                String textAlumno=vecAl[cont].nombre+", "+vecAl[cont].dni+", "+
+                        vecAl[cont].correoE;
+                bw.write(textAlumno);
+                bw.newLine();
+            }
+            bw.flush();
+               
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }  
 }
