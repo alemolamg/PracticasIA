@@ -44,8 +44,8 @@ public class Alumno {
         
    }
 
-    void calcularNotaMedia()  {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    void calcularNotaMedia() {
+        throw new UnsupportedOperationException("calcularNotaMedia::Alumno no implementada"); //To change body of generated methods, choose Tools | Templates.
     }
         
 }
