@@ -8,7 +8,6 @@ import java.util.Vector;
  * @author alemolamg
  */
 public class Main {
-//     Vector<Alumno> leerArchivos(String nombreArchivo);
 
     /**
      * @param args the command line arguments
@@ -17,6 +16,7 @@ public class Main {
         // TODO code application logic here
 //        Vector<Alumno> vecAlumnos=new Vector<Alumno>();
         String cadena=new String ("datos.txt");
+//        Alumno [] vectoAlum=null;
         
 //        Alumno ana("Ana","50617459W","correo@gmai.com");
 //        Alumno alemol=new Alumno();
@@ -25,13 +25,15 @@ public class Main {
 //        alemol.muestraAlumno();
 //        felipe.calcularNotaMedia();
         
-        Vector<Alumno> vecAlumnos=leerArchivos(cadena);
+//        Vector<Alumno> vecAlumnos=leerArchivos(cadena);
+        Alumno [] vectoAlum=leerArchivos(cadena);
         
        } 
     
     
-    static Vector<Alumno> leerArchivos(String nombreArchivo){
-        Vector<Alumno> vecAl=null;
+    static Alumno [] leerArchivos(String nombreArchivo){
+//        Vector<Alumno> vecAl=null;
+        Alumno [] vecAl=null;
         int contVec=0;
         
         try{
@@ -39,10 +41,17 @@ public class Main {
             
             String linea=br.readLine();
             while(linea!=null){
-                System.out.println(linea);
+//                System.out.println(linea);
+                String [] lecturas= linea.split(", ");
+                for (int i=0;i<lecturas.length;i++){
+                    System.out.println(lecturas[i]);
+                }
                 
-                //vecAl.set(contVec,);
-                linea=br.readLine();                
+                Alumno alTemp=new Alumno(lecturas[0],lecturas[1],lecturas[2]);
+                
+               vecAl[contVec]=alTemp;
+               ++contVec;
+               linea=br.readLine();                
             }
         
             br.close();
@@ -52,6 +61,7 @@ public class Main {
         
         return vecAl;
     }
+
 
     
 }
