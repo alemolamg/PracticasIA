@@ -11,8 +11,10 @@ public class Main {
         
 //        Alumno ana("Ana","50617459W","correo@gmai.com");
         Alumno alemol=new Alumno();
-        alemol.ActualizarDatosTeclado();
+        Alumno felipe=new Alumno_IA();
+//        alemol.ActualizarDatosTeclado();
         alemol.muestraAlumno();
+        felipe.calcularNotaMedia();
         
     }
     

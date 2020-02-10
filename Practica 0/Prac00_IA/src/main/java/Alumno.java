@@ -43,5 +43,9 @@ public class Alumno {
         this.correoE = teclado.nextLine();
         
    }
-    
+
+    void calcularNotaMedia()  {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+        
 }
