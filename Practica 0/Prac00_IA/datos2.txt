@@ -1,0 +1,3 @@
+Felipe, 2250, felipe@gmail.com
+Alemol, 2665, Alemol@gomez.com
+Alumno, 123456789X, correoE@email.com
