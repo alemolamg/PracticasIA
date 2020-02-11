@@ -7,6 +7,12 @@ import java.util.Vector;
  */
 public class Alumno_IA extends Alumno{
 
+    public Alumno_IA(float notaPracticas, int grupoPracticas, String nombre, String dni, String correoE) {
+        super(nombre, dni, correoE);
+        this.notaPracticas = notaPracticas;
+        this.grupoPracticas = grupoPracticas;
+    }
+
     
     
     public Alumno_IA() {
@@ -17,6 +23,7 @@ public class Alumno_IA extends Alumno{
     
     float notaPracticas;
     int grupoPracticas;
+    
     
     public void calcularNotaMedia(){
         float [] vecNotas= new float [4];
