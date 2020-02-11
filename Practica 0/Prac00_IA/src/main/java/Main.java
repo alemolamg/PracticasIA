@@ -17,6 +17,7 @@ public class Main {
         // TODO code application logic here
 //        Vector<Alumno> vecAlumnos=new Vector<Alumno>();
         String cadena=new String ("datos.txt");
+        String cadena2=new String ("datos2.txt");
         Alumno [] vectoAlum=new Alumno[3];
         
 //        Alumno ana("Ana","50617459W","correo@gmai.com");
@@ -32,7 +33,7 @@ public class Main {
         vectoAlum[0]=new Alumno("Felipe", "2250", "felipe@gmail.com");
         vectoAlum[1]=new Alumno_IA(6,1,"Alemol", "2665", "Alemol@gomez.com");
         vectoAlum[2]=new Alumno();
-        boolean wanda=guardarArchivos(cadena,vectoAlum);
+        boolean wanda=guardarArchivos(cadena2,vectoAlum);
         
        } 
     
