@@ -33,14 +33,17 @@ public class Main {
         vectoAlum[0]=new Alumno("Felipe", "2250", "felipe@gmail.com");
         vectoAlum[1]=new Alumno_IA(6,1,"Alemol", "2665", "Alemol@gomez.com");
         vectoAlum[2]=new Alumno();
-        boolean wanda=guardarArchivos(cadena2,vectoAlum);
         
+        Alumno [] vecExtra= leerArchivos(cadena);
+        vecExtra=guardarPares(vecExtra);
+        boolean wanda=guardarArchivos(cadena2,vecExtra);
+        System.out.println("\n"+wanda);
        } 
     
-    
+    /***/
     static Alumno [] leerArchivos(String nombreArchivo){
 //        Vector<Alumno> vecAl=null;
-        Alumno [] vecAl=null;
+        Alumno [] vecAl=new Alumno[4]; //TODO: ajustar de otra manera para que funcione
         int contVec=0;
         
         try{
@@ -68,14 +71,13 @@ public class Main {
         
         return vecAl;
     }
-
     
     static boolean guardarArchivos(String nombreArchivo,Alumno [] vecAl){
         
         try {
             BufferedWriter bw= new BufferedWriter(new FileWriter(nombreArchivo));
             for(int cont=0;cont<vecAl.length;cont++){
-                String textAlumno=vecAl[cont].nombre+", "+vecAl[cont].dni+", "+
+                String textAlumno=vecAl[cont].getNombre()+", "+vecAl[cont].getDni()+", "+
                         vecAl[cont].correoE;
                 bw.write(textAlumno);
                 bw.newLine();
@@ -87,4 +89,24 @@ public class Main {
         }
         return true;
     }  
+
+    static Alumno [] guardarPares(Alumno[] vecAlum){
+        int numVecPares=0;
+        Alumno [] aux1 = new Alumno[vecAlum.length];
+    
+        for(int i=0;i<vecAlum.length;i++){
+            if((Integer.parseInt(vecAlum[i].getDni())%2==0) && (vecAlum[i]!=null)){
+                aux1[numVecPares]=vecAlum[i];
+                numVecPares++;
+            }     
+        }
+    
+        Alumno [] vecReturn = new Alumno[numVecPares];
+        for (int i=0;i<vecReturn.length;i++){
+            vecReturn[i]=aux1[i];
+        }
+    
+        return vecReturn;
+    } 
+
 }
