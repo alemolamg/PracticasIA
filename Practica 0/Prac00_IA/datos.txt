@@ -1,4 +1,3 @@
-Andres Garcia, 1111, andres@garcia.es
-Maria Jimenez, 2222, maria@jimenez.es
-Pedro Soler, 3333, pedro@soler.es
-Lola Estepona, 4444, lola@estepona.es
+Felipe, 2250, felipe@gmail.com
+Alemol, 2665, Alemol@gomez.com
+Alumno, 123456789X, correoE@email.com
