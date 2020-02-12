@@ -17,7 +17,7 @@ public class Main {
         // TODO code application logic here
 //        Vector<Alumno> vecAlumnos=new Vector<Alumno>();
         String cadena=new String ("datos.txt");
-        String cadena2=new String ("datos2.txt");
+        String cadena2=new String ("pares.txt");
         Alumno [] vectoAlum=new Alumno[3];
         
 //        Alumno ana("Ana","50617459W","correo@gmai.com");
