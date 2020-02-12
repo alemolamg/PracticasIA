@@ -40,7 +40,9 @@ public class Main {
         System.out.println("\n"+wanda);
        } 
     
-    /***/
+    /**
+     *
+     **/
     static Alumno [] leerArchivos(String nombreArchivo){
 //        Vector<Alumno> vecAl=null;
         Alumno [] vecAl=new Alumno[4]; //TODO: ajustar de otra manera para que funcione

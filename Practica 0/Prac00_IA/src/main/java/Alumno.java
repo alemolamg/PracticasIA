@@ -2,7 +2,7 @@
 import java.util.Scanner;
 
 /**
- * @author molej
+ * @author Alemol
  */
 
 public class Alumno {

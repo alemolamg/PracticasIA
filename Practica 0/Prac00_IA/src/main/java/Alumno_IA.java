@@ -3,7 +3,7 @@ import java.util.Scanner;
 import java.util.Vector;
 
 /**
- * @author molej
+ * @author Alemol
  */
 public class Alumno_IA extends Alumno{
 
