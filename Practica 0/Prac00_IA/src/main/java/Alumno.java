@@ -2,7 +2,7 @@
 import java.util.Scanner;
 
 /**
- * @author Alemol
+ * @author AlemolAMG
  */
 
 public class Alumno {
@@ -46,6 +46,9 @@ public class Alumno {
        System.out.println(st1+st2+st3);
    } 
    
+   /**
+    * Actualiza los datos de un alumno escribiendolos
+    */
     void ActualizarDatosTeclado(){
        
         Scanner teclado = new Scanner(System.in);
@@ -58,18 +61,23 @@ public class Alumno {
         
    }
 
+    /**
+     * función abstracta no contemplada para un alumno normal
+     */
     void calcularNotaMedia() {
         throw new UnsupportedOperationException("calcularNotaMedia::Alumno no implementada"); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
-     * @return the nombre
+     * Devuelve el nombre del alumno
+     * @return nombre
      */
     public String getNombre() {
         return nombre;
     }
 
     /**
+     * Devuelve el dni del Alumno
      * @return the dni
      */
     public String getDni() {
