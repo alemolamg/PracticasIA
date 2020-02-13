@@ -3,10 +3,26 @@ import java.util.Scanner;
 import java.util.Vector;
 
 /**
+ * Clase Alumno_IA hereda de Alumno. 
+ * Es un alumno matriculado de la asignatura de Inteligencia Artificial
  * @author Alemol
  */
 public class Alumno_IA extends Alumno{
-
+    //  Atributos //
+    float notaPracticas;
+    int grupoPracticas;
+    
+    
+    //  metodos  //
+    
+/**
+ *  Constructor parametrizado de la clase Alumno_IA 
+ * @param notaPracticas     (float)     nota del alumno en las practicas
+ * @param grupoPracticas    (int)       numero del grupo de practicas
+ * @param nombre            (string)    nombre del alumno
+ * @param dni               (string)    dni del alumno
+ * @param correoE            (string)   correo del alumno
+ */
     public Alumno_IA(float notaPracticas, int grupoPracticas, String nombre, String dni, String correoE) {
         super(nombre, dni, correoE);
         this.notaPracticas = notaPracticas;
@@ -14,17 +30,19 @@ public class Alumno_IA extends Alumno{
     }
 
     
-    
+    /**
+     *  Constructor por defecto de la clase Alumno_IA
+     */
     public Alumno_IA() {
         super();
         this.notaPracticas = 0;
         this.grupoPracticas = 1;
     }
     
-    float notaPracticas;
-    int grupoPracticas;
     
-    
+    /**
+     *  Calcula la nota media de 4 notas que se le pasan por teclado
+     */
     public void calcularNotaMedia(){
         float [] vecNotas= new float [4];
 //        Vector<Float> vecNotas=new float [4]
