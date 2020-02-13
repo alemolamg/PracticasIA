@@ -3,49 +3,33 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Vector;
 
 /**
- * @author alemolamg
+ * @author Ana
  */
 public class Main {
 
     /**
+     * Main donde está el código de ejecución principal
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-//        Vector<Alumno> vecAlumnos=new Vector<Alumno>();
-        String cadena=new String ("datos.txt");
+        
         String cadena2=new String ("pares.txt");
-        Alumno [] vectoAlum=new Alumno[3];
         
-//        Alumno ana("Ana","50617459W","correo@gmai.com");
-//        Alumno alemol=new Alumno();
-        Alumno felipe=new Alumno_IA();
-//        alemol.ActualizarDatosTeclado();
-//        alemol.muestraAlumno();
-//        felipe.calcularNotaMedia();
-        
-//        Vector<Alumno> vecAlumnos=leerArchivos(cadena);
-//        Alumno [] vectoAlum=leerArchivos(cadena);
-        
-        vectoAlum[0]=new Alumno("Felipe", "2250", "felipe@gmail.com");
-        vectoAlum[1]=new Alumno_IA(6,1,"Alemol", "2665", "Alemol@gomez.com");
-        vectoAlum[2]=new Alumno();
-        
-        Alumno [] vecExtra= leerArchivos(cadena);
+        Alumno [] vecExtra= leerArchivos("datos.txt");
         vecExtra=guardarPares(vecExtra);
         boolean wanda=guardarArchivos(cadena2,vecExtra);
         System.out.println("\n"+wanda);
        } 
     
     /**
-     *
-     **/
+     * Lee alumnos desde un archivo externo
+     * @param nombreArchivo (String)    Nombre del archivo desde donde se leen los alumnos
+     * @return vecAl        (Alumno []) Vector con los alumnos leidos
+     */
     static Alumno [] leerArchivos(String nombreArchivo){
-//        Vector<Alumno> vecAl=null;
-        Alumno [] vecAl=new Alumno[4]; //TODO: ajustar de otra manera para que funcione
+        Alumno [] vecAl=new Alumno[4]; 
         int contVec=0;
         
         try{
@@ -53,7 +37,6 @@ public class Main {
             
             String linea=br.readLine();
             while(linea!=null){
-//                System.out.println(linea);
                 String [] lecturas= linea.split(", ");
                 for (int i=0;i<lecturas.length;i++){
                     System.out.println(lecturas[i]);
@@ -74,13 +57,20 @@ public class Main {
         return vecAl;
     }
     
-    static boolean guardarArchivos(String nombreArchivo,Alumno [] vecAl){
+    
+    /**
+     * @param nombreArchivo (String)    Nombre del archivo donde guardar los Alumnos
+     * @param vecAlum       (Alumno []) vector con los alumnos
+     * @return True     Alunmos guardados correctamente
+     * @return False    alumnos no guardados correctamente
+     */
+    static boolean guardarArchivos(String nombreArchivo,Alumno [] vecAlum){
         
         try {
             BufferedWriter bw= new BufferedWriter(new FileWriter(nombreArchivo));
-            for(int cont=0;cont<vecAl.length;cont++){
-                String textAlumno=vecAl[cont].getNombre()+", "+vecAl[cont].getDni()+", "+
-                        vecAl[cont].correoE;
+            for(int cont=0;cont<vecAlum.length;cont++){
+                String textAlumno=vecAlum[cont].getNombre()+", "+vecAlum[cont].getDni()+", "+
+                        vecAlum[cont].correoE;
                 bw.write(textAlumno);
                 bw.newLine();
             }
@@ -91,7 +81,12 @@ public class Main {
         }
         return true;
     }  
-
+    
+    /**
+     * Guarda en un nuevo vector los alumnos cuyos dni son par
+     * @param vecAlum    (Alumno[]) Vector con todos los alumnos
+     * @return vecReturn (Alumno[]) Vector con los alumnos con dni par
+     */
     static Alumno [] guardarPares(Alumno[] vecAlum){
         int numVecPares=0;
         Alumno [] aux1 = new Alumno[vecAlum.length];

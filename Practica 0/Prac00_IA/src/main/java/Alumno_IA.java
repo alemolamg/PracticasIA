@@ -5,7 +5,7 @@ import java.util.Vector;
 /**
  * Clase Alumno_IA hereda de Alumno. 
  * Es un alumno matriculado de la asignatura de Inteligencia Artificial
- * @author Alemol
+ * @author AlemolAMG
  */
 public class Alumno_IA extends Alumno{
     //  Atributos //
