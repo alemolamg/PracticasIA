@@ -6,24 +6,38 @@ import java.util.Scanner;
  */
 
 public class Alumno {
-    
+    //  Atributos   //
     private String nombre;
     private String dni;
     String correoE;
-
+    
+    
+    //  funciones   //
+    
+    /**
+     * Constructor parametrizado clase Alumno
+     * 
+     * @param nombre    (String) nombre alumno
+     * @param dni       (string) documento dni alumno
+     * @param correoE   (string) correo electronico
+     */
     public Alumno(String nombre, String dni, String correoE) {
         this.nombre = nombre;
         this.dni = dni;
         this.correoE = correoE;
     }
-
+/**
+ * Constructor por defecto de la clase alumno
+ */
     public Alumno() {
         this.nombre =   "Alumno";
         this.dni =      "1234567895";
         this.correoE=   "correoE@email.com";
     }
     
-     
+   /**
+    * Muestra los datos por pantalla de un Alumno
+    */  
    void muestraAlumno(){
        String st1="\nNombre Alumno: " + this.getNombre();
        String st2="\ndni: "+ getDni();
