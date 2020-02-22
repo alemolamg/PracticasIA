@@ -4,6 +4,12 @@ import mouserun.game.Mouse;
 import mouserun.game.Grid;
 import mouserun.game.Cheese;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.Stack;
+import javafx.util.Pair;
+
 //import org.apache.commons.larg3.tuple.Pair;
 //import org.javatuples.Pair;
 
@@ -12,6 +18,11 @@ import mouserun.game.Cheese;
  * @author Alemol
  */
 public class AAMouse extends Mouse{
+     
+    private HashMap<Pair<Integer, Integer>, Grid> mapa;
+    private Stack<Grid> movPila;
+    
+    //  Funciones   //
     
     public AAMouse(){
         super("AAMouse");
@@ -27,10 +38,48 @@ public class AAMouse extends Mouse{
     
     }
     
-    public int move (Grid gridActual,Cheese cheese){
+    /**
+     * @brief Función que procede a mover el objeto
+     * @param currentGrid   casilla actual donde está el ratón
+     * @param cheese        queso que tiene que buscar
+     * @return 
+     */
+    public int move (Grid currentGrid,Cheese cheese){
         
+        int x=currentGrid.getX();
+        int y=currentGrid.getY();
+        
+        int solSimple=moveSimple(currentGrid, cheese);
+        
+        return solSimple;
+    }
+    
+    
+    public int moveSimple(Grid currentGrid, Cheese cheese){
+        
+        int x=currentGrid.getX();
+        int y=currentGrid.getY();
+
+        if(cheese.getY()>y){        
+            if(currentGrid.canGoUp())   //verificar que podemos subir
+                return Mouse.UP;
+        }
+
+        if(cheese.getY()<y){        
+            if(currentGrid.canGoDown())   //verificar que podemos subir
+                return Mouse.DOWN;
+        }
+        
+        if(cheese.getX()>x){        
+            if(currentGrid.canGoRight())   //verificar que podemos subir
+                return Mouse.RIGHT;
+        }
+        
+        if(cheese.getX()>x){        
+            if(currentGrid.canGoLeft())   //verificar que podemos subir
+                return Mouse.LEFT;
+        }
         
         return 0;
     }
-    
 }
