@@ -20,19 +20,19 @@ import javafx.util.Pair;
 public class AAMouse extends Mouse{
      
     private HashMap<Pair<Integer, Integer>, Grid> mapa;
-    private Stack<Grid> movPila;
+    private Stack<Grid> pilaMov;
+    private long numCasillasVisitadas;
     
     //  Funciones   //
     
     public AAMouse(){
         super("AAMouse");
+        numCasillasVisitadas=0;
     }
-    
     
     public void newCheese(){
         
     }
-
     
     public void respawned() {
     
@@ -59,9 +59,13 @@ public class AAMouse extends Mouse{
         
         int x=currentGrid.getX();
         int y=currentGrid.getY();
+        
+        Pair <Integer,Integer> pair =new Pair (x,y);
+        
 
         if(cheese.getY()>y){        
             if(currentGrid.canGoUp())   //verificar que podemos subir
+                pilaMov.add(pair);      //implementar bien
                 return Mouse.UP;
         }
 
@@ -81,6 +85,7 @@ public class AAMouse extends Mouse{
         }
         
         return 0;
+        
     }
     
     public void comprobarCasillas(Grid casillaActual){
