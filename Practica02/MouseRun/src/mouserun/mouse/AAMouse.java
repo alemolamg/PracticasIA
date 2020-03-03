@@ -82,4 +82,13 @@ public class AAMouse extends Mouse{
         
         return 0;
     }
+    
+    public void comprobarCasillas(Grid casillaActual){
+        
+        int x=casillaActual.getX();
+        int y=casillaActual.getY();
+        
+         
+    }
+    
 }
