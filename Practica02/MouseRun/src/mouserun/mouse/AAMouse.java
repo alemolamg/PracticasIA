@@ -88,12 +88,7 @@ public class AAMouse extends Mouse{
         int x=casillaActual.getX();
         int y=casillaActual.getY();
         
-        for (int i= -1;i<=1;i++){
-            Pair parNuevo= new Pair<x+i,y>;
-            
-        }
-        
-        
+         
     }
     
 }
