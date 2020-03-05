@@ -67,6 +67,7 @@ public class MXXA04 extends Mouse {
            
         
         if(!celdasVisitadas.containsKey(new Pair(x, y))){      //Vemos si la casilla actual esta en el mapa
+            this.incExploredGrids();
             numCasillasVisitadas++;                 //aumentamos las casillas visitadas
             celdasVisitadas.put(new Pair(x, y), currentGrid);  //y guardamos la casilla en el mapa
         }   
@@ -122,7 +123,7 @@ public class MXXA04 extends Mouse {
      */
     @Override
     public void respawned() {
-
+        this.pilaMovimientos=new Stack<>();
     }
 
     /**
@@ -131,7 +132,7 @@ public class MXXA04 extends Mouse {
      * @param currentGrid Celda actual
      * @return True Si las casillas X e Y anterior son distintas a las actuales
      */
-   /* public boolean testGrid(int direction, Grid currentGrid) {
+   /*public boolean testGrid(int direction, Grid currentGrid) {
         if (lastGrid == null) {
             return true;
         }
@@ -159,8 +160,8 @@ public class MXXA04 extends Mouse {
 
         return !(lastGrid.getX() == x && lastGrid.getY() == y);
 
-    }
-
+    }*/
+    
     /**
      * @brief Método que devuelve si de una casilla dada, está contenida en el mapa de celdasVisitadas
      * @param casilla Casilla que se pasa para saber si ha sido visitada
