@@ -27,6 +27,11 @@ public class MXXA04 extends Mouse {
     private Grid lastGrid;
     
     /**
+     * Variable con el número de casillas recorridaas
+     */
+    private long numCasillasVisitadas;
+    
+    /**
      * Tabla hash para almacenar las celdas visitadas por el raton:
      * Clave: Coordenadas
      * Valor: La celda
@@ -36,7 +41,7 @@ public class MXXA04 extends Mouse {
     /**
      * Pila para almacenar el camino recorrido.
      */
-    private Stack<Grid> pilaMovimientos;
+    private Stack<Integer> pilaMovimientos;
     
     
     /**
@@ -56,7 +61,51 @@ public class MXXA04 extends Mouse {
     @Override
     public int move(Grid currentGrid, Cheese cheese) {  
 
-        return 0; // DEBES BORRAR ESTO CUANDO EMPIECES A PROGRAMAR TU METODO.
+        
+        int x=currentGrid.getX();
+        int y=currentGrid.getY();
+           
+        
+        if(!celdasVisitadas.containsKey(new Pair(x, y))){      //Vemos si la casilla actual esta en el mapa
+            numCasillasVisitadas++;                 //aumentamos las casillas visitadas
+            celdasVisitadas.put(new Pair(x, y), currentGrid);  //y guardamos la casilla en el mapa
+        }   
+        
+        
+        if (currentGrid.canGoDown()) {//probamos si puede ir hacia arriba
+                Pair p = new Pair(x, y - 1);//creamos un pair de la casilla superior
+                if(!celdasVisitadas.containsKey(p)){//si no esta contenida en el mapa
+//                    Grid nuevaCasilla= new Grid(x,y-1);
+                    pilaMovimientos.add(Mouse.UP);//metemos en movimiento en la pila
+                    return Mouse.DOWN;//devolvemos el movimiento
+                }
+        }
+        
+        if (currentGrid.canGoLeft()) {
+                Pair p = new Pair(x - 1, y);
+                if(!celdasVisitadas.containsKey(p)){
+                    pilaMovimientos.add(Mouse.RIGHT);
+                    return Mouse.LEFT;
+                }
+        }
+        
+        if (currentGrid.canGoRight()) {
+            Pair p = new Pair(x + 1, y);
+            if(!celdasVisitadas.containsKey(p)){
+                pilaMovimientos.add(Mouse.LEFT);
+                return Mouse.RIGHT;
+            }
+        }
+        
+        if (currentGrid.canGoUp()) {
+            Pair p = new Pair(x , y + 1);
+            if(!celdasVisitadas.containsKey(p)){
+                pilaMovimientos.add(Mouse.DOWN);
+                return Mouse.UP;
+            }
+        }
+        return pilaMovimientos.pop();
+        
     }
 
     /**

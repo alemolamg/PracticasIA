@@ -6,8 +6,10 @@ import mouserun.game.Cheese;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.Stack;
+import java.util.Vector;
 import javafx.util.Pair;
 
 //import org.apache.commons.larg3.tuple.Pair;
@@ -20,7 +22,7 @@ import javafx.util.Pair;
 public class AAMouse extends Mouse{
      
     private HashMap<Pair<Integer, Integer>, Grid> mapa;
-    private Stack<Grid> pilaMov;
+    private Stack<Integer> pilaMov;
     private long numCasillasVisitadas;
     
     //  Funciones   //
@@ -50,11 +52,10 @@ public class AAMouse extends Mouse{
         int x=currentGrid.getX();
         int y=currentGrid.getY();
            
-         Pair<Integer, Integer> pair = new Pair(x, y);//Hacemos un pair de la casilla actual
         
-        if(!mapa.containsKey(pair)){//Vemos si la casilla actual esta en el mapa
-            numCasillasVisitadas++;//aumentamos las casillas visitadas
-            mapa.put(pair, currentGrid);//y guardamos la casilla en el mapa
+        if(!mapa.containsKey(new Pair(x, y))){      //Vemos si la casilla actual esta en el mapa
+            numCasillasVisitadas++;                 //aumentamos las casillas visitadas
+            mapa.put(new Pair(x, y), currentGrid);  //y guardamos la casilla en el mapa
         }   
         
         
@@ -62,7 +63,7 @@ public class AAMouse extends Mouse{
                 Pair p = new Pair(x, y - 1);//creamos un pair de la casilla superior
                 if(!mapa.containsKey(p)){//si no esta contenida en el mapa
 //                    Grid nuevaCasilla= new Grid(x,y-1);
-                    pilaMov.add(new Grid(x,y - 1));//metemos en movimiento en la pila
+                    pilaMov.add(Mouse.UP);//metemos en movimiento en la pila
                     return Mouse.DOWN;//devolvemos el movimiento
                 }
         }
@@ -70,7 +71,7 @@ public class AAMouse extends Mouse{
         if (currentGrid.canGoLeft()) {
                 Pair p = new Pair(x - 1, y);
                 if(!mapa.containsKey(p)){
-                    pilaMov.add(new Grid(x-1,y));
+                    pilaMov.add(Mouse.RIGHT);
                     return Mouse.LEFT;
                 }
         }
@@ -78,7 +79,7 @@ public class AAMouse extends Mouse{
         if (currentGrid.canGoRight()) {
             Pair p = new Pair(x + 1, y);
             if(!mapa.containsKey(p)){
-                pilaMov.add(new Grid(x+1,y));
+                pilaMov.add(Mouse.LEFT);
                 return Mouse.RIGHT;
             }
         }
@@ -86,86 +87,26 @@ public class AAMouse extends Mouse{
         if (currentGrid.canGoUp()) {
             Pair p = new Pair(x , y + 1);
             if(!mapa.containsKey(p)){
-                pilaMov.add(new Grid(x,y+1));
+                pilaMov.add(Mouse.LEFT);
                 return Mouse.UP;
             }
         }
-        return 0;
-        
-        
-         //int solSimple=moveSimple(currentGrid, cheese);
-        
-         //Si el contenedor esta vacio lo inicializamos con las celdas vacias.
+        return pilaMov.pop();
     }
     
-    
-    public int moveSimple(Grid currentGrid, Cheese cheese){
-        
-        int x=currentGrid.getX();
-        int y=currentGrid.getY();
-        
-        Pair <Integer,Integer> pair =new Pair (x,y);
-        
-        if(!mapa.containsKey(pair)){//Vemos si la casilla actual esta en el mapa
-            numCasillasVisitadas++;//aumentamos las casillas visitadas
-            mapa.put(pair, currentGrid);//y guardamos la casilla en el mapa
-        } 
-        System.out.println("Comenzamos a movernos");
-        
-        if(cheese.getY()>y){        
-            if(currentGrid.canGoUp())   //verificar que podemos subir
-                System.out.println("podemos subir");
-//                pilaMov.add(pair);      //implementar bien
-                return Mouse.UP;
-        }
-
-        if(cheese.getY()<y){        
-            if(currentGrid.canGoDown())   //verificar que podemos subir
-                return Mouse.DOWN;
-        }
-        
-        if(cheese.getX()>x){        
-            if(currentGrid.canGoRight())   //verificar que podemos subir
-                return Mouse.RIGHT;
-        }
-        
-        if(cheese.getX()>x){        
-            if(currentGrid.canGoLeft())   //verificar que podemos subir
-                return Mouse.LEFT;
-        }
-        
-        return 0;
-        
-    }
-        
 }
 
 /**
  * Clase que almacena la informacion de la celda donde estamos parados.
- */
- class celda1{
+ *
+ class celda{
+     
+    private Grid gribCelda;
+    private Vector<Integer> celdasAdy;
 
-    int x;
-    int y;
-    int veces;
-    double distancia;
-
-    
-    /**
-     * Clase para crear las posiciones del tablero del juego.
-     * @param posX Indica la posicion X en el tablero
-     * @param posY Indica la posicion Y en el tablero
-     * @param posCofreX Indica la posicion X del cofre del tesoro
-     * @param posCofreY Indica la posicion Y del cofre del tesoro
-     */
-    public celda1(int posX,int posY,int posCofreX,int posCofreY)
-    {
-        this.x=posX;
-        this.y=posY;
-        veces=0;
-        
-        //Guardamos la distancia desde esta celda al cofre del tesoro.
-        distancia=Math.sqrt(Math.pow(posCofreX-posX, 2) + Math.pow(posCofreY-posY, 2));
-        
+    public celda(Grid actualGrid){
+        celdasAdy=new Vector<Integer> ();
+        gribCelda=actualGrid;
     }
-}
+    
+}*/
