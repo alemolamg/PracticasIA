@@ -131,7 +131,7 @@ public class MXXA04 extends Mouse {
      * @param currentGrid Celda actual
      * @return True Si las casillas X e Y anterior son distintas a las actuales
      */
-    public boolean testGrid(int direction, Grid currentGrid) {
+   /* public boolean testGrid(int direction, Grid currentGrid) {
         if (lastGrid == null) {
             return true;
         }
