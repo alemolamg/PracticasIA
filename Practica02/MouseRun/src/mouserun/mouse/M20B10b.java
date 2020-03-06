@@ -234,6 +234,8 @@ public class M20B10b extends Mouse {
     public boolean actualIzquierda(Grid actual, Grid anterior) {
         return actual.getX() < anterior.getX();
     }
-    
+    private void arbolqueso(){
+        
+    }
 
 }
