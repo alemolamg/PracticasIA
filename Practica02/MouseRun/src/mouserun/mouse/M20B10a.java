@@ -56,7 +56,6 @@ public class M20B10a extends Mouse {
      */
     @Override
     public int move(Grid currentGrid, Cheese cheese) {  
-
         
         int x=currentGrid.getX();
         int y=currentGrid.getY();
@@ -69,46 +68,47 @@ public class M20B10a extends Mouse {
         }   
         
         
-        if (currentGrid.canGoDown()) {              
-                Pair p = new Pair(x, y - 1);        
-                if(!celdasVisitadas.containsKey(p)){
-//                    Grid nuevaCasilla= new Grid(x,y-1);
-                    pilaMovimientos.add(currentGrid);
-                    return Mouse.DOWN;              
+        if (currentGrid.canGoDown()) {                  //vemos si podemos movernos
+                Pair p = new Pair(x, y - 1);            //creamos las nuevas coordenadas
+                if(!celdasVisitadas.containsKey(p)){    //comprobamos que la casilla es nueva
+                    pilaMovimientos.add(currentGrid);   //la guardamos en la pila
+                    return Mouse.DOWN;                  //nos movemos
                 }
         }
         
-        if (currentGrid.canGoLeft()) {
-                Pair p = new Pair(x - 1, y);
-                if(!celdasVisitadas.containsKey(p)){
-                    pilaMovimientos.add(currentGrid);
-                    return Mouse.LEFT;
+        if (currentGrid.canGoLeft()) {                  //vemos si podemos movernos
+                Pair p = new Pair(x - 1, y);            //creamos las nuevas coordenadas
+                if(!celdasVisitadas.containsKey(p)){    //comprobamos que la casilla es nueva
+                    pilaMovimientos.add(currentGrid);   //la guardamos en la pila
+                    return Mouse.LEFT;                  //nos movemos
                 }
         }
         
-        if (currentGrid.canGoRight()) {
-            Pair p = new Pair(x + 1, y);
-            if(!celdasVisitadas.containsKey(p)){
-                pilaMovimientos.add(currentGrid);
-                return Mouse.RIGHT;
+        if (currentGrid.canGoRight()) {                 //vemos si podemos movernos
+            Pair p = new Pair(x + 1, y);                //creamos las nuevas coordenadas
+            if(!celdasVisitadas.containsKey(p)){        //comprobamos que la casilla es nueva
+                pilaMovimientos.add(currentGrid);       //la guardamos en la pila
+                return Mouse.RIGHT;                     //nos movemos
             }
         }
         
-        if (currentGrid.canGoUp()) {
-            Pair p = new Pair(x , y + 1);
-            if(!celdasVisitadas.containsKey(p)){
-                pilaMovimientos.add(currentGrid);
-                return Mouse.UP;
+        if (currentGrid.canGoUp()) {                    //vemos si podemos movernos
+            Pair p = new Pair(x , y + 1);               //creamos las nuevas coordenadas
+            if(!celdasVisitadas.containsKey(p)){        //comprobamos que la casilla es nueva
+                pilaMovimientos.add(currentGrid);       //la guardamos en la pila
+                return Mouse.UP;                        //nos movemos
             }
         }
         
+        //Pruebas
         int salida=posRegreso(currentGrid);
-        System.out.println("El movimiento es: "+ salida);
+        System.out.println("El movimiento es: "+ salida); //comprueba que se mueve correctamente
         pilaMovimientos.pop();      //saca el ultimo grip
         
         return salida;                                // idea Mental
         
-////        return posRegreso(currentGrid);
+////        pilaMovimientos.pop();      //saca el ultimo grip
+////        return posRegreso(currentGrid);               // funcional
         
     }
     
