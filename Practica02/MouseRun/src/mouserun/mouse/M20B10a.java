@@ -15,7 +15,7 @@ import mouserun.game.Cheese;
  * @author Cristóbal José Carmona (ccarmona@ujaen.es) y Ángel Miguel García Vico (agvico@ujaen.es)
  * @author Ana Montijano Zaragoza y Alejandro Molero Gómez
  */
-public class MXXA04 extends Mouse {
+public class M20B10a extends Mouse {
 
     /**
      * Variable para almacenar la ultima celda visitada
@@ -43,8 +43,8 @@ public class MXXA04 extends Mouse {
     /**
      * Constructor (Puedes modificar el nombre a tu gusto).
      */
-    public MXXA04() {
-        super("MXXA04");
+    public M20B10a() {
+        super("M20B10a");
         celdasVisitadas = new HashMap<>();
         pilaMovimientos = new Stack<>();
     }
@@ -118,6 +118,7 @@ public class MXXA04 extends Mouse {
      * @return movimiento de regreso del raton
      */
     int posRegreso(Grid celdaActual){   //Falta un caso por tener en cuenta
+        
 //        if(pilaMovimientos.peek().equals(casillaActual))
 //            return -1;  //Es la misma casilla, fallo grave
         
