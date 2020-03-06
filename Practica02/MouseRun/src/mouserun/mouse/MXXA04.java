@@ -103,7 +103,7 @@ public class MXXA04 extends Mouse {
         }
         
         int salida=posicionRelativa(currentGrid);
-        System.out.println("El movimiento es: "+salida);
+        System.out.println("El movimiento es: "+ salida);
         pilaMovimientos.pop();      //saca el ultimo grip
         
         return salida;                                // idea Mental
