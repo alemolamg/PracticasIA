@@ -71,7 +71,7 @@ public class M20B10a extends Mouse {
         if (currentGrid.canGoDown()) {                  //vemos si podemos movernos
                 Pair p = new Pair(x, y - 1);            //creamos las nuevas coordenadas
                 if(!celdasVisitadas.containsKey(p)){    //comprobamos que la casilla es nueva
-                    pilaMovimientos.add(currentGrid);   //la guardamos en la pila
+                    pilaMovimientos.push(currentGrid);   //la guardamos en la pila
                     return Mouse.DOWN;                  //nos movemos
                 }
         }
@@ -79,24 +79,25 @@ public class M20B10a extends Mouse {
         if (currentGrid.canGoLeft()) {                  //vemos si podemos movernos
                 Pair p = new Pair(x - 1, y);            //creamos las nuevas coordenadas
                 if(!celdasVisitadas.containsKey(p)){    //comprobamos que la casilla es nueva
-                    pilaMovimientos.add(currentGrid);   //la guardamos en la pila
+                    pilaMovimientos.push(currentGrid);   //la guardamos en la pila
                     return Mouse.LEFT;                  //nos movemos
                 }
+        }
+        
+        
+        if (currentGrid.canGoUp()) {                    //vemos si podemos movernos
+            Pair p = new Pair(x , y + 1);               //creamos las nuevas coordenadas
+            if(!celdasVisitadas.containsKey(p)){        //comprobamos que la casilla es nueva
+                pilaMovimientos.push(currentGrid);       //la guardamos en la pila
+                return Mouse.UP;                        //nos movemos
+            }
         }
         
         if (currentGrid.canGoRight()) {                 //vemos si podemos movernos
             Pair p = new Pair(x + 1, y);                //creamos las nuevas coordenadas
             if(!celdasVisitadas.containsKey(p)){        //comprobamos que la casilla es nueva
-                pilaMovimientos.add(currentGrid);       //la guardamos en la pila
+                pilaMovimientos.push(currentGrid);       //la guardamos en la pila
                 return Mouse.RIGHT;                     //nos movemos
-            }
-        }
-        
-        if (currentGrid.canGoUp()) {                    //vemos si podemos movernos
-            Pair p = new Pair(x , y + 1);               //creamos las nuevas coordenadas
-            if(!celdasVisitadas.containsKey(p)){        //comprobamos que la casilla es nueva
-                pilaMovimientos.add(currentGrid);       //la guardamos en la pila
-                return Mouse.UP;                        //nos movemos
             }
         }
         
