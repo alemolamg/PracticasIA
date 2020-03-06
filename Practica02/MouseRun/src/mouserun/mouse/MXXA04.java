@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mouserun.mouse;
 
 import java.util.ArrayList;
@@ -18,6 +13,7 @@ import mouserun.game.Cheese;
  * Clase que contiene el esqueleto del raton base para las prácticas de Inteligencia Artificial del curso 2019-20.
  * 
  * @author Cristóbal José Carmona (ccarmona@ujaen.es) y Ángel Miguel García Vico (agvico@ujaen.es)
+ * @author Ana Montijano Zaragoza y Alejandro Molero Gómez
  */
 public class MXXA04 extends Mouse {
 
@@ -41,7 +37,7 @@ public class MXXA04 extends Mouse {
     /**
      * Pila para almacenar el camino recorrido.
      */
-    private Stack<Integer> pilaMovimientos;
+    private Stack<Grid> pilaMovimientos;
     
     
     /**
@@ -67,25 +63,25 @@ public class MXXA04 extends Mouse {
            
         
         if(!celdasVisitadas.containsKey(new Pair(x, y))){      //Vemos si la casilla actual esta en el mapa
-            this.incExploredGrids();
-            numCasillasVisitadas++;                 //aumentamos las casillas visitadas
+            this.incExploredGrids();                            //Aumentamos el numero de casillas visitadas
+//            numCasillasVisitadas++;                             //aumentamos las casillas visitadas
             celdasVisitadas.put(new Pair(x, y), currentGrid);  //y guardamos la casilla en el mapa
         }   
         
         
-        if (currentGrid.canGoDown()) {//probamos si puede ir hacia arriba
-                Pair p = new Pair(x, y - 1);//creamos un pair de la casilla superior
+        if (currentGrid.canGoDown()) {              //probamos si puede ir hacia arriba
+                Pair p = new Pair(x, y - 1);        //creamos un pair de la casilla superior
                 if(!celdasVisitadas.containsKey(p)){//si no esta contenida en el mapa
 //                    Grid nuevaCasilla= new Grid(x,y-1);
-                    pilaMovimientos.add(Mouse.UP);//metemos en movimiento en la pila
-                    return Mouse.DOWN;//devolvemos el movimiento
+                    pilaMovimientos.add(currentGrid);  //metemos en movimiento en la pila
+                    return Mouse.DOWN;              //devolvemos el movimiento
                 }
         }
         
         if (currentGrid.canGoLeft()) {
                 Pair p = new Pair(x - 1, y);
                 if(!celdasVisitadas.containsKey(p)){
-                    pilaMovimientos.add(Mouse.RIGHT);
+                    pilaMovimientos.add(currentGrid);
                     return Mouse.LEFT;
                 }
         }
@@ -93,7 +89,7 @@ public class MXXA04 extends Mouse {
         if (currentGrid.canGoRight()) {
             Pair p = new Pair(x + 1, y);
             if(!celdasVisitadas.containsKey(p)){
-                pilaMovimientos.add(Mouse.LEFT);
+                pilaMovimientos.add(currentGrid);
                 return Mouse.RIGHT;
             }
         }
@@ -101,12 +97,36 @@ public class MXXA04 extends Mouse {
         if (currentGrid.canGoUp()) {
             Pair p = new Pair(x , y + 1);
             if(!celdasVisitadas.containsKey(p)){
-                pilaMovimientos.add(Mouse.DOWN);
+                pilaMovimientos.add(currentGrid);
                 return Mouse.UP;
             }
         }
-        return pilaMovimientos.pop();
         
+//        int salida=posicionRelativa(currentGrid);
+//        return salida;                                // idea Mental
+        
+        return posicionRelativa(currentGrid);
+        
+    }
+    
+    int posicionRelativa(Grid casillaActual){
+        if(pilaMovimientos.peek().equals(casillaActual))
+            return -1;  //Es la misma casilla, fallo grave
+        
+        if(pilaMovimientos.peek().getX()== casillaActual.getX()){
+             if(pilaMovimientos.peek().getY()<casillaActual.getY())
+                 return Mouse.DOWN;  //bajamos el ratón
+             else if(pilaMovimientos.peek().getY()>casillaActual.getY())
+                 return Mouse.UP;             
+        }  //else
+        if (pilaMovimientos.peek().getY()==casillaActual.getY()){
+            if(pilaMovimientos.peek().getX()<casillaActual.getX())
+                return Mouse.LEFT;
+            else if (pilaMovimientos.peek().getX()>casillaActual.getX())
+                return Mouse.RIGHT;
+        }
+        
+        return -2;  //fallo las dos coordenadas son diferentes, servirá para implementar bombas
     }
 
     /**
