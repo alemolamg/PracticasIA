@@ -69,12 +69,12 @@ public class MXXA04 extends Mouse {
         }   
         
         
-        if (currentGrid.canGoDown()) {              //probamos si puede ir hacia arriba
-                Pair p = new Pair(x, y - 1);        //creamos un pair de la casilla superior
-                if(!celdasVisitadas.containsKey(p)){//si no esta contenida en el mapa
+        if (currentGrid.canGoDown()) {              
+                Pair p = new Pair(x, y - 1);        
+                if(!celdasVisitadas.containsKey(p)){
 //                    Grid nuevaCasilla= new Grid(x,y-1);
-                    pilaMovimientos.add(currentGrid);  //metemos en movimiento en la pila
-                    return Mouse.DOWN;              //devolvemos el movimiento
+                    pilaMovimientos.add(currentGrid);
+                    return Mouse.DOWN;              
                 }
         }
         
@@ -102,30 +102,35 @@ public class MXXA04 extends Mouse {
             }
         }
         
-        int salida=posicionRelativa(currentGrid);
-        System.out.println("El movimiento es: "+salida);
+        int salida=posRegreso(currentGrid);
+        System.out.println("El movimiento es: "+ salida);
         pilaMovimientos.pop();      //saca el ultimo grip
         
         return salida;                                // idea Mental
         
-////        return posicionRelativa(currentGrid);
+////        return posRegreso(currentGrid);
         
     }
     
-    int posicionRelativa(Grid casillaActual){   //Falta un caso por tener en cuenta
+    /**
+     * 
+     * @param celdaActual celda donde se encuentra el ratón
+     * @return movimiento de regreso del raton
+     */
+    int posRegreso(Grid celdaActual){   //Falta un caso por tener en cuenta
 //        if(pilaMovimientos.peek().equals(casillaActual))
 //            return -1;  //Es la misma casilla, fallo grave
         
-        if(pilaMovimientos.peek().getX()== casillaActual.getX()){
-             if(pilaMovimientos.peek().getY()<casillaActual.getY())
+        if(pilaMovimientos.peek().getX()== celdaActual.getX()){
+             if(pilaMovimientos.peek().getY()<celdaActual.getY())
                  return Mouse.DOWN;  //bajamos el ratón
-             else if(pilaMovimientos.peek().getY()>casillaActual.getY())
+             else if(pilaMovimientos.peek().getY()>celdaActual.getY())
                  return Mouse.UP;             
         }  //else
-        if (pilaMovimientos.peek().getY()==casillaActual.getY()){
-            if(pilaMovimientos.peek().getX()<casillaActual.getX())
+        if (pilaMovimientos.peek().getY()==celdaActual.getY()){
+            if(pilaMovimientos.peek().getX()<celdaActual.getX())
                 return Mouse.LEFT;
-            else if (pilaMovimientos.peek().getX()>casillaActual.getX())
+            else if (pilaMovimientos.peek().getX()>celdaActual.getX())
                 return Mouse.RIGHT;
         }
         
