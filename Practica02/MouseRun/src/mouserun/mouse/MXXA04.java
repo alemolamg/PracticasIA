@@ -102,16 +102,19 @@ public class MXXA04 extends Mouse {
             }
         }
         
-//        int salida=posicionRelativa(currentGrid);
-//        return salida;                                // idea Mental
+        int salida=posicionRelativa(currentGrid);
+        System.out.println("El movimiento es: "+salida);
+        pilaMovimientos.pop();      //saca el ultimo grip
         
-        return posicionRelativa(currentGrid);
+        return salida;                                // idea Mental
+        
+////        return posicionRelativa(currentGrid);
         
     }
     
-    int posicionRelativa(Grid casillaActual){
-        if(pilaMovimientos.peek().equals(casillaActual))
-            return -1;  //Es la misma casilla, fallo grave
+    int posicionRelativa(Grid casillaActual){   //Falta un caso por tener en cuenta
+//        if(pilaMovimientos.peek().equals(casillaActual))
+//            return -1;  //Es la misma casilla, fallo grave
         
         if(pilaMovimientos.peek().getX()== casillaActual.getX()){
              if(pilaMovimientos.peek().getY()<casillaActual.getY())
