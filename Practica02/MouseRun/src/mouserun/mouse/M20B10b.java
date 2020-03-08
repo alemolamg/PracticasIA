@@ -150,42 +150,6 @@ public class M20B10b extends Mouse {
     }
 
     /**
-     * @brief Método para evaluar que no nos movamos a la misma celda anterior
-     * @param direction Direccion del raton
-     * @param currentGrid Celda actual
-     * @return True Si las casillas X e Y anterior son distintas a las actuales
-     */
-   /*public boolean testGrid(int direction, Grid currentGrid) {
-        if (lastGrid == null) {
-            return true;
-        }
-
-        int x = currentGrid.getX();
-        int y = currentGrid.getY();
-
-        switch (direction) {
-            case Mouse.UP:
-                y += 1;
-                break;
-
-            case Mouse.DOWN:
-                y -= 1;
-                break;
-
-            case Mouse.LEFT:
-                x -= 1;
-                break;
-
-            case Mouse.RIGHT:
-                x += 1;
-                break;
-        }
-
-        return !(lastGrid.getX() == x && lastGrid.getY() == y);
-
-    }*/
-    
-    /**
      * @brief Método que devuelve si de una casilla dada, está contenida en el mapa de celdasVisitadas
      * @param casilla Casilla que se pasa para saber si ha sido visitada
      * @return True Si esa casilla ya la había visitado
@@ -234,7 +198,14 @@ public class M20B10b extends Mouse {
     public boolean actualIzquierda(Grid actual, Grid anterior) {
         return actual.getX() < anterior.getX();
     }
+    
+    private void crearArbol(){
+        
+        
+    }
+    
     private void arbolqueso(){
+        
         
     }
 
