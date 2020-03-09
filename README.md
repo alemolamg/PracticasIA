@@ -8,4 +8,5 @@ Tenemos que recuperar las practicas: Practica 00A y Practica 00B, en mayo.
 La Practica01 ya está entregada, falta subirla a GitHub.
 
 Creación de la practica 02, MouseRun:
-La practica se encuentra en un proceso temprano aún
+ - Escaner funciona correctamente
+ - Desarrollando busqueda del queso en profundidad
