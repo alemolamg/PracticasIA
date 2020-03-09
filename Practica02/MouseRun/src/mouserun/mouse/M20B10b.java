@@ -56,54 +56,11 @@ public class M20B10b extends Mouse {
      */
     @Override
     public int move(Grid currentGrid, Cheese cheese) {  
-
+        int salida;
         
-        int x=currentGrid.getX();
-        int y=currentGrid.getY();
-           
+        salida = escaner(currentGrid, cheese);
         
-        if(!celdasVisitadas.containsKey(new Pair(x, y))){      //Vemos si la casilla actual esta en el mapa
-            this.incExploredGrids();                            //Aumentamos el numero de casillas visitadas                           //aumentamos las casillas visitadas
-            celdasVisitadas.put(new Pair(x, y), currentGrid);  //y guardamos la casilla en el mapa
-        }   
-        
-        
-        if (currentGrid.canGoDown()) {                     
-                if(!celdasVisitadas.containsKey(new Pair(x, y - 1))){
-                    pilaMovimientos.push(currentGrid);
-                    return Mouse.DOWN;              
-                }
-        }
-        
-        if (currentGrid.canGoLeft()) {
-                if(!celdasVisitadas.containsKey(new Pair(x - 1, y))){
-                    pilaMovimientos.push(currentGrid);
-                    return Mouse.LEFT;
-                }
-        }
-        
-        if (currentGrid.canGoRight()) {
-            if(!celdasVisitadas.containsKey(new Pair(x + 1, y))){
-                pilaMovimientos.push(currentGrid);
-                return Mouse.RIGHT;
-            }
-        }
-        
-        if (currentGrid.canGoUp()) {
-            if(!celdasVisitadas.containsKey(new Pair(x , y + 1))){
-                pilaMovimientos.push(currentGrid);
-                return Mouse.UP;
-            }
-        }
-        
-        int salida=posRegreso(currentGrid);
-        System.out.println("El movimiento es: "+ salida);
-        pilaMovimientos.pop();      //saca el ultimo grip
-        
-        return salida;                                // idea Mental
-        
-////        return posRegreso(currentGrid);
-        
+        return salida;
     }
     
     /**
@@ -205,6 +162,56 @@ public class M20B10b extends Mouse {
     }
     
     private void arbolqueso(){
+        
+        
+    }
+    
+    private int escaner(Grid currentGrid, Cheese cheese){
+        int x=currentGrid.getX();
+        int y=currentGrid.getY();
+           
+        
+        if(!celdasVisitadas.containsKey(new Pair(x, y))){      //Vemos si la casilla actual esta en el mapa
+            this.incExploredGrids();                            //Aumentamos el numero de casillas visitadas                           //aumentamos las casillas visitadas
+            celdasVisitadas.put(new Pair(x, y), currentGrid);  //y guardamos la casilla en el mapa
+        }   
+        
+        
+        if (currentGrid.canGoDown()) {                     
+                if(!celdasVisitadas.containsKey(new Pair(x, y - 1))){
+                    pilaMovimientos.push(currentGrid);
+                    return Mouse.DOWN;              
+                }
+        }
+        
+        if (currentGrid.canGoLeft()) {
+                if(!celdasVisitadas.containsKey(new Pair(x - 1, y))){
+                    pilaMovimientos.push(currentGrid);
+                    return Mouse.LEFT;
+                }
+        }
+        
+        if (currentGrid.canGoRight()) {
+            if(!celdasVisitadas.containsKey(new Pair(x + 1, y))){
+                pilaMovimientos.push(currentGrid);
+                return Mouse.RIGHT;
+            }
+        }
+        
+        if (currentGrid.canGoUp()) {
+            if(!celdasVisitadas.containsKey(new Pair(x , y + 1))){
+                pilaMovimientos.push(currentGrid);
+                return Mouse.UP;
+            }
+        }
+        
+        int salida=posRegreso(currentGrid);
+        System.out.println("El movimiento es: "+ salida);
+        pilaMovimientos.pop();      //saca el ultimo grip
+        
+        return salida;                                // idea Mental
+        
+////        return posRegreso(currentGrid);
         
         
     }
