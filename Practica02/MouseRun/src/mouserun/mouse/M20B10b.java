@@ -58,7 +58,16 @@ public class M20B10b extends Mouse {
     public int move(Grid currentGrid, Cheese cheese) {  
         int salida;
         
-        salida = escaner(currentGrid, cheese);
+        Pair pairQueso= new Pair (cheese.getX(),cheese.getY());
+        Grid gridQueso= new Grid(cheese.getX(),cheese.getY());
+        
+//        if(HashMap<pairQueso,gridQueso>){
+            
+//        }else{
+            salida = escaner(currentGrid, cheese);
+//        }
+        
+        
         
         return salida;
     }
