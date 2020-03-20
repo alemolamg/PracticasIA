@@ -1,13 +1,20 @@
 package mouserun.mouse;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Random;
+import java.util.Set;
 import java.util.Stack;
 import javafx.util.Pair;
 import mouserun.game.Mouse;
 import mouserun.game.Grid;
 import mouserun.game.Cheese;
+import static mouserun.game.Mouse.DOWN;
+import static mouserun.game.Mouse.LEFT;
+import static mouserun.game.Mouse.RIGHT;
+import static mouserun.game.Mouse.UP;
 
 /**
  * Clase que contiene el esqueleto del raton base para las prácticas de Inteligencia Artificial del curso 2019-20.
@@ -21,6 +28,10 @@ public class M20B10b extends Mouse {
      * Variable para almacenar la ultima celda visitada
      */
     private Grid lastGrid;
+    
+    Set<String> marcados;//estructura auxiliar para crear el camino
+    private LinkedList camino;//camino hasta el queso
+    private TreeMap<Integer,Grid> visitadas;
     
     /**
      * Variable con el número de casillas recorridaas
@@ -63,10 +74,11 @@ public class M20B10b extends Mouse {
         
 //        if(HashMap<pairQueso,gridQueso>){
             
+
+
 //        }else{
             salida = escaner(currentGrid, cheese);
 //        }
-        
         
         
         return salida;
@@ -103,8 +115,7 @@ public class M20B10b extends Mouse {
      */
     @Override
     public void newCheese() {
-
-
+        
     }
 
     /**
@@ -165,15 +176,6 @@ public class M20B10b extends Mouse {
         return actual.getX() < anterior.getX();
     }
     
-    private void crearArbol(){
-        
-        
-    }
-    
-    private void arbolqueso(){
-        
-        
-    }
     
     private int escaner(Grid currentGrid, Cheese cheese){
         int x=currentGrid.getX();
@@ -224,5 +226,72 @@ public class M20B10b extends Mouse {
         
         
     }
+    
+    public boolean planificarProfundidad(int x,int y, Cheese cheese) {
+        int cX=x;
+        int cY=y;
+        
+        if(cX==cheese.getX()&&cY==cheese.getY()){
+            return true;
+        }
+        Grid g=new Grid(x,y);
+//        Casilla c=new Casilla(g);
+        Grid gUP=new Grid(x,y+1);
+//        Casilla cUP=new Casilla(gUP);
+        Grid gDown=new Grid(x,y-1);
+//        Casilla cDOWN=new Casilla(gD);
+        Grid gLeft=new Grid(x-1,y);
+//        Casilla cLEFT=new Casilla(gL);
+        Grid gRight=new Grid(x+1,y);
+//        Casilla cRIGHT=new Casilla(gR);
+        String x1 = String.valueOf(x);
+        String y1 = String.valueOf(y);
 
+        String actual = x1 + y1;
+        String sup = x1 + String.valueOf(cY + 1);
+        String inf = x1 +  String.valueOf(cY - 1);
+        String izq = String.valueOf(cX - 1) + y1;
+        String der = String.valueOf(cX + 1) + y1;
+        
+        marcados.add(actual);
+        if (visitadas.containsKey(gUP)&& !marcados.contains(sup)) {
+            if(visitadas.get(g).canGoUp()){
+            camino.addLast(UP);
+            if(planificarProfundidad(x,cY+1,cheese)){
+                return true;
+            }
+            camino.removeLast();
+            }
+        }
+        if (visitadas.containsKey(gDown)&& !marcados.contains(inf)) {
+            if(visitadas.get(g).canGoDown()){
+            camino.addLast(DOWN);
+            if(planificarProfundidad(x,cY-1,cheese)){
+                return true;
+            }
+            camino.removeLast();
+            }
+        }
+        if (visitadas.containsKey(gLeft)&& !marcados.contains(izq)) {
+            if(visitadas.get(g).canGoLeft()){
+            camino.addLast(LEFT);
+            if(planificarProfundidad(cX-1,y,cheese)){
+                return true;
+            }
+            camino.removeLast();
+            }
+        }
+        if (visitadas.containsKey(gRight) && !marcados.contains(der)) {
+            if(visitadas.get(g).canGoRight()){
+            camino.addLast(RIGHT);
+            if(planificarProfundidad(cX+1,y,cheese)){
+                return true;
+            }
+            camino.removeLast();
+            }
+        }
+       return false;
+    }
+    
+    
 }
