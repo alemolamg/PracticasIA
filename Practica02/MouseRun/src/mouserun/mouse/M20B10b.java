@@ -31,7 +31,7 @@ public class M20B10b extends Mouse {
     
     Set<String> marcados;//estructura auxiliar para crear el camino
     private LinkedList camino;//camino hasta el queso
-    private TreeMap<Integer,Grid> visitadas;
+    private TreeMap<Pair,Grid> visitadas;
     
     /**
      * Variable con el número de casillas recorridaas
@@ -72,16 +72,20 @@ public class M20B10b extends Mouse {
         Pair pairQueso= new Pair (cheese.getX(),cheese.getY());
         Grid gridQueso= new Grid(cheese.getX(),cheese.getY());
         
-//        if(HashMap<pairQueso,gridQueso>){
-            
-
-
-//        }else{
-            salida = escaner(currentGrid, cheese);
-//        }
+        if(!celdasVisitadas.containsKey(pairQueso)){ //aquí FALLO     //Comprobamos que el queso no está en el mapa visitado
+            System.out.println("Escaneando......");
+            return salida = escaner(currentGrid, cheese);           
+        }else{
+            System.out.println("Conozco el queso, voy a por él");
+            if (!camino.isEmpty()) {
+             return (int) camino.removeFirst();
+            }
+        marcados.clear();
+        lastGrid = currentGrid;
+        planificarProfundidad(currentGrid,cheese);
+        return (int)camino.removeFirst();            
+        }
         
-        
-        return salida;
     }
     
     /**
@@ -217,7 +221,7 @@ public class M20B10b extends Mouse {
         }
         
         int salida=posRegreso(currentGrid);
-        System.out.println("El movimiento es: "+ salida);
+        //System.out.println("El movimiento es: "+ salida);
         pilaMovimientos.pop();      //saca el ultimo grip
         
         return salida;                                // idea Mental
@@ -227,69 +231,69 @@ public class M20B10b extends Mouse {
         
     }
     
-    public boolean planificarProfundidad(int x,int y, Cheese cheese) {
-        int cX=x;
-        int cY=y;
-        
-        if(cX==cheese.getX()&&cY==cheese.getY()){
+    public boolean planificarProfundidad(Grid actual, Cheese cheese) {
+                
+        if(actual.getX() == cheese.getX() && actual.getY() == cheese.getY()){
             return true;
         }
-        Grid g=new Grid(x,y);
-//        Casilla c=new Casilla(g);
-        Grid gUP=new Grid(x,y+1);
-//        Casilla cUP=new Casilla(gUP);
-        Grid gDown=new Grid(x,y-1);
-//        Casilla cDOWN=new Casilla(gD);
-        Grid gLeft=new Grid(x-1,y);
-//        Casilla cLEFT=new Casilla(gL);
-        Grid gRight=new Grid(x+1,y);
-//        Casilla cRIGHT=new Casilla(gR);
-        String x1 = String.valueOf(x);
-        String y1 = String.valueOf(y);
-
-        String actual = x1 + y1;
-        String sup = x1 + String.valueOf(cY + 1);
-        String inf = x1 +  String.valueOf(cY - 1);
-        String izq = String.valueOf(cX - 1) + y1;
-        String der = String.valueOf(cX + 1) + y1;
         
-        marcados.add(actual);
-        if (visitadas.containsKey(gUP)&& !marcados.contains(sup)) {
-            if(visitadas.get(g).canGoUp()){
+        Grid g=new Grid(actual.getX(),actual.getY());
+//        Casilla c=new Casilla(g);
+        Grid gUP=new Grid(actual.getX(),actual.getY()+1);
+//        Casilla cUP=new Casilla(gUP);
+        Grid gDown=new Grid(actual.getX(),actual.getY()-1);
+//        Casilla cDOWN=new Casilla(gD);
+        Grid gLeft=new Grid(actual.getX()-1,actual.getY());
+//        Casilla cLEFT=new Casilla(gL);
+        Grid gRight=new Grid(actual.getX()+1,actual.getY());
+//        Casilla cRIGHT=new Casilla(gR);
+        String x1 = String.valueOf(actual.getX());
+        String y1 = String.valueOf(actual.getY());
+
+        String posActual = x1 + y1;
+        String sup = x1 + String.valueOf(actual.getY() + 1);
+        String inf = x1 +  String.valueOf(actual.getY() - 1);
+        String izq = String.valueOf(actual.getX() - 1) + y1;
+        String der = String.valueOf(actual.getX() + 1) + y1;
+        
+        marcados.add(posActual);
+        if (celdasVisitadas.containsKey(gUP)&& !marcados.contains(sup)) {
+            if(celdasVisitadas.get(g).canGoUp()){
             camino.addLast(UP);
-            if(planificarProfundidad(x,cY+1,cheese)){
+            if(planificarProfundidad(gUP,cheese)){
                 return true;
             }
             camino.removeLast();
             }
         }
-        if (visitadas.containsKey(gDown)&& !marcados.contains(inf)) {
-            if(visitadas.get(g).canGoDown()){
+        if (celdasVisitadas.containsKey(gDown)&& !marcados.contains(inf)) {
+            if(celdasVisitadas.get(g).canGoDown()){
             camino.addLast(DOWN);
-            if(planificarProfundidad(x,cY-1,cheese)){
+            if(planificarProfundidad(gDown,cheese)){
                 return true;
             }
             camino.removeLast();
             }
         }
-        if (visitadas.containsKey(gLeft)&& !marcados.contains(izq)) {
-            if(visitadas.get(g).canGoLeft()){
+        if (celdasVisitadas.containsKey(gLeft)&& !marcados.contains(izq)) {
+            if(celdasVisitadas.get(g).canGoLeft()){
             camino.addLast(LEFT);
-            if(planificarProfundidad(cX-1,y,cheese)){
+            if(planificarProfundidad(gLeft,cheese)){
                 return true;
             }
             camino.removeLast();
             }
         }
-        if (visitadas.containsKey(gRight) && !marcados.contains(der)) {
-            if(visitadas.get(g).canGoRight()){
+        if (celdasVisitadas.containsKey(gRight) && !marcados.contains(der)) {
+            if(celdasVisitadas.get(g).canGoRight()){
             camino.addLast(RIGHT);
-            if(planificarProfundidad(cX+1,y,cheese)){
+            if(planificarProfundidad(gRight,cheese)){
                 return true;
             }
             camino.removeLast();
             }
         }
+        
        return false;
     }
     
