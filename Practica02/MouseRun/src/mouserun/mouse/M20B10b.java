@@ -30,7 +30,7 @@ public class M20B10b extends Mouse {
     private Grid lastGrid;
     
     Set<String> marcados;//estructura auxiliar para crear el camino
-    private LinkedList camino;//camino hasta el queso
+    private LinkedList<Integer> camino;//camino hasta el queso
     private TreeMap<Pair,Grid> visitadas;
     
     /**
@@ -74,18 +74,23 @@ public class M20B10b extends Mouse {
         
         if(!celdasVisitadas.containsKey(pairQueso)){ //aquí FALLO     //Comprobamos que el queso no está en el mapa visitado
             System.out.println("Escaneando......");
-            return salida = escaner(currentGrid, cheese);           
+            return salida = explorar(currentGrid, cheese);           
         }else{
+            
             System.out.println("Conozco el queso, voy a por él");
-            if (!camino.isEmpty()) {
-             return (int) camino.removeFirst();
-            }
-        marcados.clear();
+//            if (!camino.isEmpty()) {
+//                System.out.println("camino lleno, voy a por queso");
+//             return (int) camino.removeFirst();
+//            }
+        //marcados.clear();
         lastGrid = currentGrid;
-        planificarProfundidad(currentGrid,cheese);
-        return (int)camino.removeFirst();            
+            System.out.println("Planifico...");
+        if(planificarProfundidad(currentGrid,cheese)){      //Arreglar planificarProfuncidad()
+            System.out.println("Camino encontrado");
+        }       
+            return (int)camino.removeFirst();    
+//        return 0;
         }
-        
     }
     
     /**
@@ -93,7 +98,7 @@ public class M20B10b extends Mouse {
      * @param celdaActual celda donde se encuentra el ratón
      * @return movimiento de regreso del raton
      */
-    int posRegreso(Grid celdaActual){   //Falta un caso por tener en cuenta
+    int posRegreso(Grid celdaActual){   
         
 //        if(pilaMovimientos.peek().equals(casillaActual))
 //            return -1;  //Es la misma casilla, fallo grave
@@ -181,11 +186,10 @@ public class M20B10b extends Mouse {
     }
     
     
-    private int escaner(Grid currentGrid, Cheese cheese){
+    private int explorar(Grid currentGrid, Cheese cheese){
         int x=currentGrid.getX();
         int y=currentGrid.getY();
            
-        
         if(!celdasVisitadas.containsKey(new Pair(x, y))){      //Vemos si la casilla actual esta en el mapa
             this.incExploredGrids();                            //Aumentamos el numero de casillas visitadas                           //aumentamos las casillas visitadas
             celdasVisitadas.put(new Pair(x, y), currentGrid);  //y guardamos la casilla en el mapa
@@ -257,40 +261,46 @@ public class M20B10b extends Mouse {
         String der = String.valueOf(actual.getX() + 1) + y1;
         
         marcados.add(posActual);
-        if (celdasVisitadas.containsKey(gUP)&& !marcados.contains(sup)) {
-            if(celdasVisitadas.get(g).canGoUp()){
-            camino.addLast(UP);
-            if(planificarProfundidad(gUP,cheese)){
-                return true;
-            }
-            camino.removeLast();
-            }
-        }
-        if (celdasVisitadas.containsKey(gDown)&& !marcados.contains(inf)) {
-            if(celdasVisitadas.get(g).canGoDown()){
-            camino.addLast(DOWN);
-            if(planificarProfundidad(gDown,cheese)){
-                return true;
-            }
-            camino.removeLast();
+        //if (celdasVisitadas.containsKey(gUP) && !marcados.contains(sup)) {
+        if (celdasVisitadas.containsKey(gUP) ) {
+            if (celdasVisitadas.get(g).canGoUp()) {
+                camino.addLast(UP);
+                if (planificarProfundidad(gUP, cheese)) {
+                    return true;
+                }
+                camino.removeLast();
             }
         }
-        if (celdasVisitadas.containsKey(gLeft)&& !marcados.contains(izq)) {
-            if(celdasVisitadas.get(g).canGoLeft()){
-            camino.addLast(LEFT);
-            if(planificarProfundidad(gLeft,cheese)){
-                return true;
-            }
-            camino.removeLast();
+        
+        //if (celdasVisitadas.containsKey(gDown) && !marcados.contains(inf)) {
+        if (celdasVisitadas.containsKey(gDown) ) {
+            if (celdasVisitadas.get(g).canGoDown()) {
+                camino.addLast(DOWN);
+                if (planificarProfundidad(gDown, cheese)) {
+                    return true;
+                }
+                camino.removeLast();
             }
         }
-        if (celdasVisitadas.containsKey(gRight) && !marcados.contains(der)) {
-            if(celdasVisitadas.get(g).canGoRight()){
-            camino.addLast(RIGHT);
-            if(planificarProfundidad(gRight,cheese)){
-                return true;
+        
+//        if (celdasVisitadas.containsKey(gLeft) && !marcados.contains(izq)) {
+        if (celdasVisitadas.containsKey(gLeft) ) {
+            if (celdasVisitadas.get(g).canGoLeft()) {
+                camino.addLast(LEFT);
+                if (planificarProfundidad(gLeft, cheese)) {
+                    return true;
+                }
+                camino.removeLast();
             }
-            camino.removeLast();
+        }
+        //if (celdasVisitadas.containsKey(gRight) && !marcados.contains(der)) {
+        if (celdasVisitadas.containsKey(gRight) ) {
+            if (celdasVisitadas.get(g).canGoRight()) {
+                camino.addLast(RIGHT);
+                if (planificarProfundidad(gRight, cheese)) {
+                    return true;
+                }
+                camino.removeLast();
             }
         }
         
