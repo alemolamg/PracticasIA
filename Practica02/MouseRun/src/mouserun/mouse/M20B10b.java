@@ -237,9 +237,10 @@ public class M20B10b extends Mouse {
     
     public boolean planificarProfundidad(Grid actual, Cheese cheese) {
                 
-        if(actual.getX() == cheese.getX() && actual.getY() == cheese.getY()){
+        if(actual.getX() == cheese.getX() && actual.getY() == cheese.getY())    //Ver si ha terminado el camino
             return true;
-        }
+        
+        System.out.println("Entramos Planificar Profundidad");        
         
         Grid g=new Grid(actual.getX(),actual.getY());
 //        Casilla c=new Casilla(g);
@@ -251,20 +252,21 @@ public class M20B10b extends Mouse {
 //        Casilla cLEFT=new Casilla(gL);
         Grid gRight=new Grid(actual.getX()+1,actual.getY());
 //        Casilla cRIGHT=new Casilla(gR);
-        String x1 = String.valueOf(actual.getX());
-        String y1 = String.valueOf(actual.getY());
-
-        String posActual = x1 + y1;
-        String sup = x1 + String.valueOf(actual.getY() + 1);
-        String inf = x1 +  String.valueOf(actual.getY() - 1);
-        String izq = String.valueOf(actual.getX() - 1) + y1;
-        String der = String.valueOf(actual.getX() + 1) + y1;
+//        String x1 = String.valueOf(actual.getX());
+//        String y1 = String.valueOf(actual.getY());
+//
+//        String posActual = x1 + y1;
+//        String sup = x1 + String.valueOf(actual.getY() + 1);
+//        String inf = x1 +  String.valueOf(actual.getY() - 1);
+//        String izq = String.valueOf(actual.getX() - 1) + y1;
+//        String der = String.valueOf(actual.getX() + 1) + y1;
         
-        marcados.add(posActual);
+//        marcados.add(posActual);
         //if (celdasVisitadas.containsKey(gUP) && !marcados.contains(sup)) {
         if (celdasVisitadas.containsKey(gUP) ) {
             if (celdasVisitadas.get(g).canGoUp()) {
                 camino.addLast(UP);
+                System.out.println("Encontrado camino UP");
                 if (planificarProfundidad(gUP, cheese)) {
                     return true;
                 }
@@ -276,6 +278,7 @@ public class M20B10b extends Mouse {
         if (celdasVisitadas.containsKey(gDown) ) {
             if (celdasVisitadas.get(g).canGoDown()) {
                 camino.addLast(DOWN);
+                System.out.println("Encontrado camino DOWN");
                 if (planificarProfundidad(gDown, cheese)) {
                     return true;
                 }
@@ -287,6 +290,7 @@ public class M20B10b extends Mouse {
         if (celdasVisitadas.containsKey(gLeft) ) {
             if (celdasVisitadas.get(g).canGoLeft()) {
                 camino.addLast(LEFT);
+                System.out.println("Encontrado camino LEFT");
                 if (planificarProfundidad(gLeft, cheese)) {
                     return true;
                 }
@@ -297,6 +301,7 @@ public class M20B10b extends Mouse {
         if (celdasVisitadas.containsKey(gRight) ) {
             if (celdasVisitadas.get(g).canGoRight()) {
                 camino.addLast(RIGHT);
+                System.out.println("Encontrado camino RIGHT");
                 if (planificarProfundidad(gRight, cheese)) {
                     return true;
                 }
