@@ -72,7 +72,7 @@ public class M20B10b extends Mouse {
         Pair pairQueso= new Pair (cheese.getX(),cheese.getY());
         Grid gridQueso= new Grid(cheese.getX(),cheese.getY());
         
-        if(!celdasVisitadas.containsKey(pairQueso)){ //aquí FALLO     //Comprobamos que el queso no está en el mapa visitado
+        if(!celdasVisitadas.containsKey(pairQueso)){ //aquí funciona, Pair=clave hashmap    
             System.out.println("Escaneando......");
             return salida = explorar(currentGrid, cheese);           
         }else{
@@ -82,9 +82,10 @@ public class M20B10b extends Mouse {
 //                System.out.println("camino lleno, voy a por queso");
 //             return (int) camino.removeFirst();
 //            }
+            
         //marcados.clear();
         lastGrid = currentGrid;
-            System.out.println("Planifico...");
+        System.out.println("Planifico...");
         if(planificarProfundidad(currentGrid,cheese)){      //Arreglar planificarProfuncidad()
             System.out.println("Camino encontrado");
         }       
@@ -237,34 +238,26 @@ public class M20B10b extends Mouse {
     
     public boolean planificarProfundidad(Grid actual, Cheese cheese) {
                 
-        if(actual.getX() == cheese.getX() && actual.getY() == cheese.getY())    //Ver si ha terminado el camino
+        if(actual.getX() == cheese.getX() && actual.getY() == cheese.getY()){   //Ver si ha terminado el camino
+            System.out.println("coinciden Queso y Casilla");
             return true;
-        
+        }
         System.out.println("Entramos Planificar Profundidad");        
         
         Grid g=new Grid(actual.getX(),actual.getY());
-//        Casilla c=new Casilla(g);
         Grid gUP=new Grid(actual.getX(),actual.getY()+1);
-//        Casilla cUP=new Casilla(gUP);
         Grid gDown=new Grid(actual.getX(),actual.getY()-1);
-//        Casilla cDOWN=new Casilla(gD);
         Grid gLeft=new Grid(actual.getX()-1,actual.getY());
-//        Casilla cLEFT=new Casilla(gL);
         Grid gRight=new Grid(actual.getX()+1,actual.getY());
-//        Casilla cRIGHT=new Casilla(gR);
-//        String x1 = String.valueOf(actual.getX());
-//        String y1 = String.valueOf(actual.getY());
-//
-//        String posActual = x1 + y1;
-//        String sup = x1 + String.valueOf(actual.getY() + 1);
-//        String inf = x1 +  String.valueOf(actual.getY() - 1);
-//        String izq = String.valueOf(actual.getX() - 1) + y1;
-//        String der = String.valueOf(actual.getX() + 1) + y1;
-        
+
 //        marcados.add(posActual);
         //if (celdasVisitadas.containsKey(gUP) && !marcados.contains(sup)) {
-        if (celdasVisitadas.containsKey(gUP) ) {
-            if (celdasVisitadas.get(g).canGoUp()) {
+        System.out.println("Vamos a calcular el camino correcto");
+        
+        if (celdasVisitadas.containsKey(generarPair(gUP))) {    //el pair es la clave
+            System.out.println("gUP - existe en celdasVisitadas ");
+            if (celdasVisitadas.get(g).canGoUp()) {     //
+                System.out.println("Podemos movernos hacia arriba");
                 camino.addLast(UP);
                 System.out.println("Encontrado camino UP");
                 if (planificarProfundidad(gUP, cheese)) {
@@ -275,8 +268,10 @@ public class M20B10b extends Mouse {
         }
         
         //if (celdasVisitadas.containsKey(gDown) && !marcados.contains(inf)) {
-        if (celdasVisitadas.containsKey(gDown) ) {
+        if (celdasVisitadas.containsKey(generarPair(gDown))) {
+            System.out.println("gDOWN - existe en celdasVisitadas ");
             if (celdasVisitadas.get(g).canGoDown()) {
+                System.out.println("Podemos movernos hacia ABAJO");
                 camino.addLast(DOWN);
                 System.out.println("Encontrado camino DOWN");
                 if (planificarProfundidad(gDown, cheese)) {
@@ -286,9 +281,14 @@ public class M20B10b extends Mouse {
             }
         }
         
+        
+//        celdasVisitadas.containsKey(new Pair(actual.getX(),actual.getX()+1));
+        
 //        if (celdasVisitadas.containsKey(gLeft) && !marcados.contains(izq)) {
-        if (celdasVisitadas.containsKey(gLeft) ) {
+        if (celdasVisitadas.containsKey(generarPair(gLeft)) ) {
+            System.out.println("gLEFT - existe en celdasVisitadas ");
             if (celdasVisitadas.get(g).canGoLeft()) {
+                System.out.println("Podemos movernos hacia IZQUIERDA");
                 camino.addLast(LEFT);
                 System.out.println("Encontrado camino LEFT");
                 if (planificarProfundidad(gLeft, cheese)) {
@@ -298,8 +298,10 @@ public class M20B10b extends Mouse {
             }
         }
         //if (celdasVisitadas.containsKey(gRight) && !marcados.contains(der)) {
-        if (celdasVisitadas.containsKey(gRight) ) {
+        if (celdasVisitadas.containsKey(generarPair(gRight))) {
+            System.out.println("gRIGHT - existe en celdasVisitadas ");
             if (celdasVisitadas.get(g).canGoRight()) {
+                System.out.println("Podemos movernos hacia DERECHA");
                 camino.addLast(RIGHT);
                 System.out.println("Encontrado camino RIGHT");
                 if (planificarProfundidad(gRight, cheese)) {
@@ -308,9 +310,14 @@ public class M20B10b extends Mouse {
                 camino.removeLast();
             }
         }
-        
+        System.out.println("Falla, sale FALSE");
        return false;
     }
     
+    
+    private Pair generarPair(Grid gridToPair){
+        Pair sol= new Pair (gridToPair.getX(),gridToPair.getY());
+        return sol;       
+    }
     
 }
