@@ -9,4 +9,5 @@ La Practica01 ya está entregada, falta subirla a GitHub.
 
 Creación de la practica 02, MouseRun:
  - Escaner funciona correctamente
- - Desarrollando busqueda del queso en profundidad
+ - Desarrollando busqueda del queso en profundidad (DFS)
+ - Desarrollando busqueda gredit
