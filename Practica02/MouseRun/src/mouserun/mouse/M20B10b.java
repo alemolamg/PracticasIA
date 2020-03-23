@@ -30,7 +30,7 @@ public class M20B10b extends Mouse {
     private Grid lastGrid;
     
     Set<String> marcados;//estructura auxiliar para crear el camino
-    private LinkedList<Integer> camino;//camino hasta el queso
+    private Stack<Integer> camino;//camino hasta el queso
     private TreeMap<Pair,Grid> visitadas;
     
     /**
@@ -89,7 +89,7 @@ public class M20B10b extends Mouse {
         if(planificarProfundidad(currentGrid,cheese)){      //Arreglar planificarProfuncidad()
             System.out.println("Camino encontrado");
         }       
-            return (int)camino.removeFirst();    
+            return (int)camino.pop();    
 //        return 0;
         }
     }
@@ -244,7 +244,7 @@ public class M20B10b extends Mouse {
         }
         System.out.println("Entramos Planificar Profundidad");        
         
-        Grid g=new Grid(actual.getX(),actual.getY());
+        //Grid g=new Grid(actual.getX(),actual.getY());
         Grid gUP=new Grid(actual.getX(),actual.getY()+1);
         Grid gDown=new Grid(actual.getX(),actual.getY()-1);
         Grid gLeft=new Grid(actual.getX()-1,actual.getY());
@@ -256,58 +256,57 @@ public class M20B10b extends Mouse {
         
         if (celdasVisitadas.containsKey(generarPair(gUP))) {    //el pair es la clave
             System.out.println("gUP - existe en celdasVisitadas ");
-            if (celdasVisitadas.get(g).canGoUp()) {     //
+            if (celdasVisitadas.get(generarPair(actual)).canGoUp()) {     //
                 System.out.println("Podemos movernos hacia arriba");
-                camino.addLast(UP);
+                camino.push(UP);
                 System.out.println("Encontrado camino UP");
                 if (planificarProfundidad(gUP, cheese)) {
                     return true;
                 }
-                camino.removeLast();
+                camino.pop();
             }
         }
         
         //if (celdasVisitadas.containsKey(gDown) && !marcados.contains(inf)) {
         if (celdasVisitadas.containsKey(generarPair(gDown))) {
             System.out.println("gDOWN - existe en celdasVisitadas ");
-            if (celdasVisitadas.get(g).canGoDown()) {
+            if (celdasVisitadas.get(generarPair(actual)).canGoDown()) {
                 System.out.println("Podemos movernos hacia ABAJO");
-                camino.addLast(DOWN);
+                camino.push(DOWN);
                 System.out.println("Encontrado camino DOWN");
                 if (planificarProfundidad(gDown, cheese)) {
                     return true;
                 }
-                camino.removeLast();
+                camino.pop();
             }
         }
         
         
-//        celdasVisitadas.containsKey(new Pair(actual.getX(),actual.getX()+1));
         
 //        if (celdasVisitadas.containsKey(gLeft) && !marcados.contains(izq)) {
         if (celdasVisitadas.containsKey(generarPair(gLeft)) ) {
             System.out.println("gLEFT - existe en celdasVisitadas ");
-            if (celdasVisitadas.get(g).canGoLeft()) {
+            if (celdasVisitadas.get(generarPair(actual)).canGoLeft()) {
                 System.out.println("Podemos movernos hacia IZQUIERDA");
-                camino.addLast(LEFT);
+                camino.push(LEFT);
                 System.out.println("Encontrado camino LEFT");
                 if (planificarProfundidad(gLeft, cheese)) {
                     return true;
                 }
-                camino.removeLast();
+                camino.pop();
             }
         }
         //if (celdasVisitadas.containsKey(gRight) && !marcados.contains(der)) {
         if (celdasVisitadas.containsKey(generarPair(gRight))) {
             System.out.println("gRIGHT - existe en celdasVisitadas ");
-            if (celdasVisitadas.get(g).canGoRight()) {
+            if (celdasVisitadas.get(generarPair(actual)).canGoRight()) {
                 System.out.println("Podemos movernos hacia DERECHA");
-                camino.addLast(RIGHT);
+                camino.push(RIGHT);
                 System.out.println("Encontrado camino RIGHT");
                 if (planificarProfundidad(gRight, cheese)) {
                     return true;
                 }
-                camino.removeLast();
+                camino.pop();
             }
         }
         System.out.println("Falla, sale FALSE");
@@ -316,8 +315,11 @@ public class M20B10b extends Mouse {
     
     
     private Pair generarPair(Grid gridToPair){
-        Pair sol= new Pair (gridToPair.getX(),gridToPair.getY());
-        return sol;       
+        return new Pair(gridToPair.getX(),gridToPair.getY());       
+    }
+    
+    private Pair generarPair(int x,int y){
+        return new Pair (x,y);
     }
     
 }
