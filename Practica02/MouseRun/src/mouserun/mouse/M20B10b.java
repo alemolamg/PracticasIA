@@ -30,7 +30,7 @@ public class M20B10b extends Mouse {
     private Grid lastGrid;
     
     Set<String> marcados;//estructura auxiliar para crear el camino
-    private Stack<Integer> camino;//camino hasta el queso
+    private LinkedList<Integer> camino;//camino hasta el queso
     private TreeMap<Pair,Grid> visitadas;
     
     /**
@@ -89,7 +89,7 @@ public class M20B10b extends Mouse {
         if(planificarProfundidad(currentGrid,cheese)){      //Arreglar planificarProfuncidad()
             System.out.println("Camino encontrado");
         }       
-            return (int)camino.pop();    
+            return (int)camino.removeFirst();
 //        return 0;
         }
     }
@@ -263,7 +263,7 @@ public class M20B10b extends Mouse {
                 if (planificarProfundidad(gUP, cheese)) {
                     return true;
                 }
-                camino.pop();
+                camino.removeLast();
             }
         }
         
@@ -277,7 +277,7 @@ public class M20B10b extends Mouse {
                 if (planificarProfundidad(gDown, cheese)) {
                     return true;
                 }
-                camino.pop();
+                camino.removeLast();
             }
         }
         
@@ -293,7 +293,7 @@ public class M20B10b extends Mouse {
                 if (planificarProfundidad(gLeft, cheese)) {
                     return true;
                 }
-                camino.pop();
+                camino.removeLast();
             }
         }
         //if (celdasVisitadas.containsKey(gRight) && !marcados.contains(der)) {
@@ -306,7 +306,7 @@ public class M20B10b extends Mouse {
                 if (planificarProfundidad(gRight, cheese)) {
                     return true;
                 }
-                camino.pop();
+                camino.removeLast();
             }
         }
         System.out.println("Falla, sale FALSE");
