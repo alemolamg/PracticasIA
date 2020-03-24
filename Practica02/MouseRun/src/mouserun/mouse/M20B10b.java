@@ -3,6 +3,7 @@ package mouserun.mouse;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Set;
@@ -58,6 +59,8 @@ public class M20B10b extends Mouse {
         super("M20B10b");
         celdasVisitadas = new HashMap<>();
         pilaMovimientos = new Stack<>();
+        camino          = new LinkedList<>();
+        marcados        = new HashSet<>();                
     }
 
     /**
@@ -77,21 +80,14 @@ public class M20B10b extends Mouse {
             return salida = explorar(currentGrid, cheese);           
         }else{
             
-            System.out.println("Conozco el queso, voy a por él");
-//            if (!camino.isEmpty()) {
-//                System.out.println("camino lleno, voy a por queso");
-//             return (int) camino.removeFirst();
-//            }
-            
-        //marcados.clear();
+            if (!camino.isEmpty()) {
+             return (int) camino.removeFirst();
+            }
+        marcados.clear();
         lastGrid = currentGrid;
-        System.out.println("Planifico...");
-        if(planificarProfundidad(currentGrid,cheese)){      //Arreglar planificarProfuncidad()
-            System.out.println("Camino encontrado");
-        }       
-            return (int)camino.removeFirst();
-//        return 0;
-        }
+        planificarProfundidad(currentGrid,cheese);
+        return (int)camino.removeFirst();}
+       
     }
     
     /**
@@ -242,6 +238,10 @@ public class M20B10b extends Mouse {
             System.out.println("coinciden Queso y Casilla");
             return true;
         }
+        
+        int xGrid = actual.getX();
+        int yGrid = actual.getY();
+        
         System.out.println("Entramos Planificar Profundidad");        
         
         //Grid g=new Grid(actual.getX(),actual.getY());
@@ -250,11 +250,17 @@ public class M20B10b extends Mouse {
         Grid gLeft=new Grid(actual.getX()-1,actual.getY());
         Grid gRight=new Grid(actual.getX()+1,actual.getY());
 
-//        marcados.add(posActual);
+        String posActual = String.valueOf(xGrid) + String.valueOf(yGrid);
+        String sup = String.valueOf(xGrid) + String.valueOf(yGrid + 1);
+        String inf = String.valueOf(xGrid) +  String.valueOf(yGrid - 1);
+        String izq = String.valueOf(xGrid - 1) + String.valueOf(yGrid);
+        String der = String.valueOf(xGrid + 1) + String.valueOf(yGrid);
+        
+        marcados.add(posActual);
         //if (celdasVisitadas.containsKey(gUP) && !marcados.contains(sup)) {
         System.out.println("Vamos a calcular el camino correcto");
         
-        if (celdasVisitadas.containsKey(generarPair(gUP))) {    //el pair es la clave
+        if (celdasVisitadas.containsKey(generarPair(gUP)) && !marcados.contains(sup)) {    //el pair es la clave
             System.out.println("gUP - existe en celdasVisitadas ");
             if (celdasVisitadas.get(generarPair(actual)).canGoUp()) {     //
                 System.out.println("Podemos movernos hacia arriba");
@@ -268,7 +274,7 @@ public class M20B10b extends Mouse {
         }
         
         //if (celdasVisitadas.containsKey(gDown) && !marcados.contains(inf)) {
-        if (celdasVisitadas.containsKey(generarPair(gDown))) {
+        if (celdasVisitadas.containsKey(generarPair(gDown)) && !marcados.contains(inf)) {
             System.out.println("gDOWN - existe en celdasVisitadas ");
             if (celdasVisitadas.get(generarPair(actual)).canGoDown()) {
                 System.out.println("Podemos movernos hacia ABAJO");
@@ -284,7 +290,7 @@ public class M20B10b extends Mouse {
         
         
 //        if (celdasVisitadas.containsKey(gLeft) && !marcados.contains(izq)) {
-        if (celdasVisitadas.containsKey(generarPair(gLeft)) ) {
+        if (celdasVisitadas.containsKey(generarPair(gLeft)) && !marcados.contains(izq)) {
             System.out.println("gLEFT - existe en celdasVisitadas ");
             if (celdasVisitadas.get(generarPair(actual)).canGoLeft()) {
                 System.out.println("Podemos movernos hacia IZQUIERDA");
@@ -297,7 +303,7 @@ public class M20B10b extends Mouse {
             }
         }
         //if (celdasVisitadas.containsKey(gRight) && !marcados.contains(der)) {
-        if (celdasVisitadas.containsKey(generarPair(gRight))) {
+        if (celdasVisitadas.containsKey(generarPair(gRight)) && !marcados.contains(der)) {
             System.out.println("gRIGHT - existe en celdasVisitadas ");
             if (celdasVisitadas.get(generarPair(actual)).canGoRight()) {
                 System.out.println("Podemos movernos hacia DERECHA");
