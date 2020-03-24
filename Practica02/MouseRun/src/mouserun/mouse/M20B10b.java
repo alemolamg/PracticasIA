@@ -1,11 +1,9 @@
 package mouserun.mouse;
 
-import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 import javafx.util.Pair;
@@ -20,7 +18,6 @@ import static mouserun.game.Mouse.UP;
 /**
  * Clase que contiene el esqueleto del raton base para las prácticas de Inteligencia Artificial del curso 2019-20.
  * 
- * @author Cristóbal José Carmona (ccarmona@ujaen.es) y Ángel Miguel García Vico (agvico@ujaen.es)
  * @author Ana Montijano Zaragoza y Alejandro Molero Gómez
  */
 public class M20B10b extends Mouse {
@@ -72,8 +69,7 @@ public class M20B10b extends Mouse {
     public int move(Grid currentGrid, Cheese cheese) {  
         int salida;
         
-        Pair pairQueso= new Pair (cheese.getX(),cheese.getY());
-        Grid gridQueso= new Grid(cheese.getX(),cheese.getY());
+        Pair pairQueso= generarPair(cheese.getX(),cheese.getY());
         
         if(!celdasVisitadas.containsKey(pairQueso)){ //aquí funciona, Pair=clave hashmap    
             System.out.println("Escaneando......");
@@ -121,6 +117,7 @@ public class M20B10b extends Mouse {
      */
     @Override
     public void newCheese() {
+        
         
     }
 
