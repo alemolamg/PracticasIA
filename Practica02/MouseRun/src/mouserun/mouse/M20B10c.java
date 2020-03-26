@@ -1,12 +1,16 @@
 package mouserun.mouse;
 
-import java.util.TreeMap;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
 import javafx.util.Pair;
 import static java.lang.Math.abs;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Vector;
 import mouserun.game.Mouse;
 import mouserun.game.Grid;
 import mouserun.game.Cheese;
@@ -26,13 +30,13 @@ public class M20B10c extends Mouse {
      * Variable para almacenar la ultima celda visitada
      */
     private Grid lastGrid;                  
-//    private LinkedList<Integer> camino;     //camino hasta el queso
+    private LinkedList<Integer> camino;               //camino hasta el queso
 //    private TreeMap<Pair,Grid> visitadas;
 //    private long numCasillasVisitadas;
     private boolean firstQueso=true;
     private HashMap<Pair<Integer, Integer>, Grid> celdasVisitadas;
     private HashMap<Pair<Integer, Integer>, Grid> mapaAuxiliar;
-    
+    Set<String> auxiliar;                               //estructura auxiliar
     private Stack<Integer> pilaMovimientos;
     private Stack<Integer> pilaMovAuxiliar;
     
@@ -47,6 +51,8 @@ public class M20B10c extends Mouse {
         pilaMovAuxiliar = new Stack<>();
         mapaAuxiliar    = new HashMap<>();
         firstQueso      = true;
+        auxiliar        = new LinkedHashSet<>();
+        camino          = new LinkedList<>();
     }
 
     /**
@@ -72,95 +78,10 @@ public class M20B10c extends Mouse {
             System.out.println("Buscando el queso");
             if(firstQueso){
                 pilaMovAuxiliar.clear();
-                mapaAuxiliar.clear(); 
+//                mapaAuxiliar.clear(); 
                 firstQueso=false;
             }
-//            return calcCaminoGreed(currentGrid, cheese);
-
-        int x=currentGrid.getX();
-        int y=currentGrid.getY();
-        
-            System.out.println("Calculamos la distancia del greedy");
-        if(celdasVisitadas.containsKey(generarPair(cheese.getX(), cheese.getY()))){
-            System.out.println("Está en el mapa\n Calculamos la distancia del greedy");
-            int distUP      = distanciaManhattan(x, y + 1, cheese.getX(), cheese.getY());
-            int distDown    = distanciaManhattan(x, y - 1, cheese.getX(), cheese.getY());
-            int distRight   = distanciaManhattan(x + 1, y, cheese.getX(), cheese.getY());
-            int distLeft    = distanciaManhattan(x - 1, y, cheese.getX(), cheese.getY());
-            
-            
-            if(!currentGrid.canGoUp())
-                distUP = Integer.MAX_VALUE;
-            
-            if(!currentGrid.canGoLeft())
-                distLeft = Integer.MAX_VALUE;
-            
-            if(!currentGrid.canGoRight())
-                distRight = Integer.MAX_VALUE;
-            
-            if(!currentGrid.canGoDown())
-                distDown = Integer.MAX_VALUE;
-            
-            
-            if(minimo(distUP, distRight, distLeft, distDown)){
-                Pair siguiente=generarPair(x,y+1);
-                System.out.println("Arriba\n");
-                if(!mapaAuxiliar.containsKey(siguiente)){
-                    mapaAuxiliar.put(siguiente, currentGrid);
-                    pilaMovAuxiliar.add(DOWN);
-                    pilaMovimientos.add(DOWN);
-//                    pilaMovimientos.add(new Grid(x, y-1));
-                    return UP;
-                } else{ System.out.println("no podemos subir");
-                    distUP=Integer.MAX_VALUE; }
-            }
-            
-            if(minimo(distRight, distUP, distLeft, distDown)){
-                Pair siguiente= new Pair(x+1, y);
-                System.out.println("derecha\n");
-                if(!mapaAuxiliar.containsKey(siguiente)){
-                    mapaAuxiliar.put(siguiente, currentGrid);
-                    pilaMovAuxiliar.add(LEFT);
-                    pilaMovimientos.add(LEFT);
-//                    pilaMovimientos.add(new Grid(x-1, y));
-                    return RIGHT;
-                }else{ 
-                    System.out.println("No podemos derecha");
-                    distRight=Integer.MAX_VALUE; }
-            }
-            if(minimo(distDown, distUP, distLeft, distRight)){
-                System.out.println("bajamos\n");
-                    Pair pairDown=generarPair(x,y-1);
-                if(!mapaAuxiliar.containsKey(pairDown)){
-//                    System.out.println("Metemos pos en el mapa");
-                    mapaAuxiliar.put(pairDown, currentGrid);
-                    pilaMovAuxiliar.add(UP);
-                    pilaMovimientos.add(UP);
-                    //pilaMovimientos.add(new Grid(x, y+1));
-//                    System.out.println("pilas llenas, volvemos");
-                    return DOWN;
-                }else{ System.out.println("No podemos Bajar");
-                    distDown=Integer.MAX_VALUE; }
-            }
-            if(minimo(distLeft, distUP, distRight, distDown)){
-                System.out.println("izquierda\n");
-                if(!mapaAuxiliar.containsKey(generarPair(x - 1, y))){
-                    mapaAuxiliar.put(generarPair(x - 1, y), currentGrid);
-                    pilaMovAuxiliar.add(RIGHT);
-                    pilaMovimientos.add(RIGHT);
-                    //pilaMovimientos.add(new Grid(x+1, y));
-                    return LEFT;
-                }else{ System.out.println("No podemos izquierda");
-                    distLeft=Integer.MAX_VALUE; }
-            }
-           
-            if(pilaMovAuxiliar.size() > 0)//{
-                //pilaMovimientos.add(pilaMovAuxiliar.peek());
-                return pilaMovAuxiliar.pop();
-            //}
-            
-        }
-        return pilaMovimientos.pop() ;
+            return calcCaminoGreedy(currentGrid, cheese);
         }
     }
     
@@ -170,7 +91,7 @@ public class M20B10c extends Mouse {
     @Override
     public void newCheese() {
         pilaMovAuxiliar.clear();
-        mapaAuxiliar.clear();
+//        mapaAuxiliar.clear();
         
     }
 
@@ -232,7 +153,7 @@ public class M20B10c extends Mouse {
         return actual.getX() < anterior.getX();
     }
     
-    
+        
     private int explorar(Grid currentGrid){
         int x=currentGrid.getX();
         int y=currentGrid.getY();
@@ -282,7 +203,7 @@ public class M20B10c extends Mouse {
         return new Pair (x,y);
     }
     
-    private int distanciaManhattan(int xi, int yi, int xq, int yq){     //NO creo
+    private int distanciaManhattan(int xi, int yi, int xq, int yq){
         return abs(xi - xq) + abs(yi - yq);
     } 
     
@@ -292,97 +213,184 @@ public class M20B10c extends Mouse {
     
     private int distanciaManhattan(Grid cas1,Grid cas2){        //No creo
         return abs(cas1.getX() - cas2.getX()) + abs(cas1.getX() - cas2.getY());
-    } 
+    }     
     
     
-    
-    private int calcCaminoGreed (Grid currentGrid, Cheese cheese){
+    private int calcCaminoGreedy (Grid currentGrid, Cheese cheese){
         
         int x=currentGrid.getX();
         int y=currentGrid.getY();
         
+            System.out.println("Calculamos la distancia del greedy de Manhattan");
         if(celdasVisitadas.containsKey(generarPair(cheese.getX(), cheese.getY()))){
-            int distU = distanciaManhattan(x, y + 1, cheese.getX(), cheese.getY());
-            int distR = distanciaManhattan(x + 1, y, cheese.getX(), cheese.getY());
-            int distL = distanciaManhattan(x - 1, y, cheese.getX(), cheese.getY());
-            int distD = distanciaManhattan(x, y - 1, cheese.getX(), cheese.getY());
+            System.out.println("Está en el mapa\n Calculamos la distancia del greedy");
+            int distUP      = distanciaManhattan(x, y + 1, cheese.getX(), cheese.getY());
+            int distDown    = distanciaManhattan(x, y - 1, cheese.getX(), cheese.getY());
+            int distRight   = distanciaManhattan(x + 1, y, cheese.getX(), cheese.getY());
+            int distLeft    = distanciaManhattan(x - 1, y, cheese.getX(), cheese.getY());
+            
             
             if(!currentGrid.canGoUp())
-                distU = Integer.MAX_VALUE;
+                distUP = 99999;
             
             if(!currentGrid.canGoLeft())
-                distL = Integer.MAX_VALUE;
+                distLeft = 99999;
             
             if(!currentGrid.canGoRight())
-                distR = Integer.MAX_VALUE;
+                distRight = 99999;
             
             if(!currentGrid.canGoDown())
-                distD = Integer.MAX_VALUE;
+                distDown = 99999;
             
             
-            if(minimo(distU, distR, distL, distD)){
-                System.out.println("Subimos");
-                if(!mapaAuxiliar.containsKey(generarPair(x, y + 1))){
-                    mapaAuxiliar.put(generarPair(x, y + 1), currentGrid);
+            if(minimo(distUP, distRight, distLeft, distDown)){
+                if(!mapaAuxiliar.containsKey(generarPair(x,y+1)) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
+                    mapaAuxiliar.put(generarPair(x,y+1), new Grid(x, y+1));
                     pilaMovAuxiliar.add(DOWN);
                     pilaMovimientos.add(DOWN);
-//                    pilaMovimientos.add(new Grid(x, y-1));
                     return UP;
+                } else{ 
+                    distUP=99999; 
                 }
             }
-            if(minimo(distR, distU, distL, distD)){
-                System.out.println("derecha");
-                if(!mapaAuxiliar.containsKey(generarPair(x + 1, y))){
-                    mapaAuxiliar.put(generarPair(x + 1, y), currentGrid);
+            
+            if(minimo(distRight, distUP, distLeft, distDown)){
+                Pair siguiente= new Pair(x+1, y);
+                System.out.println("derecha\n");
+                if(!mapaAuxiliar.containsKey(siguiente) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
+                    mapaAuxiliar.put(siguiente, new Grid(x+1, y));
                     pilaMovAuxiliar.add(LEFT);
                     pilaMovimientos.add(LEFT);
 //                    pilaMovimientos.add(new Grid(x-1, y));
                     return RIGHT;
-                }
+                }else{ 
+                    distRight=99999; }
             }
-            if(minimo(distD, distU, distL, distR)){
+            if(minimo(distDown, distUP, distLeft, distRight)){
                 System.out.println("bajamos\n");
-                if(!mapaAuxiliar.containsKey(generarPair(x, y - 1))){
-                    System.out.println("Metemos pos en el mapa");
-                    mapaAuxiliar.put(generarPair(x, y - 1), currentGrid);
+                    Pair pairDown=generarPair(x,y-1);
+                if(!mapaAuxiliar.containsKey(pairDown) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
+//                    System.out.println("Metemos pos en el mapa");
+                    mapaAuxiliar.put(pairDown, new Grid(x, y-1));
                     pilaMovAuxiliar.add(UP);
                     pilaMovimientos.add(UP);
                     //pilaMovimientos.add(new Grid(x, y+1));
-                    System.out.println("pilas llenas, volvemos");
+//                    System.out.println("pilas llenas, volvemos");
                     return DOWN;
-                }
+                }else{ System.out.println("No podemos Bajar");
+                    distDown=Integer.MAX_VALUE; }
             }
-            if(minimo(distL, distU, distR, distD)){
-                if(!mapaAuxiliar.containsKey(generarPair(x - 1, y))){
-                    mapaAuxiliar.put(generarPair(x - 1, y), currentGrid);
+            if(minimo(distLeft, distUP, distRight, distDown)){
+                System.out.println("izquierda\n");
+                if(!mapaAuxiliar.containsKey(generarPair(x - 1, y)) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
+                    mapaAuxiliar.put(generarPair(x - 1, y), new Grid(x+1, y));
                     pilaMovAuxiliar.add(RIGHT);
                     pilaMovimientos.add(RIGHT);
                     //pilaMovimientos.add(new Grid(x+1, y));
                     return LEFT;
-                }
+                }else{ System.out.println("No podemos izquierda");
+                    distLeft=Integer.MAX_VALUE; }
             }
            
             if(pilaMovAuxiliar.size() > 0){
                 pilaMovimientos.add(pilaMovAuxiliar.peek());
                 return pilaMovAuxiliar.pop();
-            }
-            
+            } 
         }
         return pilaMovimientos.pop() ;
+        
     }
     
     
-    boolean minimo(int minimoAComprobar, int a, int b, int c){
-        //System.out.println("Entramos en calMinimo");
-        if(minimoAComprobar > a){
+    boolean minimo(int clave, int a, int b, int c){
+               
+        if(clave > a){
             return false;
         }
-        if(minimoAComprobar > b){
+        if(clave > b){
             return false;
         }
-        if(minimoAComprobar > c){
+        if(clave > c){
             return false;
         }
         return true;
     }
+
+//    //subclase auxiliar
+    class Casilla implements Comparable<Casilla>{
+
+        private Grid grid;
+        private int nveces;
+        private int heuristica;
+
+        public Casilla(Grid g) {
+            grid = g;
+            nveces = 0;
+            heuristica=0;
+        }
+
+        public Casilla(int x, int y) {
+            Grid grid = new Grid(x, y);
+            nveces = 0;
+            heuristica=0;
+        }
+
+        public void incrementa() {
+            setNveces(getNveces() + 1);
+        }
+
+        /**
+         * @return the casilla
+         */
+        public Grid getGrid() {
+            return grid;
+        }
+
+        /**
+         * @param casilla the casilla to set
+         */
+        public void setGrid(Grid casilla) {
+            this.grid = casilla;
+        }
+
+        /**
+         * @return the nveces
+         */
+        public int getNveces() {
+            return nveces;
+        }
+
+        /**
+         * @param nveces the nveces to set
+         */
+        public void setNveces(int nveces) {
+            this.nveces = nveces;
+        }
+
+        /**
+         * @return the heuristica
+         */
+        public int getHeuristica() {
+            return heuristica;
+        }
+
+        /**
+         * @param heuristica the heuristica to set
+         */
+        public void setHeuristica(int heuristica) {
+            this.heuristica = heuristica;
+        }
+
+        @Override
+        public int compareTo(Casilla o) {
+            if(o.getHeuristica()<this.heuristica){
+                return -1;
+            }if(o.getHeuristica()>this.heuristica){
+                return 1;
+            }
+            return 0;
+        }
+    }
+    
 }
+
