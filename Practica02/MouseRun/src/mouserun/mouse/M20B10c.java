@@ -69,13 +69,15 @@ public class M20B10c extends Mouse {
         
         Pair pairQueso= generarPair(cheese.getX(),cheese.getY());
         
-        if(!celdasVisitadas.containsKey(pairQueso)){ //aquí funciona, Pair=clave hashmap    
+        if(!celdasVisitadas.containsKey(pairQueso)){  
             if(!firstQueso)
                 firstQueso=true;
-            System.out.println("Escaneando......");
-            return explorar(currentGrid);           
+//            System.out.println("Escaneando......");
+            return explorar(currentGrid);  
+            
         }else{
-            System.out.println("Buscando el queso");
+            
+//            System.out.println("Buscando el queso");
             if(firstQueso){
                 pilaMovAuxiliar.clear();
 //                mapaAuxiliar.clear(); 
@@ -91,8 +93,7 @@ public class M20B10c extends Mouse {
     @Override
     public void newCheese() {
         pilaMovAuxiliar.clear();
-//        mapaAuxiliar.clear();
-        
+//        mapaAuxiliar.clear(); 
     }
 
     /**
@@ -112,48 +113,7 @@ public class M20B10c extends Mouse {
         Pair par = new Pair(casilla.getX(), casilla.getY());
         return celdasVisitadas.containsKey(par);
     }
-
-   /**
-     * @brief Método para calcular si una casilla está en una posición relativa respecto a otra
-     * @param actual Celda actual
-     * @param anterior Celda anterior
-     * @return True Si la posición Y de la actual es mayor que la de la anterior
-     */
-    public boolean actualArriba(Grid actual, Grid anterior) {
-        return actual.getY() > anterior.getY();
-    }
-
-    /**
-     * @brief Método para calcular si una casilla está en una posición relativa respecto a otra
-     * @param actual Celda actual
-     * @param anterior Celda anterior
-     * @return True Si la posición Y de la actual es menor que la de la anterior
-     */
-    public boolean actualAbajo(Grid actual, Grid anterior) {
-        return actual.getY() < anterior.getY();
-    }
-    
-    /**
-     * @brief Método para calcular si una casilla está en una posición relativa respecto a otra
-     * @param actual Celda actual
-     * @param anterior Celda anterior
-     * @return True Si la posición X de la actual es mayor que la de la anterior
-     */
-    public boolean actualDerecha(Grid actual, Grid anterior) {
-        return actual.getX() > anterior.getX();
-    }
-    
-    /**
-     * @brief Método para calcular si una casilla está en una posición relativa respecto a otra
-     * @param actual Celda actual
-     * @param anterior Celda anterior
-     * @return True Si la posición X de la actual es menor que la de la anterior
-     */
-    public boolean actualIzquierda(Grid actual, Grid anterior) {
-        return actual.getX() < anterior.getX();
-    }
-    
-        
+               
     private int explorar(Grid currentGrid){
         int x=currentGrid.getX();
         int y=currentGrid.getY();
@@ -170,18 +130,18 @@ public class M20B10c extends Mouse {
                 }
         }
         
-        if (currentGrid.canGoLeft()) {
-                if(!celdasVisitadas.containsKey(new Pair(x - 1, y))){
-                    pilaMovimientos.add(RIGHT);
-                    return Mouse.LEFT;
-                }
-        }
-        
         if (currentGrid.canGoRight()) {
             if(!celdasVisitadas.containsKey(new Pair(x + 1, y))){
                 pilaMovimientos.add(LEFT);
                 return Mouse.RIGHT;
             }
+        }
+        
+        if (currentGrid.canGoLeft()) {
+                if(!celdasVisitadas.containsKey(new Pair(x - 1, y))){
+                    pilaMovimientos.add(RIGHT);
+                    return Mouse.LEFT;
+                }
         }
         
         if (currentGrid.canGoUp()) {
@@ -203,45 +163,49 @@ public class M20B10c extends Mouse {
         return new Pair (x,y);
     }
     
-    private int distanciaManhattan(int xi, int yi, int xq, int yq){
+    private int calcManhattan(int xi, int yi, int xq, int yq){
         return abs(xi - xq) + abs(yi - yq);
     } 
     
-    private int distanciaManhattan(Grid coord,Cheese queso){
+    private int calcManhattan(Grid coord,Cheese queso){
         return abs(coord.getX() - queso.getX()) + abs(coord.getY() - queso.getY());
     } 
     
-    private int distanciaManhattan(Grid cas1,Grid cas2){        //No creo
+    private int calcManhattan(Grid cas1,Grid cas2){        //No creo
         return abs(cas1.getX() - cas2.getX()) + abs(cas1.getX() - cas2.getY());
     }     
-    
     
     private int calcCaminoGreedy (Grid currentGrid, Cheese cheese){
         
         int x=currentGrid.getX();
         int y=currentGrid.getY();
         
-            System.out.println("Calculamos la distancia del greedy de Manhattan");
         if(celdasVisitadas.containsKey(generarPair(cheese.getX(), cheese.getY()))){
-            System.out.println("Está en el mapa\n Calculamos la distancia del greedy");
-            int distUP      = distanciaManhattan(x, y + 1, cheese.getX(), cheese.getY());
-            int distDown    = distanciaManhattan(x, y - 1, cheese.getX(), cheese.getY());
-            int distRight   = distanciaManhattan(x + 1, y, cheese.getX(), cheese.getY());
-            int distLeft    = distanciaManhattan(x - 1, y, cheese.getX(), cheese.getY());
+            int distUP;
+            int distDown;
+            int distLeft;
+            int distRight;
             
-            
-            if(!currentGrid.canGoUp())
+            if(currentGrid.canGoUp()){
+                distUP = calcManhattan(x, y + 1, cheese.getX(), cheese.getY());
+            }else
                 distUP = 99999;
-            
-            if(!currentGrid.canGoLeft())
-                distLeft = 99999;
-            
-            if(!currentGrid.canGoRight())
-                distRight = 99999;
-            
-            if(!currentGrid.canGoDown())
+                
+            if(currentGrid.canGoDown())
+                distDown = calcManhattan(x, y - 1, cheese.getX(), cheese.getY());
+            else
                 distDown = 99999;
             
+            if(currentGrid.canGoLeft())
+                distLeft =calcManhattan(x - 1, y, cheese.getX(), cheese.getY());
+            else 
+                distLeft = 99999;
+            
+            if(currentGrid.canGoRight())
+                distRight = calcManhattan(x + 1, y, cheese.getX(), cheese.getY());
+            else
+                distRight = 99999;
+                
             
             if(minimo(distUP, distRight, distLeft, distDown)){
                 if(!mapaAuxiliar.containsKey(generarPair(x,y+1)) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
@@ -255,44 +219,35 @@ public class M20B10c extends Mouse {
             }
             
             if(minimo(distRight, distUP, distLeft, distDown)){
-                Pair siguiente= new Pair(x+1, y);
-                System.out.println("derecha\n");
-                if(!mapaAuxiliar.containsKey(siguiente) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
-                    mapaAuxiliar.put(siguiente, new Grid(x+1, y));
+                if(!mapaAuxiliar.containsKey(generarPair(x+1, y)) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
+                    mapaAuxiliar.put(generarPair(x+1, y), new Grid(x+1, y));
                     pilaMovAuxiliar.add(LEFT);
                     pilaMovimientos.add(LEFT);
-//                    pilaMovimientos.add(new Grid(x-1, y));
                     return RIGHT;
                 }else{ 
                     distRight=99999; }
             }
             if(minimo(distDown, distUP, distLeft, distRight)){
-                System.out.println("bajamos\n");
-                    Pair pairDown=generarPair(x,y-1);
-                if(!mapaAuxiliar.containsKey(pairDown) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
-//                    System.out.println("Metemos pos en el mapa");
-                    mapaAuxiliar.put(pairDown, new Grid(x, y-1));
+                if(!mapaAuxiliar.containsKey(generarPair(x,y-1)) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
+                    mapaAuxiliar.put(generarPair(x,y-1), new Grid(x, y-1));
                     pilaMovAuxiliar.add(UP);
                     pilaMovimientos.add(UP);
-                    //pilaMovimientos.add(new Grid(x, y+1));
-//                    System.out.println("pilas llenas, volvemos");
                     return DOWN;
-                }else{ System.out.println("No podemos Bajar");
-                    distDown=Integer.MAX_VALUE; }
+                }else{
+                    distDown=99999; 
+                }
             }
             if(minimo(distLeft, distUP, distRight, distDown)){
-                System.out.println("izquierda\n");
                 if(!mapaAuxiliar.containsKey(generarPair(x - 1, y)) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
                     mapaAuxiliar.put(generarPair(x - 1, y), new Grid(x+1, y));
                     pilaMovAuxiliar.add(RIGHT);
                     pilaMovimientos.add(RIGHT);
-                    //pilaMovimientos.add(new Grid(x+1, y));
                     return LEFT;
-                }else{ System.out.println("No podemos izquierda");
-                    distLeft=Integer.MAX_VALUE; }
+                }else{
+                    distLeft=Integer.MAX_VALUE; 
+                }
             }
-           
-            if(pilaMovAuxiliar.size() > 0){
+            if(pilaMovAuxiliar.size() >=1){
                 pilaMovimientos.add(pilaMovAuxiliar.peek());
                 return pilaMovAuxiliar.pop();
             } 
@@ -302,8 +257,7 @@ public class M20B10c extends Mouse {
     }
     
     
-    boolean minimo(int clave, int a, int b, int c){
-               
+    boolean minimo(int clave, int a, int b, int c){     
         if(clave > a){
             return false;
         }
@@ -314,83 +268,6 @@ public class M20B10c extends Mouse {
             return false;
         }
         return true;
-    }
-
-//    //subclase auxiliar
-    class Casilla implements Comparable<Casilla>{
-
-        private Grid grid;
-        private int nveces;
-        private int heuristica;
-
-        public Casilla(Grid g) {
-            grid = g;
-            nveces = 0;
-            heuristica=0;
-        }
-
-        public Casilla(int x, int y) {
-            Grid grid = new Grid(x, y);
-            nveces = 0;
-            heuristica=0;
-        }
-
-        public void incrementa() {
-            setNveces(getNveces() + 1);
-        }
-
-        /**
-         * @return the casilla
-         */
-        public Grid getGrid() {
-            return grid;
-        }
-
-        /**
-         * @param casilla the casilla to set
-         */
-        public void setGrid(Grid casilla) {
-            this.grid = casilla;
-        }
-
-        /**
-         * @return the nveces
-         */
-        public int getNveces() {
-            return nveces;
-        }
-
-        /**
-         * @param nveces the nveces to set
-         */
-        public void setNveces(int nveces) {
-            this.nveces = nveces;
-        }
-
-        /**
-         * @return the heuristica
-         */
-        public int getHeuristica() {
-            return heuristica;
-        }
-
-        /**
-         * @param heuristica the heuristica to set
-         */
-        public void setHeuristica(int heuristica) {
-            this.heuristica = heuristica;
-        }
-
-        @Override
-        public int compareTo(Casilla o) {
-            if(o.getHeuristica()<this.heuristica){
-                return -1;
-            }if(o.getHeuristica()>this.heuristica){
-                return 1;
-            }
-            return 0;
-        }
-    }
-    
+    }    
 }
 
