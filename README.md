@@ -11,3 +11,5 @@ Creación de la practica 02, MouseRun:
  - Escaner funciona correctamente
  - Desarrollando busqueda del queso en profundidad (DFS)
  - Desarrollando busqueda gredit
+
+Practica 03 en Realización (Flappy Bird)
