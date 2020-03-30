@@ -24,7 +24,7 @@ import static mouserun.game.Mouse.UP;
  * 
  * @author Ana Montijano Zaragoza y Alejandro Molero Gómez
  */
-public class M20B10c extends Mouse {
+public class M20B10GRE extends Mouse {
 
     /**
      * Variable para almacenar la ultima celda visitada
@@ -44,8 +44,8 @@ public class M20B10c extends Mouse {
     /**
      * Constructor (Puedes modificar el nombre a tu gusto).
      */
-    public M20B10c() {
-        super("M20B10c");
+    public M20B10GRE() {
+        super("M20B10-GRE");
         celdasVisitadas = new HashMap<>();
         pilaMovimientos = new Stack<>();
         pilaMovAuxiliar = new Stack<>();
@@ -65,11 +65,12 @@ public class M20B10c extends Mouse {
         //int salida =0;      // TODO: borrame
         if(!celdasVisitadas.containsKey(generarPair(currentGrid)) ){
             celdasVisitadas.put(generarPair(currentGrid), currentGrid);
+            //añadir a la pila 
         }
         
         Pair pairQueso= generarPair(cheese.getX(),cheese.getY());
         
-        if(!celdasVisitadas.containsKey(pairQueso)){  
+        if(!celdasVisitadas.containsKey(pairQueso)){  //ir a explorar
             if(!firstQueso)
                 firstQueso=true;
 //            System.out.println("Escaneando......");
@@ -80,7 +81,7 @@ public class M20B10c extends Mouse {
 //            System.out.println("Buscando el queso");
             if(firstQueso){
                 pilaMovAuxiliar.clear();
-//                mapaAuxiliar.clear(); 
+                mapaAuxiliar.clear(); 
                 firstQueso=false;
             }
             return calcCaminoGreedy(currentGrid, cheese);
@@ -244,9 +245,10 @@ public class M20B10c extends Mouse {
                     pilaMovimientos.add(RIGHT);
                     return LEFT;
                 }else{
-                    distLeft=Integer.MAX_VALUE; 
+                    distLeft=99999; 
                 }
             }
+            
             if(pilaMovAuxiliar.size() >=1){
                 pilaMovimientos.add(pilaMovAuxiliar.peek());
                 return pilaMovAuxiliar.pop();

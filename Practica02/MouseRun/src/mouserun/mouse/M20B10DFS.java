@@ -20,7 +20,7 @@ import static mouserun.game.Mouse.UP;
  * 
  * @author Ana Montijano Zaragoza y Alejandro Molero Gómez
  */
-public class M20B10b extends Mouse {
+public class M20B10DFS extends Mouse {
 
     /**
      * Variable para almacenar la ultima celda visitada
@@ -52,8 +52,8 @@ public class M20B10b extends Mouse {
     /**
      * Constructor (Puedes modificar el nombre a tu gusto).
      */
-    public M20B10b() {
-        super("M20B10b");
+    public M20B10DFS() {
+        super("M20B10-DFS");
         celdasVisitadas = new HashMap<>();
         pilaMovimientos = new Stack<>();
         camino          = new LinkedList<>();
