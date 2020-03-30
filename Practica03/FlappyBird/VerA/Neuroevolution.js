@@ -337,20 +337,18 @@ var Neuroevolution = function (options) {
 				// Genetic crossover
 				// 0.5 is the crossover factor.
 				// FIXME Really should be a predefined constant.
-				var j;
-				do{
-					j=Math.random();
-				}while(j>i && j<data.network.size)
-
 				if (Math.random() <= 0.5) {
-					data.network.weights[i] = g2.network.weights[j];
+					data.network.weights[i] = g2.network.weights[i];
 				}
 			}
 
 			// Perform mutation on some weights.
 			for (var i in data.network.weights) {
 				if (Math.random() <= self.options.mutationRate) {
-					data.network.weights[i] +=  Math.sin(2*Math.random());
+					data.network.weights[i] += Math.random() *
+						self.options.mutationRange *
+						2 -
+						self.options.mutationRange;
 				}
 			}
 			datas.push(data);
