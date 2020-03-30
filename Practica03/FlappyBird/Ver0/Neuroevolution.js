@@ -345,7 +345,11 @@ var Neuroevolution = function (options) {
 			// Perform mutation on some weights.
 			for (var i in data.network.weights) {
 				if (Math.random() <= self.options.mutationRate) {
-					data.network.weights[i] +=  Math.sin(2*Math.random());
+					data.network.weights[i] += Math.random() *
+						self.options.mutationRange *
+						2 -
+						self.options.mutationRange;
+				}
 			}
 			datas.push(data);
 		}
