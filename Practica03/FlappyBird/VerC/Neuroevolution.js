@@ -333,19 +333,27 @@ var Neuroevolution = function (options) {
 		for (var nb = 0; nb < nbChilds; nb++) {
 			// Deep clone of genome 1.
 			var data = JSON.parse(JSON.stringify(g1));
-			for (var i in g2.network.weights) {
-				// Genetic crossover
-				// 0.5 is the crossover factor.
-				// FIXME Really should be a predefined constant.
-				if (Math.random() <= 0.5) {
-					data.network.weights[i] = g2.network.weights[i];
+			for(var i in g2.network.weights){
+				for (var j in g2.network.weights ) {
+					// Genetic crossover
+					// 0.5 is the crossover factor.
+					// FIXME Really should be a predefined constant.
+					if(i<j){
+						data.network.weights[j] = g2.network.weights[j];
+						data.network.weights[i] = g2.network.weights[i];
+					}						
+
+					//if (Math.random() <= 0.5) {
+					//	data.network.weights[i] = g2.network.weights[i];
+					//}
 				}
 			}
 
 			// Perform mutation on some weights.
 			for (var i in data.network.weights) {
 				if (Math.random() <= self.options.mutationRate) {
-					data.network.weights[i] +=  Math.sin(2*Math.random());
+					data.network.weights[i] += data.network.weights[i] +=  Math.sin(self.options.mutationRange * Math.random() );
+				}
 			}
 			datas.push(data);
 		}
