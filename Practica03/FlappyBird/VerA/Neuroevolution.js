@@ -337,8 +337,16 @@ var Neuroevolution = function (options) {
 				// Genetic crossover
 				// 0.5 is the crossover factor.
 				// FIXME Really should be a predefined constant.
+				
+				float minimo= min(g1.weights.length,g2.weights.length);
+				float maximo= max(g1.weights.length,g2.weights.length);
+				do{
+					var num1=random(minimo);
+					var num2=random(maximo);
+				}while(num1<num2 && num2<=maximo && num1>=minimo);
+
 				if (Math.random() <= 0.5) {
-					data.network.weights[i] = g2.network.weights[i];
+					data.network.weights[num1] = g2.network.weights[num2];
 				}
 			}
 
