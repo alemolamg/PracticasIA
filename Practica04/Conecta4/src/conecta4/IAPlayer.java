@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package conecta4;
 
 /**
@@ -33,6 +28,9 @@ public class IAPlayer extends Player {
         //Pintar Ficha (sustituir 'columna' por el valor adecuado)
         //Pintar Ficha
         int columna = getRandomColumn(tablero);
+        
+        
+        
 
         return tablero.checkWin(tablero.setButton(columna, Conecta4.PLAYER2), columna, conecta);
 
