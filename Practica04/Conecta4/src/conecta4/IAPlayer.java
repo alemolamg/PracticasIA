@@ -38,6 +38,15 @@ public class IAPlayer extends Player {
 
     } // turnoJugada
     
+    private int valorMax(int matriz[][], Grid tablero, int conecta){
+      int termina= esTerminal(matriz, conecta, conecta, conecta, tablero);  //falta completar
+        
+     
+      return termina;
+    };
+    
+    
+    
     private int valorMin(int matriz[][], Grid tablero, int conecta){
         
         int termina= esTerminal(matriz, conecta, conecta, conecta, tablero);  //falta completar
