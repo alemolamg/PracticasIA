@@ -38,6 +38,180 @@ public class IAPlayer extends Player {
 
     } // turnoJugada
     
+    private int valorMax(int matriz[][], Grid tablero, int conecta){
+      int termina= esTerminal(matriz, conecta, conecta, conecta, tablero);  //falta completar
+        
+     
+      return termina;
+    };
+    
+    
+    
+    private int valorMin(int matriz[][], Grid tablero, int conecta){
+        
+        int termina= esTerminal(matriz, conecta, conecta, conecta, tablero);  //falta completar
+        
+        if(termina == -1)
+            return -1;
+          else{
+            
+        }
+        
+        
+    };
+    
+    
+    private int esTerminal(int matrix[][], int x, int y, int conecta, Grid tablero) {
+        int ganar1 = 0;
+        int ganar2 = 0;
+        int ganador = 0;
+        boolean salir = false;
+        // comprobar vertical
+        for (int j = 0; (j < tablero.getColumnas()) && !salir; j++) {
+            if (matrix[j][y] != 0) {
+                if (matrix[j][y] == 1) {
+                    ganar1++;
+                } else {
+                    ganar1 = 0;
+                }
+                // Gana el jugador 1
+                if (ganar1 == conecta) {
+                    ganador = 1;
+                    salir = true;
+                }
+                if (!salir) {
+                    if (matrix[j][y] == -1) {
+                        ganar2++;
+                    } else {
+                        ganar2 = 0;
+                    }
+                    // Gana el jugador 2
+                    if (ganar2 == conecta) {
+                        ganador = -1;
+                        salir = true;
+                    }
+                }
+            } else {
+                ganar1 = 0;
+                ganar2 = 0;
+            }
+        }
+        // Comprobar horizontal
+        ganar1 = 0;
+        ganar2 = 0;
+        for (int i = 0; (i < tablero.getColumnas()) && !salir; i++) {
+            if (matrix[x][i] != 0) {
+                if (matrix[x][i] == 1) {
+                    ganar1++;
+                } else {
+                    ganar1 = 0;
+                }
+                // Gana el jugador 1
+                if (ganar1 == conecta) {
+                    ganador = 1;
+                    salir = true;
+                }
+                if (ganador != 1) {
+                    if (matrix[x][i] == -1) {
+                        ganar2++;
+                    } else {
+                        ganar2 = 0;
+                    }
+                    // Gana el jugador 2
+                    if (ganar2 == conecta) {
+                        ganador = -1;
+                        salir = true;
+                    }
+                }
+            } else {
+                ganar1 = 0;
+                ganar2 = 0;
+            }
+        }
+        // Comprobar oblicuo. De izquierda a derecha
+        ganar1 = 0;
+        ganar2 = 0;
+        int a = x;
+        int b = y;
+        while (b > 0 && a > 0) {
+            a--;
+            b--;
+        }
+        while (b < tablero.getColumnas()&& a < tablero.getFilas()&& !salir) {
+            if (matrix[a][b] != 0) {
+                if (matrix[a][b] == 1) {
+                    ganar1++;
+                } else {
+                    ganar1 = 0;
+                }
+                // Gana el jugador 1
+                if (ganar1 == conecta) {
+                    ganador = 1;
+                    salir = true;
+                }
+                if (ganador != 1) {
+                    if (matrix[a][b] == -1) {
+                        ganar2++;
+                    } else {
+                        ganar2 = 0;
+                    }
+                    // Gana el jugador 2
+                    if (ganar2 == conecta) {
+                        ganador = -1;
+                        salir = true;
+                    }
+                }
+            } else {
+                ganar1 = 0;
+                ganar2 = 0;
+            }
+            a++;
+            b++;
+        }
+        // Comprobar oblicuo de derecha a izquierda 
+        ganar1 = 0;
+        ganar2 = 0;
+        a = x;
+        b = y;
+        //buscar posición de la esquina
+        while (b < tablero.getColumnas()- 1 && a > 0) {
+            a--;
+            b++;
+        }
+        while (b > -1 && a < tablero.getFilas() && !salir) {
+            if (matrix[a][b] != 0) {
+                if (matrix[a][b] == 1) {
+                    ganar1++;
+                } else {
+                    ganar1 = 0;
+                }
+                // Gana el jugador 1
+                if (ganar1 == conecta) {
+                    ganador = 1;
+                    salir = true;
+                }
+                if (ganador != 1) {
+                    if (matrix[a][b] == -1) {
+                        ganar2++;
+                    } else {
+                        ganar2 = 0;
+                    }
+                    // Gana el jugador 2
+                    if (ganar2 == conecta) {
+                        ganador = -1;
+                        salir = true;
+                    }
+                }
+            } else {
+                ganar1 = 0;
+                ganar2 = 0;
+            }
+            a++;
+            b--;
+        }
+
+        return ganador;
+    }
     
     
     private class Nodo{
