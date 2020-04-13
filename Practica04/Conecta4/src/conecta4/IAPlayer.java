@@ -1,5 +1,8 @@
 package conecta4;
 
+import java.util.TreeMap;
+import javax.swing.tree.DefaultMutableTreeNode;
+        
 /**
  *
  * @author José María Serrano
@@ -13,7 +16,7 @@ package conecta4;
  *
  */
 public class IAPlayer extends Player {
-
+       
     /**
      *
      * @param tablero Representación del tablero de juego
@@ -31,9 +34,15 @@ public class IAPlayer extends Player {
         
         
         
-
         return tablero.checkWin(tablero.setButton(columna, Conecta4.PLAYER2), columna, conecta);
 
     } // turnoJugada
+    
+    
+    
+    private class Nodo{
+        
+        
+    }
 
 } // IAPlayer
