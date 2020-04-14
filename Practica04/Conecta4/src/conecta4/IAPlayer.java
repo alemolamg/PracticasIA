@@ -39,7 +39,7 @@ public class IAPlayer extends Player {
     } // turnoJugada
     
     private int valorMax(int matriz[][], Grid tablero, int conecta){
-      int termina= esTerminal(matriz, conecta, conecta, conecta, tablero);  //falta completar
+      int termina= esTerminal(matriz, conecta, tablero);  //falta completar
         
      
       return termina;
@@ -49,19 +49,33 @@ public class IAPlayer extends Player {
     
     private int valorMin(int matriz[][], Grid tablero, int conecta){
         
-        int termina= esTerminal(matriz, conecta, conecta, conecta, tablero);  //falta completar
+        int termina= esTerminal(matriz, conecta, tablero);  //falta completar
         
-        if(termina == -1)
+        if (termina == -1) {
             return -1;
-          else{
-            
+        } else {
+            int minimoCamino = Integer.MAX_VALUE;
+            int aux;
+            for (int i = 0; i < tablero.getColumnas(); i++) {
+                for (int j = 0; j < tablero.getFilas(); j++) {
+                    if (matriz[i][j] == 0) {
+                        matriz[i][j] = -1;
+                        aux = valorMax(matriz,tablero,conecta);
+                        if (aux < minimoCamino) {
+                            minimoCamino = aux;
+                        }
+                        matriz[i][j] = -1;
+                    }
+                }
+            }
+            return minimoCamino;
         }
-        
+
         
     };
     
     
-    private int esTerminal(int matrix[][], int x, int y, int conecta, Grid tablero) {
+    private int esTerminal(int matrix[][], int conecta, Grid tablero) {
         int ganar1 = 0;
         int ganar2 = 0;
         int ganador = 0;
