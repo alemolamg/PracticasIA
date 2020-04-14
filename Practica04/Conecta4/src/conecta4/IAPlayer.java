@@ -68,7 +68,7 @@ public class IAPlayer extends Player {
     
     private int valorMin(int matriz[][], Grid tablero, int conecta){
         
-        int termina= esTerminal(matriz, conecta, tablero);  //falta completar
+        int termina= esTerminal(matriz, conecta, tablero);      //falta completar
         
         if (termina == -1) {
             return -1;
