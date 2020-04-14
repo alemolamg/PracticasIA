@@ -15,3 +15,4 @@ Practica 02, MouseRun:
 Practica 03 Flappy Bird Terminada, nota por determinar
 
 Práctica 04 Conecta4
+- comenzando arbol minimax
