@@ -41,8 +41,25 @@ public class IAPlayer extends Player {
     private int valorMax(int matriz[][], Grid tablero, int conecta){
       int termina= esTerminal(matriz, conecta, tablero);  //falta completar
         
-     
-      return termina;
+        if (termina == 1) {
+            return 1;
+        } else {
+            int maxCamino = Integer.MAX_VALUE;
+            int aux;
+            for (int i = 0; i < tablero.getColumnas(); i++) {
+                for (int j = 0; j < tablero.getFilas(); j++) {
+                    if (matriz[i][j] == 0) {
+                        matriz[i][j] = 1;
+                        aux = valorMin(matriz,tablero,conecta);
+                        if (aux > maxCamino) {
+                            maxCamino = aux;
+                        }
+                        matriz[i][j] = 1;
+                    }
+                }
+            }
+            return maxCamino;
+        }
     };
     
     
