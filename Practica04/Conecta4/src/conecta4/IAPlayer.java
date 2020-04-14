@@ -246,8 +246,25 @@ public class IAPlayer extends Player {
     
     
     private class Nodo{
+        int columJugada;
+        int tableroNodo [][];
+        Grid tableroGrid; 
         
+        private Nodo (Grid tablero){
+            tableroNodo = tablero.toArray();
+            tableroGrid = tablero;
+        }
         
+        private Nodo (Nodo NodoTablero){
+            tableroNodo = NodoTablero.getTableroNodo();
+            tableroGrid = NodoTablero.tableroGrid; 
+        }
+        
+        public int[][] getTableroNodo(){
+            return tableroNodo;
+        }
+        
+        public int getColumnaJugada() { return columJugada;}  
     }
 
 } // IAPlayer
