@@ -64,7 +64,9 @@ public class IAPlayer extends Player {
     } // turnoJugada
     
     private int valorMax(Nodo nodoActual, Grid tablero, int conecta){
-      int termina= esTerminal(nodoActual, conecta, tablero);  //falta completar
+        
+      //int termina= esTerminal(nodoActual, conecta, tablero);  //falta completar
+      int termina = tablero.checkWin(nodoActual.columJugada, nodoActual.filaJugada, conecta);      //falta completar
       
       //DefaultMutableTreeNode arbol; //ver si sirve
       
@@ -94,7 +96,8 @@ public class IAPlayer extends Player {
     
     private int valorMin(Nodo nodoActual, Grid tablero, int conecta){
         
-        int termina= esTerminal(nodoActual, conecta, tablero);      //falta completar
+        //int termina = esTerminal(nodoActual, conecta, tablero);      //falta completar
+        int termina = tablero.checkWin(nodoActual.columJugada, nodoActual.filaJugada, conecta);      //falta completar
         
         if (termina == -1) {
             return -1;
@@ -111,6 +114,7 @@ public class IAPlayer extends Player {
                         if (aux < minimoCamino) {
                             minimoCamino = aux;
                         }
+                        nodoActual.tableroNodo[i][j] = -1;
                         //matriz[i][j] = -1;
                     }
                 }
@@ -298,12 +302,15 @@ public class IAPlayer extends Player {
     
     public class Nodo{
         int columJugada;        //ultima columna usada
+        int filaJugada;         //ultima fila jugada
         int tableroNodo [][];   //*matriz con el grid en enteros
         Grid tableroGrid;       //grib con el tablero
+        
         
         private Nodo (Grid tablero){
             tableroNodo = tablero.toArray();
             tableroGrid = tablero;
+            
         }
         
         private Nodo (Nodo NodoTablero){
@@ -313,6 +320,14 @@ public class IAPlayer extends Player {
         
         public int[][] getTableroNodo(){
             return tableroNodo;
+        }
+        
+        public void setFilaNodo(int num){
+            filaJugada=num;
+        }
+        
+        public int getFilaNodo(){
+            return filaJugada;            
         }
         
         public int getTableroNodo(int i,int j){
