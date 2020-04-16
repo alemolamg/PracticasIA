@@ -37,6 +37,7 @@ public class IAPlayer extends Player {
         Nodo unNodo=new Nodo(tablero);
         
         int mejorMov = 1;
+        int x=tablero.getColumnas(), y=tablero.getFilas();
         int min, minActual;
         min = Integer.MAX_VALUE;
         int filaAux = 0;
@@ -47,7 +48,7 @@ public class IAPlayer extends Player {
             if (hayFilas(matrix, j, tablero)) {
                 int aux = queFila(matrix, j, tablero);
                 matrix[aux][j] = -1;
-                minActual = valorMin(unNodo,tablero,conecta);
+                minActual = valorMin(unNodo,tablero,x,y,conecta);
                 matrix[aux][j] = 0;
                 if (minActual < min) {
                     filaAux = aux;
@@ -63,10 +64,10 @@ public class IAPlayer extends Player {
 
     } // turnoJugada
     
-    private int valorMax(Nodo nodoActual, Grid tablero, int conecta){
+    private int valorMax(Nodo nodoActual, Grid tablero,int x,int y, int conecta){
         
       //int termina= esTerminal(nodoActual, conecta, tablero);  //falta completar
-      int termina = tablero.checkWin(nodoActual.columJugada, nodoActual.filaJugada, conecta);      //falta completar
+      int termina = tablero.checkWin(x, y, conecta);      //verifica si se gana
       
       //DefaultMutableTreeNode arbol; //ver si sirve
       
@@ -80,7 +81,7 @@ public class IAPlayer extends Player {
                     if (nodoActual.getTableroNodo(i, j) == 0) {
                         nodoActual.tableroNodo[i][j] = 1;
                         
-                        aux = valorMin(nodoActual,tablero,conecta);     //puede ser la poda
+                        aux = valorMin(nodoActual,tablero,x,y,conecta);     //puede ser la poda
                         if (aux > maxCamino) {
                             maxCamino = aux;
                         }
@@ -94,10 +95,10 @@ public class IAPlayer extends Player {
     
     
     
-    private int valorMin(Nodo nodoActual, Grid tablero, int conecta){
+    private int valorMin(Nodo nodoActual, Grid tablero, int x, int y, int conecta){
         
         //int termina = esTerminal(nodoActual, conecta, tablero);      //falta completar
-        int termina = tablero.checkWin(nodoActual.columJugada, nodoActual.filaJugada, conecta);      //falta completar
+        int termina = tablero.checkWin(x, y, conecta);      //falta completar
         
         if (termina == -1) {
             return -1;
@@ -110,7 +111,7 @@ public class IAPlayer extends Player {
                     if (nodoActual.tableroNodo[i][j] == 0) {
                         nodoActual.tableroNodo[i][j] = -1;
                         
-                        aux = valorMax(nodoActual,tablero,conecta);
+                        aux = valorMax(nodoActual,tablero,x,y,conecta);
                         if (aux < minimoCamino) {
                             minimoCamino = aux;
                         }
@@ -126,9 +127,9 @@ public class IAPlayer extends Player {
     };
     
     
-    private int esTerminal(Nodo nodoActual, int conecta, Grid tablero) //no está corregido, necesitamos una x y una y
-    {
-        int x=tablero.getColumnas(), y=tablero.getFilas();  //ToDo: probar, no se sabe si funciona
+    private int esTerminal(Nodo nodoActual, int conecta,int x, int y, Grid tablero){ //no está corregido, necesitamos una x y una y
+    
+        //int x=tablero.getColumnas(), y=tablero.getFilas();  //ToDo: probar, no se sabe si funciona
         int ganar1 = 0;
         int ganar2 = 0;
         int ganador = 0;
@@ -280,7 +281,7 @@ public class IAPlayer extends Player {
         return ganador;
     }
     
-     private boolean hayFilas(int matrix[][], int x, Grid tablero) {
+    private boolean hayFilas(int matrix[][], int x, Grid tablero) {
         for (int i = tablero.getFilas() - 1; i >= 0; i--) {
             if (matrix[i][x] != 1 && matrix[i][x] != -1) {
                 return true;
@@ -289,7 +290,7 @@ public class IAPlayer extends Player {
         return false;
     }
      
-     private int queFila(int matrix[][], int x, Grid tablero) {
+    private int queFila(int matrix[][], int x, Grid tablero) {
         int cont = 0;
         for (int i = tablero.getFilas() - 1; i >= 0; i--) {
             if (matrix[i][x] != 1 && matrix[i][x] != -1) {
