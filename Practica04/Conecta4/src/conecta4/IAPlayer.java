@@ -36,10 +36,10 @@ public class IAPlayer extends Player {
         
         Nodo unNodo=new Nodo(tablero);
         
-        int mejorMov = 1;
+        int mejorMov = 1;           // luego se cambia
         int x=tablero.getColumnas(), y=tablero.getFilas();
-        int min, minActual;
-        min = Integer.MAX_VALUE;
+        int minInicial, minActual;
+        minInicial = Integer.MAX_VALUE;
         int filaAux = 0;
         //unNodo.tableroNodo = tablero.toArray();
         
@@ -50,31 +50,38 @@ public class IAPlayer extends Player {
                 matrix[aux][j] = -1;
                 minActual = valorMin(unNodo,tablero,x,y,conecta);
                 matrix[aux][j] = 0;
-                if (minActual < min) {
+                if (minActual < minInicial) {
                     filaAux = aux;
-                    min = minActual;
+                    minInicial = minActual;
                     mejorMov = j;
                 }
             }
         }
                
-        tablero.setButton(filaAux, mejorMov);
-        return tablero.checkWin(filaAux, mejorMov, conecta);
+        return tablero.checkWin(tablero.setButton(filaAux, Conecta4.PLAYER2), mejorMov, conecta);
         //return tablero.checkWin(tablero.setButton(columna, Conecta4.PLAYER2), columna, conecta);
 
     } // turnoJugada
     
+    /**
+     * 
+     * @param nodoActual
+     * @param tablero
+     * @param x
+     * @param y
+     * @param conecta
+     * @return 
+     */
     private int valorMax(Nodo nodoActual, Grid tablero,int x,int y, int conecta){
         
-      //int termina= esTerminal(nodoActual, conecta, tablero);  //falta completar
-      int termina = tablero.checkWin(x, y, conecta);      //verifica si se gana
+        int termina = tablero.checkWin(x, y, conecta);      //verifica si se gana
       
       //DefaultMutableTreeNode arbol; //ver si sirve
       
         if (termina == 1) {
             return 1;
         } else {
-            int maxCamino = Integer.MAX_VALUE;
+            int caminoMax = Integer.MAX_VALUE;
             int aux;
             for (int i = 0; i < tablero.getColumnas(); i++) {
                 for (int j = 0; j < tablero.getFilas(); j++) {
@@ -82,19 +89,27 @@ public class IAPlayer extends Player {
                         nodoActual.tableroNodo[i][j] = 1;
                         
                         aux = valorMin(nodoActual,tablero,x,y,conecta);     //puede ser la poda
-                        if (aux > maxCamino) {
-                            maxCamino = aux;
+                        if (aux > caminoMax) {
+                            caminoMax = aux;
                         }
                         //matriz[i][j] = 1;
                     }
                 }
             }
-            return maxCamino;
+            return caminoMax;
         }
     };
     
     
-    
+    /**
+     * 
+     * @param nodoActual
+     * @param tablero
+     * @param x
+     * @param y
+     * @param conecta
+     * @return 
+     */
     private int valorMin(Nodo nodoActual, Grid tablero, int x, int y, int conecta){
         
         //int termina = esTerminal(nodoActual, conecta, tablero);      //falta completar
@@ -126,161 +141,13 @@ public class IAPlayer extends Player {
         
     };
     
-    
-    private int esTerminal(Nodo nodoActual, int conecta,int x, int y, Grid tablero){ //no está corregido, necesitamos una x y una y
-    
-        //int x=tablero.getColumnas(), y=tablero.getFilas();  //ToDo: probar, no se sabe si funciona
-        int ganar1 = 0;
-        int ganar2 = 0;
-        int ganador = 0;
-        boolean salir = false;
-        // comprobar vertical
-        for (int j = 0; (j < tablero.getColumnas()) && !salir; j++) {
-            if (nodoActual.tableroNodo[j][y] != 0) {
-                if (nodoActual.tableroNodo[j][y] == 1) {
-                    ganar1++;
-                } else {
-                    ganar1 = 0;
-                }
-                // Gana el jugador 1
-                if (ganar1 == conecta) {
-                    ganador = 1;
-                    salir = true;
-                }
-                if (!salir) {
-                    if (nodoActual.tableroNodo[j][y] == -1) {
-                        ganar2++;
-                    } else {
-                        ganar2 = 0;
-                    }
-                    // Gana el jugador 2
-                    if (ganar2 == conecta) {
-                        ganador = -1;
-                        salir = true;
-                    }
-                }
-            } else {
-                ganar1 = 0;
-                ganar2 = 0;
-            }
-        }
-        // Comprobar horizontal
-        ganar1 = 0;
-        ganar2 = 0;
-        for (int i = 0; (i < tablero.getColumnas()) && !salir; i++) {
-            if (nodoActual.tableroNodo[x][i] != 0) {
-                if (nodoActual.tableroNodo[x][i] == 1) {
-                    ganar1++;
-                } else {
-                    ganar1 = 0;
-                }
-                // Gana el jugador 1
-                if (ganar1 == conecta) {
-                    ganador = 1;
-                    salir = true;
-                }
-                if (ganador != 1) {
-                    if (nodoActual.tableroNodo[x][i] == -1) {
-                        ganar2++;
-                    } else {
-                        ganar2 = 0;
-                    }
-                    // Gana el jugador 2
-                    if (ganar2 == conecta) {
-                        ganador = -1;
-                        salir = true;
-                    }
-                }
-            } else {
-                ganar1 = 0;
-                ganar2 = 0;
-            }
-        }
-        // Comprobar oblicuo. De izquierda a derecha
-        ganar1 = 0;
-        ganar2 = 0;
-        int a = x;
-        int b = y;
-        while (b > 0 && a > 0) {
-            a--;
-            b--;
-        }
-        while (b < tablero.getColumnas()&& a < tablero.getFilas()&& !salir) {
-            if (nodoActual.tableroNodo[a][b] != 0) {
-                if (nodoActual.tableroNodo[a][b] == 1) {
-                    ganar1++;
-                } else {
-                    ganar1 = 0;
-                }
-                // Gana el jugador 1
-                if (ganar1 == conecta) {
-                    ganador = 1;
-                    salir = true;
-                }
-                if (ganador != 1) {
-                    if (nodoActual.tableroNodo[a][b] == -1) {
-                        ganar2++;
-                    } else {
-                        ganar2 = 0;
-                    }
-                    // Gana el jugador 2
-                    if (ganar2 == conecta) {
-                        ganador = -1;
-                        salir = true;
-                    }
-                }
-            } else {
-                ganar1 = 0;
-                ganar2 = 0;
-            }
-            a++;
-            b++;
-        }
-        // Comprobar oblicuo de derecha a izquierda 
-        ganar1 = 0;
-        ganar2 = 0;
-        a = x;
-        b = y;
-        //buscar posición de la esquina
-        while (b < tablero.getColumnas()- 1 && a > 0) {
-            a--;
-            b++;
-        }
-        while (b > -1 && a < tablero.getFilas() && !salir) {
-            if (nodoActual.tableroNodo[a][b] != 0) {
-                if (nodoActual.tableroNodo[a][b] == 1) {
-                    ganar1++;
-                } else {
-                    ganar1 = 0;
-                }
-                // Gana el jugador 1
-                if (ganar1 == conecta) {
-                    ganador = 1;
-                    salir = true;
-                }
-                if (ganador != 1) {
-                    if (nodoActual.tableroNodo[a][b] == -1) {
-                        ganar2++;
-                    } else {
-                        ganar2 = 0;
-                    }
-                    // Gana el jugador 2
-                    if (ganar2 == conecta) {
-                        ganador = -1;
-                        salir = true;
-                    }
-                }
-            } else {
-                ganar1 = 0;
-                ganar2 = 0;
-            }
-            a++;
-            b--;
-        }
-
-        return ganador;
-    }
-    
+    /**
+     * 
+     * @param matrix
+     * @param x
+     * @param tablero
+     * @return 
+     */
     private boolean hayFilas(int matrix[][], int x, Grid tablero) {
         for (int i = tablero.getFilas() - 1; i >= 0; i--) {
             if (matrix[i][x] != 1 && matrix[i][x] != -1) {
@@ -289,7 +156,14 @@ public class IAPlayer extends Player {
         }
         return false;
     }
-     
+    
+    /**
+     * 
+     * @param matrix
+     * @param x
+     * @param tablero
+     * @return 
+     */
     private int queFila(int matrix[][], int x, Grid tablero) {
         int cont = 0;
         for (int i = tablero.getFilas() - 1; i >= 0; i--) {
