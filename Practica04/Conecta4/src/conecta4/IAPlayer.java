@@ -15,8 +15,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  Esta clase es la que tenemos que implementar y completar
  *
  */
-public class IAPlayer extends Player {
-       
+public class IAPlayer extends Player {  
     Nodo arrayNodo;    
     
     /**
@@ -48,7 +47,7 @@ public class IAPlayer extends Player {
             if (hayFilas(matrix, j, tablero)) {
                 int aux = queFila(matrix, j, tablero);
                 matrix[aux][j] = -1;
-                minActual = valorMin(unNodo,tablero,x,y,conecta);
+                minActual = valorMin(unNodo,tablero,x,y,conecta);   //Empieza Minimax
                 matrix[aux][j] = 0;
                 if (minActual < minInicial) {
                     filaAux = aux;
@@ -72,12 +71,12 @@ public class IAPlayer extends Player {
      * @param conecta
      * @return 
      */
-    private int valorMax(Nodo nodoActual, Grid tablero,int x,int y, int conecta){
-        
+    private int valorMax(Nodo nodoActual, Grid tablero, int x, int y, int conecta) {
+
         int termina = tablero.checkWin(x, y, conecta);      //verifica si se gana
-      
-      //DefaultMutableTreeNode arbol; //ver si sirve
-      
+
+        //DefaultMutableTreeNode arbol; //ver si sirve
+        
         if (termina == 1) {
             return 1;
         } else {
@@ -87,6 +86,7 @@ public class IAPlayer extends Player {
                 for (int j = 0; j < tablero.getFilas(); j++) {
                     if (nodoActual.getTableroNodo(i, j) == 0) {
                         nodoActual.tableroNodo[i][j] = 1;
+                        nodoActual.setUltimoMov(i, j);
                         
                         aux = valorMin(nodoActual,tablero,x,y,conecta);     //puede ser la poda
                         if (aux > caminoMax) {
@@ -99,7 +99,7 @@ public class IAPlayer extends Player {
             return caminoMax;
         }
     };
-    
+
     
     /**
      * 
@@ -112,30 +112,30 @@ public class IAPlayer extends Player {
      */
     private int valorMin(Nodo nodoActual, Grid tablero, int x, int y, int conecta){
         
-        //int termina = esTerminal(nodoActual, conecta, tablero);      //falta completar
-        int termina = tablero.checkWin(x, y, conecta);      //falta completar
+        int termina = tablero.checkWin(x, y, conecta);      
         
         if (termina == -1) {
             return -1;
             
         } else {
-            int minimoCamino = Integer.MAX_VALUE;
-            int aux;
-            for (int i = 0; i < tablero.getColumnas(); i++) {
-                for (int j = 0; j < tablero.getFilas(); j++) {
+            int caminoMinimo = Integer.MAX_VALUE;               //Iniciamos al valor mas alto
+            int aux;                                            //auxiliar que nos ayude
+            for (int i = 0; i < tablero.getColumnas(); i++) {   //recorrer columnas
+                for (int j = 0; j < tablero.getFilas(); j++) {  //recorrer filas
                     if (nodoActual.tableroNodo[i][j] == 0) {
                         nodoActual.tableroNodo[i][j] = -1;
+                        nodoActual.setUltimoMov(i, j);
                         
                         aux = valorMax(nodoActual,tablero,x,y,conecta);
-                        if (aux < minimoCamino) {
-                            minimoCamino = aux;
+                        if (aux < caminoMinimo) {
+                            caminoMinimo = aux;
                         }
                         nodoActual.tableroNodo[i][j] = -1;
                         //matriz[i][j] = -1;
                     }
                 }
             }
-            return minimoCamino;
+            return caminoMinimo;
         }
 
         
@@ -219,6 +219,11 @@ public class IAPlayer extends Player {
         
         public void setColumnaJugada(int columnaNueva){
             columJugada=columnaNueva;
+        }
+        
+        public void setUltimoMov(int col, int fila){
+            setColumnaJugada(col);
+            setFilaNodo(fila);
         }
         
     }
