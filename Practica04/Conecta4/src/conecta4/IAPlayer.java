@@ -15,8 +15,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  Esta clase es la que tenemos que implementar y completar
  *
  */
-public class IAPlayer extends Player {
-       
+public class IAPlayer extends Player {  
     Nodo arrayNodo;    
     
     /**
