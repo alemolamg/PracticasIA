@@ -80,7 +80,7 @@ public class IAPlayer extends Player {
         if (termina == 1) {
             return 1;
         } else {
-            int caminoMax = Integer.MAX_VALUE;
+            int caminoMax = Integer.MIN_VALUE;
             int aux;
             for (int i = 0; i < tablero.getColumnas(); i++) {
                 for (int j = 0; j < tablero.getFilas(); j++) {
