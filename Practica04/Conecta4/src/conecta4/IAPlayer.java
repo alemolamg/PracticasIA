@@ -79,11 +79,13 @@ public class IAPlayer extends Player {
         
         if (termina == 1) {
             return 1;
+            
         } else {
+            
             int caminoMax = Integer.MIN_VALUE;
             int aux;
             for (int i = 0; i < tablero.getColumnas(); i++) {
-                for (int j = 0; j < tablero.getFilas(); j++) {
+                for (int j = 0; j < tablero.getFilas(); j++) {      //Cambiar como valormix
                     if (nodoActual.getTableroNodo(i, j) == 0) {
                         nodoActual.tableroNodo[i][j] = 1;
                         nodoActual.setUltimoMov(i, j);
@@ -114,18 +116,20 @@ public class IAPlayer extends Player {
         
         int termina = tablero.checkWin(x, y, conecta);      
         
-        if (termina == -1) {
+        if (termina == -1) {        // Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
             return -1;
             
         } else {
-            int caminoMinimo = Integer.MAX_VALUE;               //Iniciamos al valor mas alto
-            int aux;                                            //auxiliar que nos ayude
-            for (int i = 0; i < tablero.getColumnas(); i++) {   //recorrer columnas
-                for (int j = 0; j < tablero.getFilas(); j++) {  //recorrer filas
+            
+            int caminoMinimo = Integer.MAX_VALUE;                   //Iniciamos al valor mas alto
+            int aux;                                                //auxiliar que nos ayude
+            for (int i = 0; i < tablero.getColumnas(); i++) {       //recorrer columnas
+                for (int j = tablero.getFilas()-1; j >= 0; j--) {   //recorrer filas desde getfila()-1 hasta 0
                     if (nodoActual.tableroNodo[i][j] == 0) {
                         nodoActual.tableroNodo[i][j] = -1;
                         nodoActual.setUltimoMov(i, j);
                         
+                        //ecuacion heuristica
                         aux = valorMax(nodoActual,tablero,x,y,conecta);
                         if (aux < caminoMinimo) {
                             caminoMinimo = aux;
