@@ -263,7 +263,7 @@ public class IAPlayer extends Player {
         
         
         private Nodo (Grid tablero){
-            tableroNodo = tablero.toArray();    // ??
+            tableroNodo = copiarMatriz(tablero.toArray(),tablero.getColumnas(),tablero.getFilas());    // ??
             tableroGrid = tablero;              // no sirve, es asignación
             
         }
