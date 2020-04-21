@@ -77,7 +77,7 @@ public class IAPlayer extends Player {
 
         //DefaultMutableTreeNode arbol; //ver si sirve
         
-        if (termina == 1) {
+        if (termina != 0) {
             return 1;
             
         } else {
@@ -85,7 +85,7 @@ public class IAPlayer extends Player {
             int caminoMax = Integer.MIN_VALUE;
             int aux;
             for (int i = 0; i < tablero.getColumnas(); i++) {
-                for (int j = 0; j < tablero.getFilas(); j++) {      //Cambiar como valormix
+                for (int j = tablero.getFilas()-1; j>=0; j--) {      //Cambiar como valormix
                     if (nodoActual.getTableroNodo(i, j) == 0) {
                         nodoActual.tableroNodo[i][j] = 1;
                         nodoActual.setUltimoMov(i, j);
@@ -116,7 +116,7 @@ public class IAPlayer extends Player {
         
         int termina = tablero.checkWin(x, y, conecta);      
         
-        if (termina == -1) {        // Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
+        if (termina != 0) {        // Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
             return -1;
             
         } else {
@@ -178,6 +178,70 @@ public class IAPlayer extends Player {
         }
         return cont;
     }
+    
+    
+    private int heuristica(int matrix[][], int conecta, int x, int y, Grid tablero) {
+        int sumaJugador1 = 0;
+        int sumaJugador2 = 0;
+
+        for (int k = 2; k <= conecta; k++) {
+            int paresVerticales1 = 0;
+            int paresVerticales2 = 0;
+            for (int j = 0; j < tablero.getColumnas(); j++) {
+                int acV1 = 0;
+                int acV2 = 0;
+                for (int i = 0; i < tablero.getFilas(); i++) {
+                    if (matrix[i][j] == 1) {
+                        acV2=0;
+                        acV1++;
+                        
+                        if(k == acV1) {
+                            paresVerticales1++;
+                        }
+                    } else if (matrix[i][j] == -1) {
+                        acV1=0;
+                        acV2++;
+                        if(k == acV2) {
+                            paresVerticales2++;
+                        }
+                    }
+                }
+            }
+            sumaJugador1 += k * paresVerticales1;
+            sumaJugador2 += k * paresVerticales2;
+        }
+
+        for (int k = 2; k <= conecta; k++) {
+            int paresHorizontales1 = 0;
+            int paresHorizontales2 = 0;
+            for (int i = 0; i < tablero.getFilas(); i++) {
+                int acH1 = 0;
+                int acH2 = 0;
+                for (int j = 0; j < tablero.getColumnas(); j++) {
+                    if (matrix[i][j] == 1) {
+                        acH2 = 0;
+                        acH1++;
+                        if(k == acH1) {
+                            paresHorizontales1++;
+                        }
+                    } else if (matrix[i][j] == -1) {
+                        acH1 = 0;
+                        acH2++;
+                       
+                        if(k == acH2) {
+                            paresHorizontales2++;
+                        }
+                    }
+                }
+            }
+
+            sumaJugador1 += k * paresHorizontales1;
+            sumaJugador2 += k * paresHorizontales2;
+        }
+
+        return sumaJugador1 - sumaJugador2;
+    }
+    
     
     public class Nodo{
         int columJugada;        //ultima columna usada
