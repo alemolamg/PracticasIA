@@ -36,7 +36,7 @@ public class IAPlayer extends Player {
         Nodo unNodo=new Nodo(tablero);
         
         int mejorMov = 1;           // luego se cambia
-        int x=tablero.getColumnas(), y=tablero.getFilas();
+        int x=tablero.getColumnas()-1, y=tablero.getFilas()-1; //ToDo: Asignación tamaño tablero
         int minInicial, minActual;
         minInicial = Integer.MAX_VALUE;
         int filaAux = 0;
@@ -56,8 +56,9 @@ public class IAPlayer extends Player {
                 }
             }
         }
+        int meterButton = tablero.setButton(mejorMov, Conecta4.PLAYER2);
                
-        return tablero.checkWin(tablero.setButton(filaAux, Conecta4.PLAYER2), mejorMov, conecta);
+        return tablero.checkWin(mejorMov, filaAux, meterButton);
         //return tablero.checkWin(tablero.setButton(columna, Conecta4.PLAYER2), columna, conecta);
 
     } // turnoJugada
