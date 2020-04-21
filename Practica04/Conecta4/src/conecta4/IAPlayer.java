@@ -33,7 +33,7 @@ public class IAPlayer extends Player {
         //Pintar Ficha
         //int columna = getRandomColumn(tablero);
         
-        Nodo unNodo=new Nodo(tablero);
+        Nodo unNodo = new Nodo(tablero);
         
         int mejorMov = 1;           // luego se cambia
         int x=tablero.getColumnas()-1, y=tablero.getFilas()-1; //ToDo: Asignación tamaño tablero
@@ -58,7 +58,7 @@ public class IAPlayer extends Player {
         }
         int meterButton = tablero.setButton(mejorMov, Conecta4.PLAYER2);
                
-        return tablero.checkWin(mejorMov, filaAux, meterButton);
+        return tablero.checkWin(mejorMov, meterButton, conecta);
         //return tablero.checkWin(tablero.setButton(columna, Conecta4.PLAYER2), columna, conecta);
 
     } // turnoJugada
@@ -162,6 +162,17 @@ public class IAPlayer extends Player {
         return false;
     }
     
+    
+    public int[][] copiarMatriz(int[][] origMatriz, int origCol , int origFila){
+        int nuevaMatriz[][]= new int[origCol][origFila];
+        for (int fila = origFila - 1; fila >= 0; fila--) {
+            for (int columna = 0; columna < origCol; columna++) {
+                nuevaMatriz[columna][fila]=origMatriz[columna][fila];
+            }
+        }
+        return nuevaMatriz;
+    }
+    
     /**
      * 
      * @param matrix
@@ -252,8 +263,8 @@ public class IAPlayer extends Player {
         
         
         private Nodo (Grid tablero){
-            tableroNodo = tablero.toArray();
-            tableroGrid = tablero;
+            tableroNodo = tablero.toArray();    // ??
+            tableroGrid = tablero;              // no sirve, es asignación
             
         }
         
