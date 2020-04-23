@@ -202,6 +202,7 @@ public class IAPlayer extends Player {
         int sumaJugador2 = 0;
 
         for (int k = 2; k <= conecta; k++) {
+            
             int paresVerticales1 = 0;
             int paresVerticales2 = 0;
             for (int j = 0; j < tablero.getColumnas(); j++) {
@@ -257,6 +258,11 @@ public class IAPlayer extends Player {
         }
 
         return sumaJugador1 - sumaJugador2;
+    }
+    
+    public void mostrarMatriz(int [][] matriz, int numColumnas, int numFilas){
+        
+        
     }
     
     
