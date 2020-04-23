@@ -47,6 +47,7 @@ public class IAPlayer extends Player {
             if (hayFilas(matrix, j, tablero)) {
                 int aux = queFila(matrix, j, tablero);
                 matrix[aux][j] = -1;
+                mostrarMatriz(matrix, arrayNodo.getColumnaNodo(), arrayNodo.getFilaNodo());
                 System.out.println("\n Comenzamos el MiniMax");
                 minActual = valorMin(arrayNodo,tablero,x,y,conecta,limiteActual);   //Empieza Minimax
                 matrix[aux][j] = 0;
@@ -74,7 +75,9 @@ public class IAPlayer extends Player {
      * @return 
      */
     private int valorMax(Nodo nodoActual, Grid tablero, int x, int y, int conecta,int limiteMax) {
-
+        
+        System.out.println("Comenzamos valorMax");
+        mostrarMatriz(nodoActual.tableroNodo, x, y);
         int termina = tablero.checkWin(x, y, conecta);      //verifica si se gana
 
         //DefaultMutableTreeNode arbol; //ver si sirve
@@ -86,11 +89,14 @@ public class IAPlayer extends Player {
             
             int caminoMax = Integer.MIN_VALUE;
             int aux;
-            for (int i = 0; i < tablero.getColumnas(); i++) {
-                for (int j = tablero.getFilas()-1; j>=0; j--) {      //Cambiar como valormix
-                    if (nodoActual.getTableroNodo(i, j) == 0) {
-                        nodoActual.tableroNodo[i][j] = 1;
-                        nodoActual.setCoordenadasNodo(i, j);
+            for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {
+                for (int reFilas = tablero.getFilas()-1; reFilas>=0; reFilas--) {      //Cambiar como valormix
+                    if (nodoActual.getTableroNodo(reCols, reFilas) == 0) {
+                        nodoActual.rellenarNodo(reCols, reFilas, conecta);
+
+                        
+//                        nodoActual.tableroNodo[i][j] = 1;
+//                        nodoActual.setCoordenadasNodo(i, j);
                         
                         aux = valorMin(nodoActual,tablero,x,y,conecta,limiteMax);     //puede ser la poda
                         if (aux > caminoMax) {
@@ -106,7 +112,6 @@ public class IAPlayer extends Player {
 
     
     /**
-     * 
      * @param nodoActual
      * @param tablero
      * @param x
@@ -116,7 +121,9 @@ public class IAPlayer extends Player {
      */
     private int valorMin(Nodo nodoActual, Grid tablero, int x, int y, int conecta, int limiteMin){
         
-        int termina = tablero.checkWin(x, y, conecta);    
+        System.out.println("Comenzamos valorMin");
+        mostrarMatriz(nodoActual.tableroNodo, x, y);
+        int termina = tablero.checkWin(x, y-1, conecta);    
         
         
         if (termina != 0) {        //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
@@ -260,11 +267,17 @@ public class IAPlayer extends Player {
         return sumaJugador1 - sumaJugador2;
     }
     
-    public void mostrarMatriz(int [][] matriz, int numColumnas, int numFilas){
-        
-        
-    }
     
+    public void mostrarMatriz(int [][] matriz, int numColumnas, int numFilas){
+         
+        for (int fila = numFilas - 1; fila >= 0; fila--) {
+            System.out.println("\n");
+            for (int col = 0; col < numColumnas; col++) {
+                System.out.print(matriz[col][fila]);
+            }
+        }
+    }
+
     
     public class Nodo{
         int numColumnas;        //ultima columna usada
@@ -325,7 +338,6 @@ public class IAPlayer extends Player {
         public boolean rellenarNodo(int col, int fila, int jugador){
             setCoordenadasNodo(col, fila);
             this.tableroNodo[col][fila] = jugador;
-            
             vecNodos[col] = new Nodo (this);
             
             return true;
