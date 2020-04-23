@@ -1,6 +1,7 @@
 package conecta4;
 
 import java.util.TreeMap;
+import java.util.Vector;
 import javax.swing.tree.DefaultMutableTreeNode;
         
 /**
@@ -36,7 +37,7 @@ public class IAPlayer extends Player {
         Nodo arrayNodo = new Nodo(tablero);
         
         int mejorMov = 1;           // luego se cambia
-        int x=tablero.getColumnas(), y=tablero.getFilas(); //ToDo: Asignación tamaño tablero
+//        int x=tablero.getColumnas(), y=tablero.getFilas(); //ToDo: Asignación tamaño tablero
         int minInicial, minActual;
         minInicial = Integer.MAX_VALUE;
         int filaAux = 0;
@@ -48,8 +49,8 @@ public class IAPlayer extends Player {
                 int aux = queFila(matrix, j, tablero);
                 matrix[aux][j] = -1;
                 mostrarMatriz(matrix, arrayNodo.getColumnaNodo(), arrayNodo.getFilaNodo());
-                System.out.println("\n Comenzamos el MiniMax");
-                minActual = valorMin(arrayNodo,tablero,x,y,conecta,limiteActual);   //Empieza Minimax
+                System.out.println("\nComenzamos el MiniMax");
+                minActual = valorMin(arrayNodo,tablero,conecta,limiteActual);   //Empieza Minimax
                 matrix[aux][j] = 0;
                 if (minActual < minInicial) {
                     filaAux = aux;
@@ -74,11 +75,11 @@ public class IAPlayer extends Player {
      * @param conecta
      * @return 
      */
-    private int valorMax(Nodo nodoActual, Grid tablero, int x, int y, int conecta,int limiteMax) {
+    private int valorMax(Nodo nodoActual, Grid tablero, int conecta,int limiteMax) {
         
         System.out.println("Comenzamos valorMax");
-        mostrarMatriz(nodoActual.tableroNodo, x, y);
-        int termina = tablero.checkWin(x, y, conecta);      //verifica si se gana
+        mostrarMatriz(nodoActual.tableroNodo, nodoActual.getColumnaNodo(), nodoActual.getFilaNodo());
+        int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);      //verifica si se gana
 
         //DefaultMutableTreeNode arbol; //ver si sirve
         
@@ -98,7 +99,7 @@ public class IAPlayer extends Player {
 //                        nodoActual.tableroNodo[i][j] = 1;
 //                        nodoActual.setCoordenadasNodo(i, j);
                         
-                        aux = valorMin(nodoActual,tablero,x,y,conecta,limiteMax);     //puede ser la poda
+                        aux = valorMin(nodoActual,tablero,conecta,limiteMax);     //puede ser la poda
                         if (aux > caminoMax) {
                             caminoMax = aux;
                         }
@@ -111,6 +112,7 @@ public class IAPlayer extends Player {
     };
 
     
+    
     /**
      * @param nodoActual
      * @param tablero
@@ -119,11 +121,11 @@ public class IAPlayer extends Player {
      * @param conecta
      * @return 
      */
-    private int valorMin(Nodo nodoActual, Grid tablero, int x, int y, int conecta, int limiteMin){
+    private int valorMin(Nodo nodoActual, Grid tablero, int conecta, int limiteMin){
         
         System.out.println("Comenzamos valorMin");
-        mostrarMatriz(nodoActual.tableroNodo, x, y);
-        int termina = tablero.checkWin(x, y-1, conecta);    
+        nodoActual.mostrarMatrizNodo();
+        int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);    
         
         
         if (termina != 0) {        //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
@@ -142,7 +144,7 @@ public class IAPlayer extends Player {
                        // nodoActual.setCoordenadasNodo(reCols, reFilas);
                         
                         //ecuacion heuristica
-                        aux = valorMax(nodoActual,tablero,x,y,conecta,limiteMin);
+                        aux = valorMax(nodoActual,tablero,conecta,limiteMin);
                         if (aux < caminoMinimo) {
                             caminoMinimo = aux;
                         }
@@ -271,11 +273,12 @@ public class IAPlayer extends Player {
     public void mostrarMatriz(int [][] matriz, int numColumnas, int numFilas){
          
         for (int fila = numFilas - 1; fila >= 0; fila--) {
-            System.out.println("\n");
             for (int col = 0; col < numColumnas; col++) {
-                System.out.print(matriz[col][fila]);
+                System.out.print(matriz[col][fila]+" ");
             }
+            System.out.println();
         }
+        System.out.println();
     }
 
     
@@ -283,7 +286,8 @@ public class IAPlayer extends Player {
         int numColumnas;        //ultima columna usada
         int numFilas;         //ultima fila jugada
         int tableroNodo [][];   //*matriz con el grid en enteros
-        
+        int ultimaCol;
+        int ultimaFila;
         Nodo [] vecNodos; 
         
         
@@ -292,7 +296,9 @@ public class IAPlayer extends Player {
             numFilas = tablero.getFilas();
             tableroNodo = copiarMatriz(tablero.toArray(),tablero.getColumnas(),tablero.getFilas());    // ??
             vecNodos = new Nodo [numColumnas];
-            //tableroGrid = tablero;              // no sirve, es asignación
+            ultimaCol = 0;                      //valor aleatorio
+            ultimaFila= tablero.getFilas()-1;   //valor de la fila de abajo
+            
         }
         
         private Nodo (Nodo orig){
@@ -341,6 +347,29 @@ public class IAPlayer extends Player {
             vecNodos[col] = new Nodo (this);
             
             return true;
+        }
+        
+        public void mostrarMatrizNodo(){
+         
+        for (int fila = numFilas - 1; fila >= 0; fila--) {
+            for (int col = 0; col < numColumnas; col++) {
+                System.out.print(this.tableroNodo[col][fila]+" ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+        
+        public void busquedaInicial(){
+            //int[] vectorReturn= new int [2];
+            for(int col=0;col<numColumnas; col++){
+                for(int fila=this.numFilas-1;fila>=0;fila--){
+                    if(this.tableroNodo[col][fila]!=0){
+                        this.ultimaCol=col;
+                        ultimaFila=fila;
+                    }
+                }
+            }
         }
         
     }
