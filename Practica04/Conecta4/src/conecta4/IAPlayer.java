@@ -78,7 +78,8 @@ public class IAPlayer extends Player {
     private int valorMax(Nodo nodoActual, Grid tablero, int conecta,int limiteMax) {
         
         System.out.println("Comenzamos valorMax");
-        mostrarMatriz(nodoActual.tableroNodo, nodoActual.getColumnaNodo(), nodoActual.getFilaNodo());
+        nodoActual.mostrarMatrizNodo();
+//        mostrarMatriz(nodoActual.tableroNodo, nodoActual.getColumnaNodo(), nodoActual.getFilaNodo());
         int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);      //verifica si se gana
 
         //DefaultMutableTreeNode arbol; //ver si sirve
@@ -345,6 +346,8 @@ public class IAPlayer extends Player {
             setCoordenadasNodo(col, fila);
             this.tableroNodo[col][fila] = jugador;
             vecNodos[col] = new Nodo (this);
+            this.ultimaCol=col;
+            this.ultimaFila=fila;
             
             return true;
         }
