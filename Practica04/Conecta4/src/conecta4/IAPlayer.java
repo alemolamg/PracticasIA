@@ -144,7 +144,10 @@ public class IAPlayer extends Player {
                        // nodoActual.tableroNodo[reCols][reFilas] = -1;
                        // nodoActual.setCoordenadasNodo(reCols, reFilas);
                         
+                        
+                        int auxHeuristica= nodoActual.valorHeuristicaNodo;
                         //ecuacion heuristica
+                        
                         aux = valorMax(nodoActual,tablero,conecta,limiteMin);
                         if (aux < caminoMinimo) {
                             caminoMinimo = aux;
@@ -211,6 +214,7 @@ public class IAPlayer extends Player {
         int sumaJugador1 = 0;
         int sumaJugador2 = 0;
 
+        // Calcular Vertical
         for (int k = 2; k <= conecta; k++) {
             
             int paresVerticales1 = 0;
@@ -239,6 +243,7 @@ public class IAPlayer extends Player {
             sumaJugador2 += k * paresVerticales2;
         }
 
+        //Calcular Horizontal
         for (int k = 2; k <= conecta; k++) {
             int paresHorizontales1 = 0;
             int paresHorizontales2 = 0;
@@ -290,6 +295,7 @@ public class IAPlayer extends Player {
         int ultimaCol;
         int ultimaFila;
         Nodo [] vecNodos; 
+        int valorHeuristicaNodo;
         
         
         private Nodo (Grid tablero){
@@ -299,6 +305,7 @@ public class IAPlayer extends Player {
             vecNodos = new Nodo [numColumnas];
             ultimaCol = 0;                      //valor aleatorio
             ultimaFila= tablero.getFilas()-1;   //valor de la fila de abajo
+            valorHeuristicaNodo=0;
             
         }
         
