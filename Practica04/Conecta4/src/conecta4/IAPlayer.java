@@ -370,6 +370,12 @@ public class IAPlayer extends Player {
         System.out.println();
     }
         
+        public void matrizParaGrid(Grid tablero){
+            //Grid crearGrid = new Grid(numFilas, numColumnas, tablero.getFicha1(), tablero.getFicha2());
+            
+            
+        }
+        
         public void busquedaInicial(){
             //int[] vectorReturn= new int [2];
             for(int col=0;col<numColumnas; col++){
