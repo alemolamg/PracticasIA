@@ -34,7 +34,7 @@ public class IAPlayer extends Player {
         //Pintar Ficha
         //int columna = getRandomColumn(tablero);
         
-        Nodo arrayNodo = new Nodo(tablero);
+        Nodo nodoJugada = new Nodo(tablero);
         
         int mejorMov = 1;           // luego se cambia
 //        int x=tablero.getColumnas(), y=tablero.getFilas(); //ToDo: Asignación tamaño tablero
@@ -43,14 +43,14 @@ public class IAPlayer extends Player {
         int filaAux = 0;
         //unNodo.tableroNodo = tablero.toArray();
         
-        int matrix[][] = arrayNodo.tableroNodo.clone();
+        int matrix[][] = nodoJugada.tableroNodo.clone();
         for (int j = 0; j < tablero.getColumnas(); j++) {
             if (hayFilas(matrix, j, tablero)) {
                 int aux = queFila(matrix, j, tablero);
                 matrix[aux][j] = -1;
-                mostrarMatriz(matrix, arrayNodo.getColumnaNodo(), arrayNodo.getFilaNodo());
+                mostrarMatriz(matrix, nodoJugada.getColumnaNodo(), nodoJugada.getFilaNodo());
                 System.out.println("\nComenzamos el MiniMax");
-                minActual = valorMin(arrayNodo,tablero,conecta,limiteActual);   //Empieza Minimax
+                minActual = valorMin(nodoJugada,tablero,conecta,limiteActual);   //Empieza Minimax
                 matrix[aux][j] = 0;
                 if (minActual < minInicial) {
                     filaAux = aux;
@@ -93,7 +93,7 @@ public class IAPlayer extends Player {
             int aux;
             for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {
                 for (int reFilas = tablero.getFilas()-1; reFilas>=0; reFilas--) {      //Cambiar como valormix
-                    if (nodoActual.getTableroNodo(reCols, reFilas) == 0) {
+                    if (nodoActual.getTableroNodo(reFilas, reCols) == 0) {
                         nodoActual.rellenarNodo(reCols, reFilas, conecta);
 
                         
@@ -128,7 +128,6 @@ public class IAPlayer extends Player {
         nodoActual.mostrarMatrizNodo();
         int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);    
         
-        
         if (termina != 0 || limiteMin > limite) {        //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
             
             return heuristica(nodoActual.tableroNodo, conecta, nodoActual.ultimaFila,nodoActual.ultimaCol, tablero);
@@ -139,7 +138,7 @@ public class IAPlayer extends Player {
             int aux;                                                //auxiliar que nos ayude
             for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {       //recorrer columnas
                 for (int reFilas = tablero.getFilas()-1; reFilas >= 0; reFilas--) {   //recorrer filas desde getfila()-1 hasta 0
-                    if (nodoActual.tableroNodo[reCols][reFilas] == 0) {
+                    if (nodoActual.tableroNodo[reFilas][reCols] == 0) {
                         nodoActual.rellenarNodo(reCols, reFilas, conecta);
                         
                        // nodoActual.tableroNodo[reCols][reFilas] = -1;
@@ -182,11 +181,11 @@ public class IAPlayer extends Player {
     
     
     public int[][] copiarMatriz(int[][] origMatriz, int origCol , int origFila){
-        int nuevaMatriz[][] = new int[origCol][origFila];
+        int nuevaMatriz[][] = new int[origFila][origCol];
         for (int columna = 0; columna < origCol; columna++) {
             for (int fila = origFila - 1; fila >= 0; fila--) {
 
-                nuevaMatriz[columna][fila] = origMatriz[columna][fila];
+                nuevaMatriz[columna][fila] = origMatriz[fila][columna];
             }
         }
         return nuevaMatriz;
@@ -356,7 +355,7 @@ public class IAPlayer extends Player {
         
         public boolean rellenarNodo(int col, int fila, int jugador){
             setCoordenadasNodo(col, fila);
-            this.tableroNodo[col][fila] = jugador;
+            this.tableroNodo[fila][col] = jugador;
             vecNodos[col] = new Nodo (this);
             this.ultimaCol=col;
             this.ultimaFila=fila;
@@ -368,7 +367,7 @@ public class IAPlayer extends Player {
          
         for (int fila = numFilas - 1; fila >= 0; fila--) {
             for (int col = 0; col < numColumnas; col++) {
-                System.out.print(this.tableroNodo[col][fila]+" ");
+                System.out.print(this.tableroNodo[fila][col]+" ");
             }
             System.out.println();
         }
@@ -385,7 +384,7 @@ public class IAPlayer extends Player {
             //int[] vectorReturn= new int [2];
             for(int col=0;col<numColumnas; col++){
                 for(int fila=this.numFilas-1;fila>=0;fila--){
-                    if(this.tableroNodo[col][fila]!=0){
+                    if(this.tableroNodo[fila][col]!=0){
                         this.ultimaCol=col;
                         ultimaFila=fila;
                     }
