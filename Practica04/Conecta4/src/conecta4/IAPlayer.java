@@ -139,7 +139,7 @@ public class IAPlayer extends Player {
             for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {       //recorrer columnas
                 for (int reFilas = tablero.getFilas()-1; reFilas >= 0; reFilas--) {   //recorrer filas desde getfila()-1 hasta 0
                     if (nodoActual.tableroNodo[reFilas][reCols] == 0) {
-                        nodoActual.rellenarNodo(reCols, reFilas, conecta);
+                        nodoActual.rellenarNodo(reFilas, reCols, conecta);
                         
                        // nodoActual.tableroNodo[reCols][reFilas] = -1;
                        // nodoActual.setCoordenadasNodo(reCols, reFilas);
@@ -180,7 +180,7 @@ public class IAPlayer extends Player {
     }
     
     
-    public int[][] copiarMatriz(int[][] origMatriz, int origCol , int origFila){
+    public int[][] copiarMatriz(int[][] origMatriz, int origFila , int origCol){
         int nuevaMatriz[][] = new int[origFila][origCol];
         for (int columna = 0; columna < origCol; columna++) {
             for (int fila = origFila - 1; fila >= 0; fila--) {
@@ -280,7 +280,7 @@ public class IAPlayer extends Player {
          
         for (int fila = numFilas - 1; fila >= 0; fila--) {
             for (int col = 0; col < numColumnas; col++) {
-                System.out.print(matriz[col][fila]+" ");
+                System.out.print(matriz[fila][col]+" ");
             }
             System.out.println();
         }
@@ -300,9 +300,9 @@ public class IAPlayer extends Player {
         
         
         private Nodo (Grid tablero){
-            numColumnas=tablero.getColumnas();
+            numColumnas = tablero.getColumnas();
             numFilas = tablero.getFilas();
-            tableroNodo = copiarMatriz(tablero.toArray(),tablero.getColumnas(),tablero.getFilas());    // ??
+            tableroNodo = copiarMatriz(tablero.toArray(),tablero.getFilas(),tablero.getColumnas());    // ??
             vecNodos = new Nodo [numColumnas];
             ultimaCol = 0;                      //valor aleatorio
             ultimaFila= tablero.getFilas()-1;   //valor de la fila de abajo
@@ -317,7 +317,6 @@ public class IAPlayer extends Player {
             tableroNodo = orig.getTableroNodo();
             numColumnas = orig.getColumnaNodo();
             numFilas = orig.getFilaNodo();
-           //tableroGrid = NodoTablero.tableroGrid; 
         }
         
         public int[][] getTableroNodo(){
@@ -348,13 +347,13 @@ public class IAPlayer extends Player {
             numColumnas=columnaNueva;
         }
         
-        public void setCoordenadasNodo(int col, int fila){
+        public void setCoordenadasNodo(int fila, int col){
             setColumnaNodo(col);
             setFilaNodo(fila);
         }
         
-        public boolean rellenarNodo(int col, int fila, int jugador){
-            setCoordenadasNodo(col, fila);
+        public boolean rellenarNodo(int fila, int col, int jugador){
+            setCoordenadasNodo(fila, col);
             this.tableroNodo[fila][col] = jugador;
             vecNodos[col] = new Nodo (this);
             this.ultimaCol=col;
@@ -376,7 +375,6 @@ public class IAPlayer extends Player {
         
         public void matrizParaGrid(Grid tablero){
             //Grid crearGrid = new Grid(numFilas, numColumnas, tablero.getFicha1(), tablero.getFicha2());
-            
             
         }
         
