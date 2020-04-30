@@ -79,7 +79,6 @@ public class IAPlayer extends Player {
         
         System.out.println("Comenzamos valorMax");
         nodoActual.mostrarMatrizNodo();
-//        mostrarMatriz(nodoActual.tableroNodo, nodoActual.getColumnaNodo(), nodoActual.getFilaNodo());
         int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);      //verifica si se gana
 
         //DefaultMutableTreeNode arbol; //ver si sirve
@@ -100,10 +99,13 @@ public class IAPlayer extends Player {
 //                        nodoActual.tableroNodo[i][j] = 1;
 //                        nodoActual.setCoordenadasNodo(i, j);
                         
-                        aux = valorMin(nodoActual,tablero,conecta,++limiteMax);     //puede ser la poda
-                        if (aux > caminoMax) {
-                            caminoMax = aux;
+                        nodoActual.alfaNodo = calcularMaximo2Num(nodoActual.alfaNodo, valorMin(nodoActual,tablero,conecta,++limiteMax));
+                        //aux = valorMin(nodoActual,tablero,conecta,++limiteMax);     //puede ser la poda
+                        
+                        if (nodoActual.alfaNodo > caminoMax) {
+                            caminoMax = nodoActual.alfaNodo;
                         }
+                        nodoActual.tableroNodo[reFilas][reCols] = Conecta4.PLAYER1;
                         //matriz[i][j] = 1;
                     }
                 }
@@ -128,7 +130,7 @@ public class IAPlayer extends Player {
         nodoActual.mostrarMatrizNodo();
         int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);    
         
-        if (termina != 0 || limiteMin > limite) {        //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
+        if (termina != 0 || limiteMin > limite) {   //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
             
             return heuristica(nodoActual.tableroNodo, conecta, nodoActual.ultimaFila,nodoActual.ultimaCol, tablero);
             
@@ -148,11 +150,12 @@ public class IAPlayer extends Player {
                         int auxHeuristica = nodoActual.valorHeuristicaNodo;
                         //ecuacion heuristica
                         
-                        aux = valorMax(nodoActual,tablero,conecta,++limiteMin);
-                        if (aux < caminoMinimo) {
-                            caminoMinimo = aux;
+                        nodoActual.betaNodo = calcularMinimo2Num(nodoActual.betaNodo, valorMax(nodoActual,tablero,conecta,++limiteMin));
+                        //aux = valorMax(nodoActual,tablero,conecta,++limiteMin);
+                        if (nodoActual.betaNodo < caminoMinimo) {
+                            caminoMinimo = nodoActual.betaNodo;
                         }
-                        nodoActual.tableroNodo[reCols][reFilas] = -1;
+                        nodoActual.tableroNodo[reFilas][reCols] = Conecta4.PLAYER2;
                         //matriz[i][j] = -1;
                     }
                 }
@@ -162,6 +165,23 @@ public class IAPlayer extends Player {
 
         
     };
+    
+    
+    private int calcularMinimo2Num(int num1, int num2) {
+        if (num1 >= num2) {
+            return num2;
+        } else {
+            return num1;
+        }
+    }
+    
+    private int calcularMaximo2Num(int num1, int num2 ){
+        if (num1 >= num2) {
+            return num1;
+        } else {
+            return num2;
+        }
+    }
     
     /**
      * 
