@@ -84,8 +84,8 @@ public class IAPlayer extends Player {
 
         //DefaultMutableTreeNode arbol; //ver si sirve
         
-        if (termina != 0) {
-            return 1;
+        if (termina != 0 || limiteMax > limite) {
+            return heuristica(nodoActual.tableroNodo, conecta, nodoActual.ultimaFila,nodoActual.ultimaCol, tablero);
             
         } else {
             
@@ -100,7 +100,7 @@ public class IAPlayer extends Player {
 //                        nodoActual.tableroNodo[i][j] = 1;
 //                        nodoActual.setCoordenadasNodo(i, j);
                         
-                        aux = valorMin(nodoActual,tablero,conecta,limiteMax);     //puede ser la poda
+                        aux = valorMin(nodoActual,tablero,conecta,++limiteMax);     //puede ser la poda
                         if (aux > caminoMax) {
                             caminoMax = aux;
                         }
@@ -129,8 +129,9 @@ public class IAPlayer extends Player {
         int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);    
         
         
-        if (termina != 0) {        //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
-            return -1;
+        if (termina != 0 || limiteMin > limite) {        //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
+            
+            return heuristica(nodoActual.tableroNodo, conecta, nodoActual.ultimaFila,nodoActual.ultimaCol, tablero);
             
         } else {
             
@@ -145,10 +146,10 @@ public class IAPlayer extends Player {
                        // nodoActual.setCoordenadasNodo(reCols, reFilas);
                         
                         
-                        int auxHeuristica= nodoActual.valorHeuristicaNodo;
+                        int auxHeuristica = nodoActual.valorHeuristicaNodo;
                         //ecuacion heuristica
                         
-                        aux = valorMax(nodoActual,tablero,conecta,limiteMin);
+                        aux = valorMax(nodoActual,tablero,conecta,++limiteMin);
                         if (aux < caminoMinimo) {
                             caminoMinimo = aux;
                         }
@@ -295,7 +296,8 @@ public class IAPlayer extends Player {
         int ultimaCol;
         int ultimaFila;
         Nodo [] vecNodos; 
-        int valorHeuristicaNodo;
+        int valorHeuristicaNodo; 
+        int alfaNodo,betaNodo;
         
         
         private Nodo (Grid tablero){
@@ -306,6 +308,9 @@ public class IAPlayer extends Player {
             ultimaCol = 0;                      //valor aleatorio
             ultimaFila= tablero.getFilas()-1;   //valor de la fila de abajo
             valorHeuristicaNodo=0;
+            alfaNodo = Integer.MAX_VALUE;
+            betaNodo = Integer.MIN_VALUE;
+                  
             
         }
         
