@@ -15,4 +15,6 @@ Practica 02, MouseRun:
 Practica 03 Flappy Bird Terminada, nota por determinar
 
 Práctica 04 Conecta4
-- comenzando arbol minimax
+- arbol minimax funciona (revisar Matrices comportamiento)
+- Heuristica implementada en el minimax
+- falta realizar poda Alfa-Beta
