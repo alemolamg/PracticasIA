@@ -44,6 +44,7 @@ public class IAPlayer extends Player {
         //unNodo.tableroNodo = tablero.toArray();
         
         int matrix[][] = nodoJugada.tableroNodo.clone();
+        
         for (int j = 0; j < tablero.getColumnas(); j++) {
             if (hayFilas(matrix, j, tablero)) {
                 int aux = queFila(matrix, j, tablero);
