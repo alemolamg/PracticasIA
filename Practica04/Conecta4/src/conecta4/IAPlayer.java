@@ -47,7 +47,7 @@ public class IAPlayer extends Player {
         
         for (int j = 0; j < tablero.getColumnas(); j++) {
             if (hayFilas(matrix, j, tablero)) {
-                int aux = queFila(matrix, j, tablero);
+                int aux = tablero.getFilas()-1; //queFila(matrix, j, tablero);
                 matrix[aux][j] = -1;
                 mostrarMatriz(matrix, nodoJugada.getColumnaNodo(), nodoJugada.getFilaNodo());
                 System.out.println("\nComenzamos el MiniMax");
@@ -94,7 +94,8 @@ public class IAPlayer extends Player {
             for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {
                 for (int reFilas = tablero.getFilas()-1; reFilas>=0; reFilas--) {      //Cambiar como valormix
                     if (nodoActual.getTableroNodo(reFilas, reCols) == 0) {
-                        nodoActual.rellenarNodo(reCols, reFilas, conecta);
+//                        nodoActual.rellenarNodo(reCols, reFilas, conecta);
+                        nodoActual.rellenarNodo(reCols, reFilas, Conecta4.PLAYER1);
 
                         
 //                        nodoActual.tableroNodo[i][j] = 1;
@@ -142,13 +143,14 @@ public class IAPlayer extends Player {
             for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {       //recorrer columnas
                 for (int reFilas = tablero.getFilas()-1; reFilas >= 0; reFilas--) {   //recorrer filas desde getfila()-1 hasta 0
                     if (nodoActual.tableroNodo[reFilas][reCols] == 0) {
-                        nodoActual.rellenarNodo(reFilas, reCols, conecta);
+//                        nodoActual.rellenarNodo(reFilas, reCols, conecta);
+                        nodoActual.rellenarNodo(reFilas, reCols, Conecta4.PLAYER2);
                         
                        // nodoActual.tableroNodo[reCols][reFilas] = -1;
                        // nodoActual.setCoordenadasNodo(reCols, reFilas);
                         
                         
-                        int auxHeuristica = nodoActual.valorHeuristicaNodo;
+                        nodoActual.betaNodo = nodoActual.valorHeuristicaNodo;
                         //ecuacion heuristica
                         
                         nodoActual.betaNodo = calcularMinimo2Num(nodoActual.betaNodo, valorMax(nodoActual,tablero,conecta,++limiteMin));
@@ -219,16 +221,16 @@ public class IAPlayer extends Player {
      * @param tablero
      * @return 
      */
-    private int queFila(int matrix[][], int x, Grid tablero) {
-        int cont = 0;
-        for (int i = tablero.getFilas() - 1; i >= 0; i--) {
-            if (matrix[i][x] != 1 && matrix[i][x] != -1) {
-                cont = i;
-                break;
-            }
-        }
-        return cont;
-    }
+//    private int queFila(int matrix[][], int x, Grid tablero) {
+//        int cont = 0;
+//        for (int i = tablero.getFilas() - 1; i >= 0; i--) {
+//            if (matrix[i][x] != 1 && matrix[i][x] != -1) {
+//                cont = i;
+//                break;
+//            }
+//        }
+//        return cont;
+//    }
     
     
     private int heuristica(int matrix[][], int conecta, int x, int y, Grid tablero) {
@@ -385,7 +387,7 @@ public class IAPlayer extends Player {
         
         public void mostrarMatrizNodo(){
          
-        for (int fila = numFilas - 1; fila >= 0; fila--) {
+        for (int fila = 0; fila <numFilas; fila++) {
             for (int col = 0; col < numColumnas; col++) {
                 System.out.print(this.tableroNodo[fila][col]+" ");
             }
