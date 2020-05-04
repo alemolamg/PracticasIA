@@ -79,7 +79,8 @@ public class IAPlayer extends Player {
         
         System.out.println("Comenzamos valorMax");
         nodoActual.mostrarMatrizNodo();
-        int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);      //verifica si se gana
+        //int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);      //verifica si se gana
+        int termina = nodoActual.checkWin(conecta);      //verifica si se gana
 
         
         if (termina != 0 || limiteMax > limite) {
@@ -129,7 +130,8 @@ public class IAPlayer extends Player {
         
         System.out.println("Comenzamos valorMin");
         nodoActual.mostrarMatrizNodo();
-        int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);    
+//        int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);    
+        int termina = nodoActual.checkWin(conecta);    
         
         if (termina != 0 || limiteMin > limite) {   //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
             
@@ -420,12 +422,10 @@ public class IAPlayer extends Player {
          
         /**
          * 
-         * @param x     Fila en la que se añadio el último mov
-         * @param y     Columna donde  se añadio el último mov
          * @param conecta   Número de filas seguidas para ganar
          * @return  Devuelve el valor del jugador ganador
          */
-        public int checkWin(int x, int y, int conecta) {
+        public int checkWin(int conecta) {
             /*
 		 *	x fila
 		 *	y columna
@@ -437,8 +437,8 @@ public class IAPlayer extends Player {
             int ganador = 0;
             boolean salir = false;
             for (int i = 0; (i < numFilas) && !salir; i++) {
-                if (this.tableroNodo[i][y] != Conecta4.VACIO) {
-                    if (tableroNodo[i][y] == Conecta4.PLAYER1) {
+                if (this.tableroNodo[i][ultimaCol] != Conecta4.VACIO) {
+                    if (tableroNodo[i][ultimaCol] == Conecta4.PLAYER1) {
                         ganar1++;
                     } else {
                         ganar1 = 0;
@@ -449,7 +449,7 @@ public class IAPlayer extends Player {
                         salir = true;
                     }
                     if (!salir) {
-                        if (tableroNodo[i][y] == Conecta4.PLAYER2) {
+                        if (tableroNodo[i][ultimaCol] == Conecta4.PLAYER2) {
                             ganar2++;
                         } else {
                             ganar2 = 0;
@@ -469,8 +469,8 @@ public class IAPlayer extends Player {
             ganar1 = 0;
             ganar2 = 0;
             for (int j = 0; (j < numColumnas) && !salir; j++) {
-                if (tableroNodo[x][j] != Conecta4.VACIO) {
-                    if (tableroNodo[x][j] == Conecta4.PLAYER1) {
+                if (tableroNodo[ultimaFila][j] != Conecta4.VACIO) {
+                    if (tableroNodo[ultimaFila][j] == Conecta4.PLAYER1) {
                         ganar1++;
                     } else {
                         ganar1 = 0;
@@ -481,7 +481,7 @@ public class IAPlayer extends Player {
                         salir = true;
                     }
                     if (ganador != Conecta4.PLAYER1) {
-                        if (tableroNodo[x][j] == Conecta4.PLAYER2) {
+                        if (tableroNodo[ultimaFila][j] == Conecta4.PLAYER2) {
                             ganar2++;
                         } else {
                             ganar2 = 0;
@@ -500,8 +500,8 @@ public class IAPlayer extends Player {
             // Comprobar oblicuo. De izquierda a derecha
             ganar1 = 0;
             ganar2 = 0;
-            int a = x;
-            int b = y;
+            int a = ultimaFila;
+            int b = ultimaCol;
             while (b > 0 && a > 0) {
                 a--;
                 b--;
@@ -540,8 +540,8 @@ public class IAPlayer extends Player {
             // Comprobar oblicuo de derecha a izquierda 
             ganar1 = 0;
             ganar2 = 0;
-            a = x;
-            b = y;
+            a = ultimaFila;
+            b = ultimaCol;
             //buscar posición de la esquina
             while (b < numColumnas - 1 && a > 0) {
                 a--;
