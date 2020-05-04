@@ -209,7 +209,7 @@ public class IAPlayer extends Player {
         for (int columna = 0; columna < origCol; columna++) {
             for (int fila = origFila - 1; fila >= 0; fila--) {
 
-                nuevaMatriz[columna][fila] = origMatriz[fila][columna];
+                nuevaMatriz[fila][columna] = origMatriz[fila][columna];
             }
         }
         return nuevaMatriz;
