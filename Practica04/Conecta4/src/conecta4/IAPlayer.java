@@ -244,6 +244,7 @@ public class IAPlayer extends Player {
      * @return 
      */
     private int heuristica(Nodo nodoActual, int conecta) {
+        
         int sumaJugador1 = 0;
         int sumaJugador2 = 0;
 
