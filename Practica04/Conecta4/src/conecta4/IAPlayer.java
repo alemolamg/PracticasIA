@@ -80,7 +80,7 @@ public class IAPlayer extends Player {
         int termina = nodoActual.checkWin(conecta);      //verifica si se gana
 
         if (termina != 0 || limiteMax > limite) {
-            return heuristica(nodoActual, conecta);
+            return heuristica(nodoActual, conecta,Conecta4.PLAYER1);
             
         } else {
             
@@ -122,7 +122,7 @@ public class IAPlayer extends Player {
         
         if (termina != 0 || limiteMin > limite) {   //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
             
-            return heuristica(nodoActual, conecta);
+            return heuristica(nodoActual, conecta,Conecta4.PLAYER2);
             
         } else {
             
@@ -153,6 +153,7 @@ public class IAPlayer extends Player {
 
         
     };
+    
     
     /**
      * Calcula el mínimo entre dos números enteros
@@ -239,18 +240,35 @@ public class IAPlayer extends Player {
      * @param conecta       número fichas seguidas para ganar
      * @return 
      */
-    private int heuristica(Nodo nodoActual, int conecta) {
-        int base=10;
-        
-        
+    private int heuristica(Nodo nodoActual, int conecta, int jugador) {
+        int base=10;    // base sobre la que elevar
         
         int sumaJugador1 = 0;
         int sumaJugador2 = 0;
 
-        // Calcular Diagonal Izquierda
-        
-        
-        
+        // Calcular Vertical
+        for (int colMirar = 0; colMirar < nodoActual.numColumnas; colMirar++) {          //recorremos columnas
+            int cantFichasVert = 0;
+            boolean calculoValido = true;
+            int filaMirar = nodoActual.numFilas - 1;
+
+            for (; filaMirar >= (filaMirar - (conecta - 1)); filaMirar--) {   //recorremos filas
+                if (filaMirar - (conecta - 1) >= 0 && nodoActual.tableroNodo[colMirar][filaMirar] != 0) {   //ver si se puede subir
+
+                    if (nodoActual.tableroNodo[colMirar][filaMirar] == jugador) {
+                        cantFichasVert++;
+                    }else if(nodoActual.tableroNodo[colMirar][filaMirar] !=0){
+                        calculoValido = false;
+                    }
+                    
+                } else {
+                    break;
+                }
+            }
+            if (calculoValido)
+                sumaJugador1 += elevarPotencias(base, cantFichasVert);
+        }   // Fin Vertical
+
         // Calcular Vertical
         for (int k = 2; k <= conecta; k++) {
             
