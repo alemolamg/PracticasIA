@@ -12,9 +12,10 @@ Practica 02, MouseRun:
  - Desarrollando busqueda del queso en profundidad (DFS) / No Funciona, arreglar
  - Desarrollando busqueda gredit / Funciona una parte; no necesita escaner
 
-Practica 03 Flappy Bird Terminada, nota por determinar
+Practica 03 Flappy Bird:
+-Terminada, nota por determinar
 
 Práctica 04 Conecta4
 - arbol minimax funciona (revisar Matrices comportamiento)
-- Heuristica implementada en el minimax
-- falta realizar poda Alfa-Beta
+- Heuristica comenzada
+- Poda Alfa-Beta implementada a priori
