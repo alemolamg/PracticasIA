@@ -17,7 +17,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  *
  */
 public class IAPlayer extends Player {  
-    int limite=8;
+    int limite=3;
     
     /**
      *
@@ -333,7 +333,7 @@ public class IAPlayer extends Player {
         int tableroNodo [][];   //*matriz con el grid en enteros
         int ultimaCol;
         int ultimaFila;
-        Nodo [] vecNodos; 
+//        Nodo [] vecNodos= new Nodo[numColumnas]; 
         int valorHeuristicaNodo; 
         int alfaNodo,betaNodo;
         
@@ -345,14 +345,12 @@ public class IAPlayer extends Player {
             numColumnas = tablero.getColumnas();
             numFilas = tablero.getFilas();
             tableroNodo = copiarMatriz(tablero.toArray(),tablero.getFilas(),tablero.getColumnas());    // ??
-            vecNodos = new Nodo [numColumnas];
+//            vecNodos = new Nodo [numColumnas];
             ultimaCol = 0;                      //valor aleatorio
-            ultimaFila= tablero.getFilas()-1;   //valor de la fila de abajo
-            valorHeuristicaNodo=0;
+            ultimaFila = tablero.getFilas()-1;  //valor de la fila de abajo
+            valorHeuristicaNodo = 0;
             alfaNodo = Integer.MAX_VALUE;
-            betaNodo = Integer.MIN_VALUE;
-                  
-            
+            betaNodo = Integer.MIN_VALUE;     
         }
         
         /**
@@ -414,7 +412,8 @@ public class IAPlayer extends Player {
          */
         public boolean rellenarNodo(int fila, int col, int jugador){
             this.tableroNodo[fila][col] = jugador;
-            vecNodos[col] = new Nodo (this);
+//            vecNodos[col] = new Nodo(this);        //No se está usando
+            
             this.ultimaCol=col;
             this.ultimaFila=fila;
             
