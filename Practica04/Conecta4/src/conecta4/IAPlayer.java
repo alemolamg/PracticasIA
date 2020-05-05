@@ -201,12 +201,18 @@ public class IAPlayer extends Player {
         return false;
     }
     
-    
+    /**
+     * Dada una matriz de Integer, copia los datos a otra matriz.
+     * 
+     * @param origMatriz    Matriz de enteros
+     * @param origFila      Número filas matriz original
+     * @param origCol       Número columnas matriz original
+     * @return  devuelve una matriz copiada paso a paso de la original.
+     */
     public int[][] copiarMatriz(int[][] origMatriz, int origFila , int origCol){
         int nuevaMatriz[][] = new int[origFila][origCol];
-        for (int columna = 0; columna < origCol; columna++) {
-            for (int fila = origFila - 1; fila >= 0; fila--) {
-
+        for (int fila = origFila - 1; fila >= 0; fila--) {
+            for (int columna = 0; columna < origCol; columna++) {
                 nuevaMatriz[fila][columna] = origMatriz[fila][columna];
             }
         }
@@ -230,11 +236,20 @@ public class IAPlayer extends Player {
         return cont;
     }
     
-    
+    /**
+     * Función que calcula el valor de ganar en cada casilla del nodo
+     * 
+     * @param nodoActual    Nodo desde el que partimos
+     * @param conecta       número fichas seguidas para ganar
+     * @return 
+     */
     private int heuristica(Nodo nodoActual, int conecta) {
         int sumaJugador1 = 0;
         int sumaJugador2 = 0;
 
+        // Calcular Diagonal Izquierda
+        
+        
         // Calcular Vertical
         for (int k = 2; k <= conecta; k++) {
             
@@ -264,7 +279,9 @@ public class IAPlayer extends Player {
             sumaJugador2 += k * paresVerticales2;
         }
 
-        //Calcular Horizontal
+        // Calcular Diagonal Derecha
+        
+        // Calcular Horizontal
         for (int k = 2; k <= conecta; k++) {
             int paresHorizontales1 = 0;
             int paresHorizontales2 = 0;
