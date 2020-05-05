@@ -271,7 +271,28 @@ public class IAPlayer extends Player {
         }   // Fin Vertical
 
         // Calcular Horizontal
-        
+        for(int filaMirar = nodoActual.numFilas - 1; filaMirar >= 0; filaMirar--) {
+            boolean calculoValido = true;
+            int colMirar = 0;
+
+            for (; colMirar < colMirar + (conecta - 1); colMirar++) {
+                int cantFichasHor = 0;
+                if (colMirar + (conecta - 1) >= nodoActual.numColumnas && nodoActual.tableroNodo[colMirar][filaMirar] != 0) {   //ver si se puede avanzar
+                    if (nodoActual.tableroNodo[colMirar][filaMirar] == jugador) {
+                        cantFichasHor++;
+                    } else if (nodoActual.tableroNodo[colMirar][filaMirar] != 0) {
+                        calculoValido = false;
+                    }
+
+                } else {
+                    break;
+                }
+                if (calculoValido) {
+                    sumaJugador1 += elevarPotencias(base, cantFichasHor);
+                }
+            }
+
+        }   // Fin Horizontal
         
 
         // Calcular Diagonal Derecha
