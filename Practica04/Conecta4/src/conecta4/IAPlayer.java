@@ -79,25 +79,18 @@ public class IAPlayer extends Player {
         
         System.out.println("Comenzamos valorMax");
         nodoActual.mostrarMatrizNodo();
-        //int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);      //verifica si se gana
         int termina = nodoActual.checkWin(conecta);      //verifica si se gana
 
-        
         if (termina != 0 || limiteMax > limite) {
             return heuristica(nodoActual, conecta);
             
         } else {
             
             int caminoMax = Integer.MIN_VALUE;
-            //int aux;
-            for (int reFilas = tablero.getFilas() - 1; reFilas >= 0; reFilas--) {
                 for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {
-                    //Cambiar como valormix
-                    //if (nodoActual.getTableroNodo(reFilas, reCols) == 0) {
-                    if (hayFilas(reCols, nodoActual)) {
-//                        nodoActual.rellenarNodo(reCols, reFilas, conecta);
+                    if(hayFilas(reCols, nodoActual)){
+                        int reFilas = filaLibre(reCols, nodoActual);
                         nodoActual.rellenarNodo(reCols, reFilas, Conecta4.PLAYER1);
-
                         nodoActual.alfaNodo = calcularMaximo2Num(nodoActual.alfaNodo, valorMin(nodoActual, tablero, conecta, ++limiteMax));
                         //aux = valorMin(nodoActual,tablero,conecta,++limiteMax);     //puede ser la poda
 
@@ -106,7 +99,7 @@ public class IAPlayer extends Player {
                         }
                         nodoActual.tableroNodo[reFilas][reCols] = Conecta4.PLAYER1;
                         //matriz[i][j] = 1;
-                    }
+                    
                 }
             }
             return caminoMax;
@@ -126,8 +119,7 @@ public class IAPlayer extends Player {
     private int valorMin(Nodo nodoActual, Grid tablero, int conecta, int limiteMin){
         
         System.out.println("Comenzamos valorMin");
-        nodoActual.mostrarMatrizNodo();
-//        int termina = tablero.checkWin(nodoActual.ultimaFila, nodoActual.ultimaCol, conecta);    
+        nodoActual.mostrarMatrizNodo();   
         int termina = nodoActual.checkWin(conecta);    
         
         if (termina != 0 || limiteMin > limite) {   //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
@@ -137,22 +129,18 @@ public class IAPlayer extends Player {
         } else {
             
             int caminoMinimo = Integer.MAX_VALUE;                   //Iniciamos al valor mas alto
-            //int aux;                                                //auxiliar que nos ayude
             for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {       //recorrer columnas
-                for (int reFilas = tablero.getFilas()-1; reFilas >= 0; reFilas--) {   //recorrer filas desde getfila()-1 hasta 0
+                if (hayFilas(reCols, nodoActual)) {
+                    int reFilas = filaLibre(reCols, nodoActual);
                     if (nodoActual.tableroNodo[reFilas][reCols] == 0) {
-//                        nodoActual.rellenarNodo(reFilas, reCols, conecta);
                         nodoActual.rellenarNodo(reFilas, reCols, Conecta4.PLAYER2);
                         nodoActual.mostrarMatrizNodo();
                         
-                       // nodoActual.tableroNodo[reCols][reFilas] = -1;
-                       // nodoActual.setCoordenadasNodo(reCols, reFilas);
-                        
-                        
+                        // nodoActual.setCoordenadasNodo(reCols, reFilas);
                         nodoActual.betaNodo = nodoActual.valorHeuristicaNodo;
                         //ecuacion heuristica
-                        
-                        nodoActual.betaNodo = calcularMinimo2Num(nodoActual.betaNodo, valorMax(nodoActual,tablero,conecta,++limiteMin));
+
+                        nodoActual.betaNodo = calcularMinimo2Num(nodoActual.betaNodo, valorMax(nodoActual, tablero, conecta, ++limiteMin));
                         //aux = valorMax(nodoActual,tablero,conecta,++limiteMin);
                         if (nodoActual.betaNodo < caminoMinimo) {
                             caminoMinimo = nodoActual.betaNodo;
@@ -168,7 +156,12 @@ public class IAPlayer extends Player {
         
     };
     
-    
+    /**
+     * Calcula el mínimo entre dos números enteros
+     * @param num1  número 1 a comparar
+     * @param num2  número  a comparar
+     * @return Devuelve el número más pequeño
+     */
     private int calcularMinimo2Num(int num1, int num2) {
         if (num1 >= num2) {
             return num2;
@@ -177,6 +170,12 @@ public class IAPlayer extends Player {
         }
     }
     
+    /**
+     * Calcula el máximo entre dos números enteros
+     * @param num1  número 1 a comparar
+     * @param num2  número 2 a comparar
+     * @return Devuelve el número más grande
+     */
     private int calcularMaximo2Num(int num1, int num2 ){
         if (num1 >= num2) {
             return num1;
@@ -186,7 +185,7 @@ public class IAPlayer extends Player {
     }
     
     /**
-     * Calcula la fila donde jugar respecto la columna
+     * Calcula si la columna tiene filas libres
      * 
      * @param col       Columna en la que buscar fila
      * @param tablero   nodo con la matriz a añadir
@@ -220,12 +219,12 @@ public class IAPlayer extends Player {
     }
     
     /**
-     * 
+     *  Calcula la fila libre dada una columna.
      * @param col       Columna en la que buscamos 
      * @param tablero   Nodo con la matriz
      * @return 
      */
-    private int queFila(int col, Nodo tablero) {
+    private int filaLibre(int col, Nodo tablero) {
         int cont = 0;
         for (int fila = tablero.getFilaNodo() - 1; fila >= 0; fila--) {
             if (tablero.tableroNodo[fila][col] != 1 && tablero.tableroNodo[fila][col] != -1) {
@@ -249,6 +248,7 @@ public class IAPlayer extends Player {
         int sumaJugador2 = 0;
 
         // Calcular Diagonal Izquierda
+        
         
         
         // Calcular Vertical
