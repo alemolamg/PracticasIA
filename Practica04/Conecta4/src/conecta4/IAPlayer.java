@@ -248,13 +248,13 @@ public class IAPlayer extends Player {
 
         // Calcular Vertical
         for (int colMirar = 0; colMirar < nodoActual.numColumnas; colMirar++) {          //recorremos columnas
-            int cantFichasVert = 0;
             boolean calculoValido = true;
             int filaMirar = nodoActual.numFilas - 1;
 
-            for (; filaMirar >= (filaMirar - (conecta - 1)); filaMirar--) {   //recorremos filas
+            for (; filaMirar >= (filaMirar - (conecta - 1)); filaMirar--) {     //recorremos filas
+                int cantFichasVert = 0;
                 if (filaMirar - (conecta - 1) >= 0 && nodoActual.tableroNodo[colMirar][filaMirar] != 0) {   //ver si se puede subir
-
+                    
                     if (nodoActual.tableroNodo[colMirar][filaMirar] == jugador) {
                         cantFichasVert++;
                     }else if(nodoActual.tableroNodo[colMirar][filaMirar] !=0){
@@ -264,39 +264,15 @@ public class IAPlayer extends Player {
                 } else {
                     break;
                 }
-            }
-            if (calculoValido)
+                if (calculoValido)
                 sumaJugador1 += elevarPotencias(base, cantFichasVert);
+            }
+            
         }   // Fin Vertical
 
-        // Calcular Vertical
-        for (int k = 2; k <= conecta; k++) {
-            
-            int paresVerticales1 = 0;
-            int paresVerticales2 = 0;
-            for (int j = 0; j < nodoActual.numColumnas; j++) {
-                int acV1 = 0;
-                int acV2 = 0;
-                for (int i = 0; i < nodoActual.getFilaNodo(); i++) {
-                    if (nodoActual.tableroNodo[i][j] == 1) {
-                        acV2=0;
-                        acV1++;
-                        
-                        if(k == acV1) {
-                            paresVerticales1++;
-                        }
-                    } else if (nodoActual.tableroNodo[i][j] == -1) {
-                        acV1=0;
-                        acV2++;
-                        if(k == acV2) {
-                            paresVerticales2++;
-                        }
-                    }
-                }
-            }
-            sumaJugador1 += k * paresVerticales1;
-            sumaJugador2 += k * paresVerticales2;
-        }
+        // Calcular Horizontal
+        
+        
 
         // Calcular Diagonal Derecha
         
