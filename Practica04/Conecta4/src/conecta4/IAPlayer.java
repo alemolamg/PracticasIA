@@ -1,8 +1,6 @@
 package conecta4;
 
-import java.util.TreeMap;
 import java.util.Vector;
-import javax.swing.tree.DefaultMutableTreeNode;
         
 /**
  *
@@ -237,12 +235,14 @@ public class IAPlayer extends Player {
     
     /**
      * Función que calcula el valor de ganar en cada casilla del nodo
-     * 
      * @param nodoActual    Nodo desde el que partimos
      * @param conecta       número fichas seguidas para ganar
      * @return 
      */
     private int heuristica(Nodo nodoActual, int conecta) {
+        int base=10;
+        
+        
         
         int sumaJugador1 = 0;
         int sumaJugador2 = 0;
@@ -314,6 +314,10 @@ public class IAPlayer extends Player {
         return sumaJugador1 - sumaJugador2;
     }
     
+    
+    private int elevarPotencias (int base, int exponente){
+        return (int) Math.pow(base, exponente);
+    }
     
     public void mostrarMatriz(int [][] matriz, int numColumnas, int numFilas){
          
