@@ -80,7 +80,7 @@ public class IAPlayer extends Player {
         int termina = nodoActual.checkWin(conecta);      //verifica si se gana
 
         if (termina != 0 || limiteMax > limite) {
-            return heuristica(nodoActual, conecta,Conecta4.PLAYER1);
+            return calcularHeuristica(nodoActual, conecta);
             
         } else {
             
@@ -122,7 +122,7 @@ public class IAPlayer extends Player {
         
         if (termina != 0 || limiteMin > limite) {   //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
             
-            return heuristica(nodoActual, conecta,Conecta4.PLAYER2);
+            return calcularHeuristica(nodoActual, conecta);
             
         } else {
             
@@ -154,6 +154,9 @@ public class IAPlayer extends Player {
         
     };
     
+    int calcularHeuristica(Nodo nodoActual,int conecta){
+        return(Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1))+ (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
+    }
     
     /**
      * Calcula el mínimo entre dos números enteros
@@ -238,6 +241,7 @@ public class IAPlayer extends Player {
      * Función que calcula el valor de ganar en cada casilla del nodo
      * @param nodoActual    Nodo desde el que partimos
      * @param conecta       número fichas seguidas para ganar
+     * @param jugador       identificador del jugador para hacer heurística
      * @return 
      */
     private int heuristica(Nodo nodoActual, int conecta, int jugador) {
