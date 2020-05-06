@@ -26,6 +26,7 @@ public class IAPlayer extends Player {
     @Override
     public int turnoJugada(Grid tablero, int conecta) {
         int limiteActual=0;
+        
         // ...
         // Calcular la mejor columna posible donde hacer nuestra turnoJugada
         //Pintar Ficha (sustituir 'columna' por el valor adecuado)
@@ -65,7 +66,7 @@ public class IAPlayer extends Player {
     } // turnoJugada
     
     /**
-     * 
+     * Calcula el valor máximo, jugada deseada por el Jugador1
      * @param nodoActual
      * @param tablero
      * @param x
@@ -107,6 +108,7 @@ public class IAPlayer extends Player {
     
     
     /**
+     * Calcula el valor mínimo, jugada deseada por el Jugador2
      * @param nodoActual
      * @param tablero
      * @param x
@@ -154,6 +156,12 @@ public class IAPlayer extends Player {
         
     };
     
+    /**
+     * Función intermedia para calcular la heurística total de un tablero
+     * @param nodoActual    Nodo con la tabla y los datos.
+     * @param conecta       Número de fichas seguidas para ganar.
+     * @return              Valor de la heurística total.
+     */
     public int heuristicaCalcular(Nodo nodoActual,int conecta){
         int resultado =(Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1)) + (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
         return resultado;
@@ -189,7 +197,6 @@ public class IAPlayer extends Player {
     
     /**
      * Calcula si la columna tiene filas libres
-     * 
      * @param col       Columna en la que buscar fila
      * @param tablero   nodo con la matriz a añadir
      * @return  Devuelve verdad si encuentra fila libre en una columna o falso si no la encuentra
@@ -222,7 +229,7 @@ public class IAPlayer extends Player {
     }
     
     /**
-     *  Calcula la fila libre dada una columna.
+     * Calcula la fila libre dada una columna.
      * @param col       Columna en la que buscamos 
      * @param tablero   Nodo con la matriz
      * @return 
@@ -358,7 +365,12 @@ public class IAPlayer extends Player {
         return sumaJugador;
     }
     
-    
+    /**
+     * Eleva una base a su exponente
+     * @param base      Número base (será siempre 10)
+     * @param exponente Exponente (número veces que se repite una ficha)
+     * @return  potencia de exp base 10
+     */
     private int elevarPotencias (int base, int exponente){
         return (int) Math.pow(base, exponente);
     }
