@@ -250,8 +250,29 @@ public class IAPlayer extends Player {
         int sumaJugador = 0;
 
         // Calcular Diagonal izquierda
-        
-        
+        for (int filaMirar = nodoActual.numFilas - 1; filaMirar >= 0; filaMirar--) {
+            for (int colMirar = 0; colMirar < nodoActual.numColumnas; colMirar++) {
+                boolean calculoValido = true;
+                int cantFichasVert = 0;
+                if(colMirar - (conecta-1) >=0 && filaMirar -(conecta-1) >= 0 && nodoActual.tableroNodo[filaMirar][colMirar]!= 0){ //verificamos que podemos contar y que hay ficha para contar
+                    int filaAux=filaMirar,colAux=colMirar;
+                    
+                    for(int diagonal=conecta-1;diagonal >=0; diagonal--){
+                        if (nodoActual.tableroNodo[filaAux][colAux] == jugador) {
+                            cantFichasVert++;
+                            filaAux--; colAux--;
+                        }else if(nodoActual.tableroNodo[filaAux][colAux] !=0){
+                            calculoValido = false;
+                        }
+                    }
+                    if(calculoValido){
+                        sumaJugador += elevarPotencias(base, cantFichasVert);
+                    }
+                    
+                }
+   
+            }
+        }
         
         // Calcular Vertical
         for (int colMirar = 0; colMirar < nodoActual.numColumnas; colMirar++) {     //recorremos columnas
@@ -260,11 +281,11 @@ public class IAPlayer extends Player {
 
             for (; filaMirar >= (filaMirar - (conecta - 1)); filaMirar--) {         //recorremos filas
                 int cantFichasVert = 0;
-                if (filaMirar - (conecta - 1) >= 0 && nodoActual.tableroNodo[colMirar][filaMirar] != 0) {   //ver si se puede subir
+                if (filaMirar - (conecta - 1) >= 0 && nodoActual.tableroNodo[filaMirar][colMirar] != 0) {   //ver si se puede subir
                     
-                    if (nodoActual.tableroNodo[colMirar][filaMirar] == jugador) {
+                    if (nodoActual.tableroNodo[filaMirar][colMirar] == jugador) {
                         cantFichasVert++;
-                    }else if(nodoActual.tableroNodo[colMirar][filaMirar] !=0){
+                    }else if(nodoActual.tableroNodo[filaMirar][colMirar] !=0){
                         calculoValido = false;
                     }
                     
@@ -285,10 +306,10 @@ public class IAPlayer extends Player {
 
             for (; colMirar < colMirar + (conecta - 1); colMirar++) {
                 int cantFichasHor = 0;
-                if (colMirar + (conecta - 1) >= nodoActual.numColumnas && nodoActual.tableroNodo[colMirar][filaMirar] != 0) {   //ver si se puede avanzar
-                    if (nodoActual.tableroNodo[colMirar][filaMirar] == jugador) {
+                if (colMirar + (conecta - 1) >= nodoActual.numColumnas && nodoActual.tableroNodo[filaMirar][colMirar] != 0) {   //ver si se puede avanzar
+                    if (nodoActual.tableroNodo[filaMirar][colMirar] == jugador) {
                         cantFichasHor++;
-                    } else if (nodoActual.tableroNodo[colMirar][filaMirar] != 0) {
+                    } else if (nodoActual.tableroNodo[filaMirar][colMirar] != 0) {
                         calculoValido = false;
                     }
 
