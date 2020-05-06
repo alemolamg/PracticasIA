@@ -45,7 +45,7 @@ public class IAPlayer extends Player {
         
         for (int j = 0; j < tablero.getColumnas(); j++) {
             if (hayFilas(j, nodoJugada)) {
-                int aux = tablero.getFilas()-1; //queFila(matrix, j, tablero);
+                int aux = filaLibre(j,nodoJugada);
                 nodoJugada.tableroNodo[aux][j] = -1;
                 mostrarMatriz(nodoJugada.tableroNodo, nodoJugada.getColumnaNodo(), nodoJugada.getFilaNodo());
                 System.out.println("\nComenzamos el MiniMax");
