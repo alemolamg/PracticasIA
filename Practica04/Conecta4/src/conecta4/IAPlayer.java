@@ -254,11 +254,11 @@ public class IAPlayer extends Player {
         
         
         // Calcular Vertical
-        for (int colMirar = 0; colMirar < nodoActual.numColumnas; colMirar++) {          //recorremos columnas
+        for (int colMirar = 0; colMirar < nodoActual.numColumnas; colMirar++) {     //recorremos columnas
             boolean calculoValido = true;
             int filaMirar = nodoActual.numFilas - 1;
 
-            for (; filaMirar >= (filaMirar - (conecta - 1)); filaMirar--) {     //recorremos filas
+            for (; filaMirar >= (filaMirar - (conecta - 1)); filaMirar--) {         //recorremos filas
                 int cantFichasVert = 0;
                 if (filaMirar - (conecta - 1) >= 0 && nodoActual.tableroNodo[colMirar][filaMirar] != 0) {   //ver si se puede subir
                     
