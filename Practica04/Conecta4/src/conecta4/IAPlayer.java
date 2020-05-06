@@ -88,7 +88,7 @@ public class IAPlayer extends Player {
                 for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {
                     if(hayFilas(reCols, nodoActual)){
                         int reFilas = filaLibre(reCols, nodoActual);
-                        nodoActual.rellenarNodo(reCols, reFilas, Conecta4.PLAYER1);
+                        nodoActual.rellenarNodo(reCols, reFilas,conecta, Conecta4.PLAYER1);
                         nodoActual.alfaNodo = calcularMaximo2Num(nodoActual.alfaNodo, valorMin(nodoActual, tablero, conecta, ++limiteMax));
                         //aux = valorMin(nodoActual,tablero,conecta,++limiteMax);     //puede ser la poda
 
@@ -131,7 +131,7 @@ public class IAPlayer extends Player {
                 if (hayFilas(reCols, nodoActual)) {
                     int reFilas = filaLibre(reCols, nodoActual);
                     if (nodoActual.tableroNodo[reFilas][reCols] == 0) {
-                        nodoActual.rellenarNodo(reFilas, reCols, Conecta4.PLAYER2);
+                        nodoActual.rellenarNodo(reFilas, reCols,conecta, Conecta4.PLAYER2);
                         nodoActual.mostrarMatrizNodo();
                         
                         // nodoActual.setCoordenadasNodo(reCols, reFilas);
@@ -155,7 +155,8 @@ public class IAPlayer extends Player {
     };
     
     public int heuristicaCalcular(Nodo nodoActual,int conecta){
-        return(Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1)) + (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
+        int resultado =(Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1)) + (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
+        return resultado;
     }
     
     /**
@@ -305,10 +306,10 @@ public class IAPlayer extends Player {
                 boolean calculoValido = true;
                 int cantFichasVert = 0;
                 
-                if(colMirar - (conecta-1) >=0 && filaMirar -(conecta-1) >= 0 && nodoActual.tableroNodo[filaMirar][colMirar]!= 0){ //verificamos que podemos contar y que hay ficha para contar
+                if(colMirar + (conecta-1) < nodoActual.numColumnas && filaMirar -(conecta-1) >= 0 && nodoActual.tableroNodo[filaMirar][colMirar]!= 0){ //verificamos que podemos contar y que hay ficha para contar
                     int filaAux=filaMirar,colAux=colMirar;
                     
-                    for(int diagonal=conecta-1;diagonal >=0; diagonal--){
+                    for(int diagonal = conecta-1; diagonal >=0; diagonal--){
                         if (nodoActual.tableroNodo[filaAux][colAux] == jugador) {
                             cantFichasVert++;
                             filaAux--; colAux++;
@@ -457,10 +458,10 @@ public class IAPlayer extends Player {
          * @param jugador   jugador que se añade
          * @return Devuelve true siempre
          */
-        public boolean rellenarNodo(int fila, int col, int jugador){
+        public boolean rellenarNodo(int fila, int col,int conecta, int jugador){
             this.tableroNodo[fila][col] = jugador;
 //            vecNodos[col] = new Nodo(this);        //No se está usando
-            
+            valorHeuristicaNodo = heuristicaCalcular(this, conecta);
             this.ultimaCol=col;
             this.ultimaFila=fila;
             
