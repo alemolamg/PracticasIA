@@ -247,9 +247,12 @@ public class IAPlayer extends Player {
     private int heuristica(Nodo nodoActual, int conecta, int jugador) {
         int base=10;    // base sobre la que elevar
         
-        int sumaJugador1 = 0;
-        int sumaJugador2 = 0;
+        int sumaJugador = 0;
 
+        // Calcular Diagonal izquierda
+        
+        
+        
         // Calcular Vertical
         for (int colMirar = 0; colMirar < nodoActual.numColumnas; colMirar++) {          //recorremos columnas
             boolean calculoValido = true;
@@ -269,11 +272,12 @@ public class IAPlayer extends Player {
                     break;
                 }
                 if (calculoValido)
-                sumaJugador1 += elevarPotencias(base, cantFichasVert);
+                sumaJugador += elevarPotencias(base, cantFichasVert);
             }
             
         }   // Fin Vertical
 
+        
         // Calcular Horizontal
         for(int filaMirar = nodoActual.numFilas - 1; filaMirar >= 0; filaMirar--) {
             boolean calculoValido = true;
@@ -292,7 +296,7 @@ public class IAPlayer extends Player {
                     break;
                 }
                 if (calculoValido) {
-                    sumaJugador1 += elevarPotencias(base, cantFichasHor);
+                    sumaJugador += elevarPotencias(base, cantFichasHor);
                 }
             }
 
@@ -301,36 +305,9 @@ public class IAPlayer extends Player {
 
         // Calcular Diagonal Derecha
         
-        // Calcular Horizontal
-        for (int k = 2; k <= conecta; k++) {
-            int paresHorizontales1 = 0;
-            int paresHorizontales2 = 0;
-            for (int i = 0; i < nodoActual.getFilaNodo(); i++) {
-                int acH1 = 0;
-                int acH2 = 0;
-                for (int j = 0; j < nodoActual.getColumnaNodo(); j++) {
-                    if (nodoActual.tableroNodo[i][j] == 1) {
-                        acH2 = 0;
-                        acH1++;
-                        if(k == acH1) {
-                            paresHorizontales1++;
-                        }
-                    } else if (nodoActual.tableroNodo[i][j] == -1) {
-                        acH1 = 0;
-                        acH2++;
-                       
-                        if(k == acH2) {
-                            paresHorizontales2++;
-                        }
-                    }
-                }
-            }
-
-            sumaJugador1 += k * paresHorizontales1;
-            sumaJugador2 += k * paresHorizontales2;
-        }
-
-        return sumaJugador1 - sumaJugador2;
+        
+        
+        return sumaJugador;
     }
     
     
