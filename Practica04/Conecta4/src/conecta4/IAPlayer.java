@@ -49,7 +49,7 @@ public class IAPlayer extends Player {
                 nodoJugada.tableroNodo[aux][j] = -1;
                 mostrarMatriz(nodoJugada.tableroNodo, nodoJugada.getColumnaNodo(), nodoJugada.getFilaNodo());
                 System.out.println("\nComenzamos el MiniMax");
-                minActual = valorMin(nodoJugada,tablero,conecta,limiteActual);   //Empieza Minimax
+                minActual = calcularMin(nodoJugada,tablero,conecta,limiteActual);   //Empieza Minimax
                 nodoJugada.tableroNodo[aux][j] = 0;
                 if (minActual < minInicial) {
                     filaAux = aux;
@@ -74,7 +74,7 @@ public class IAPlayer extends Player {
      * @param conecta
      * @return 
      */
-    private int valorMax(Nodo nodoActual, Grid tablero, int conecta,int limiteMax) {
+    private int calcularMax(Nodo nodoActual, Grid tablero, int conecta,int limiteMax) {
         
         System.out.println("Comenzamos valorMax");
         nodoActual.mostrarMatrizNodo();
@@ -90,7 +90,7 @@ public class IAPlayer extends Player {
                     if(hayFilas(reCols, nodoActual)){
                         int reFilas = filaLibre(reCols, nodoActual);
                         nodoActual.rellenarNodo(reCols, reFilas,conecta, Conecta4.PLAYER1);
-                        nodoActual.alfaNodo = calcularMaximo2Num(nodoActual.alfaNodo, valorMin(nodoActual, tablero, conecta, ++limiteMax));
+                        nodoActual.alfaNodo = calcularMaximo2Num(nodoActual.alfaNodo, calcularMin(nodoActual, tablero, conecta, ++limiteMax));
                         //aux = valorMin(nodoActual,tablero,conecta,++limiteMax);     //puede ser la poda
 
                         if (nodoActual.alfaNodo > caminoMax) {
@@ -116,7 +116,7 @@ public class IAPlayer extends Player {
      * @param conecta
      * @return 
      */
-    private int valorMin(Nodo nodoActual, Grid tablero, int conecta, int limiteMin){
+    private int calcularMin(Nodo nodoActual, Grid tablero, int conecta, int limiteMin){
         
         System.out.println("Comenzamos valorMin");
         nodoActual.mostrarMatrizNodo();   
@@ -140,7 +140,7 @@ public class IAPlayer extends Player {
                         nodoActual.betaNodo = nodoActual.valorHeuristicaNodo;
                         //ecuacion heuristica
 
-                        nodoActual.betaNodo = calcularMinimo2Num(nodoActual.betaNodo, valorMax(nodoActual, tablero, conecta, ++limiteMin));
+                        nodoActual.betaNodo = calcularMinimo2Num(nodoActual.betaNodo, calcularMax(nodoActual, tablero, conecta, ++limiteMin));
                         //aux = valorMax(nodoActual,tablero,conecta,++limiteMin);
                         if (nodoActual.betaNodo < caminoMinimo) {
                             caminoMinimo = nodoActual.betaNodo;
