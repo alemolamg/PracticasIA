@@ -15,7 +15,7 @@ import java.util.Vector;
  *
  */
 public class IAPlayer extends Player {  
-    int limite=3;
+    int limite = 3;
     
     /**
      *
@@ -63,7 +63,7 @@ public class IAPlayer extends Player {
         return tablero.checkWin(mejorMov, meterButton, conecta);
         //return tablero.checkWin(tablero.setButton(columna, Conecta4.PLAYER2), columna, conecta);
 
-    } // turnoJugada
+    } // Fin turnoJugada
     
     /**
      * Calcula el valor máximo, jugada deseada por el Jugador1
@@ -387,13 +387,14 @@ public class IAPlayer extends Player {
     }
 
     
+    
     public class Nodo{
-        int numColumnas;        //ultima columna usada
-        int numFilas;           //ultima fila jugada
-        int tableroNodo [][];   //*matriz con el grid en enteros
-        int ultimaCol;
-        int ultimaFila;
-//        Nodo [] vecNodos= new Nodo[numColumnas]; 
+        int numColumnas;        //  Número de columnas de la matriz
+        int numFilas;           //  Número filas de la matriz
+        int tableroNodo [][];   //  matriz con el grid en enteros
+        int ultimaCol;          //  ultima columna jugada
+        int ultimaFila;         //  ultima fila jugada
+        Vector<Nodo> hijosNodos;//  vector con los nodos hijos
         int valorHeuristicaNodo; 
         int alfaNodo,betaNodo;
         
@@ -404,23 +405,40 @@ public class IAPlayer extends Player {
         private Nodo (Grid tablero){
             numColumnas = tablero.getColumnas();
             numFilas = tablero.getFilas();
-            tableroNodo = copiarMatriz(tablero.toArray(),tablero.getFilas(),tablero.getColumnas());    // ??
-//            vecNodos = new Nodo [numColumnas];
+            tableroNodo = copiarMatriz(tablero.toArray(),tablero.getFilas(),tablero.getColumnas());    // copia a través del tablero del Grid
+         
             ultimaCol = 0;                      //valor aleatorio
             ultimaFila = tablero.getFilas()-1;  //valor de la fila de abajo
+            
             valorHeuristicaNodo = 0;
+            this.hijosNodos = new Vector<Nodo>();
             alfaNodo = Integer.MAX_VALUE;
             betaNodo = Integer.MIN_VALUE;     
         }
         
         /**
-         * Función que copia el nodo
+         * Constructor copia de nodo
          * @param orig Nodo original
          */
         private Nodo (Nodo orig){
             tableroNodo = orig.getTableroNodo();
             numColumnas = orig.getColumnaNodo();
             numFilas = orig.getFilaNodo();
+            
+            ultimaCol = orig.ultimaCol;
+            ultimaFila = orig.ultimaFila;
+            
+            valorHeuristicaNodo = orig.valorHeuristicaNodo;
+            alfaNodo = orig.alfaNodo;
+            betaNodo = orig.betaNodo;
+            int i=0;                    
+            do {
+                if (orig.hijosNodos.size() != 0) {
+                    hijosNodos.add(orig.hijosNodos.get(i));
+                    i++;
+                }
+            }while (orig.hijosNodos.get(i-1)!= orig.hijosNodos.lastElement());
+                    
         }
         
         /**
