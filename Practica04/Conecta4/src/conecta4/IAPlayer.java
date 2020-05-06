@@ -80,7 +80,7 @@ public class IAPlayer extends Player {
         int termina = nodoActual.checkWin(conecta);      //verifica si se gana
 
         if (termina != 0 || limiteMax > limite) {
-            return calcularHeuristica(nodoActual, conecta);
+            return heuristicaCalcular(nodoActual, conecta);
             
         } else {
             
@@ -122,7 +122,7 @@ public class IAPlayer extends Player {
         
         if (termina != 0 || limiteMin > limite) {   //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
             
-            return calcularHeuristica(nodoActual, conecta);
+            return heuristicaCalcular(nodoActual, conecta);
             
         } else {
             
@@ -154,8 +154,8 @@ public class IAPlayer extends Player {
         
     };
     
-    int calcularHeuristica(Nodo nodoActual,int conecta){
-        return(Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1))+ (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
+    public int heuristicaCalcular(Nodo nodoActual,int conecta){
+        return(Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1)) + (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
     }
     
     /**
