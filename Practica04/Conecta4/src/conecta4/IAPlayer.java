@@ -272,7 +272,7 @@ public class IAPlayer extends Player {
                 }
    
             }
-        }
+        }   // Fin Diagonal Izquierda
         
         // Calcular Vertical
         for (int colMirar = 0; colMirar < nodoActual.numColumnas; colMirar++) {     //recorremos columnas
@@ -298,6 +298,32 @@ public class IAPlayer extends Player {
             
         }   // Fin Vertical
 
+        
+        // Calcular Diagonal Derecha
+        for (int filaMirar = nodoActual.numFilas - 1; filaMirar >= 0; filaMirar--) {
+            for (int colMirar = 0; colMirar < nodoActual.numColumnas; colMirar++) {
+                boolean calculoValido = true;
+                int cantFichasVert = 0;
+                
+                if(colMirar - (conecta-1) >=0 && filaMirar -(conecta-1) >= 0 && nodoActual.tableroNodo[filaMirar][colMirar]!= 0){ //verificamos que podemos contar y que hay ficha para contar
+                    int filaAux=filaMirar,colAux=colMirar;
+                    
+                    for(int diagonal=conecta-1;diagonal >=0; diagonal--){
+                        if (nodoActual.tableroNodo[filaAux][colAux] == jugador) {
+                            cantFichasVert++;
+                            filaAux--; colAux++;
+                        }else if(nodoActual.tableroNodo[filaAux][colAux] !=0){
+                            calculoValido = false;
+                        }
+                    }
+                    if(calculoValido){
+                        sumaJugador += elevarPotencias(base, cantFichasVert);
+                    }
+                    
+                }
+   
+            }
+        }   // Fin Diagonal Derecha
         
         // Calcular Horizontal
         for(int filaMirar = nodoActual.numFilas - 1; filaMirar >= 0; filaMirar--) {
