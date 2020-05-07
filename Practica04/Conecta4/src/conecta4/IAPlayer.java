@@ -46,7 +46,7 @@ public class IAPlayer extends Player {
         //int matrix[][] = nodoJugada.matrizNodo.clone();
         minActual=calcularMin(nodoJugada, tablero, conecta, limiteActual, alfa, beta);
         for (int recorro = 0;recorro < tablero.getColumnas(); recorro++ ){
-            if(minActual == nodoJugada.hijosNodos.elementAt(recorro).valorHeuristicaNodo){
+            if(minActual == nodoJugada.hijosNodo.elementAt(recorro).valorHeuristicaNodo){
                 mejorMov=recorro;
             } else
                 System.out.println("Mejor valor no es "+ recorro);
@@ -102,11 +102,11 @@ public class IAPlayer extends Player {
 //                        nodoActual.rellenarNodo(reCols, reFilas,conecta, Conecta4.PLAYER1);
                     nodoActual.rellenarNodoHijo(reCols, conecta, Conecta4.PLAYER1);
 
-                    alfa = calcularMaximo2Num(alfa, calcularMin(nodoActual.hijosNodos.elementAt(reCols), tablero, conecta, limiteMax++, alfa, beta));
+                    alfa = calcularMaximo2Num(alfa, calcularMin(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, limiteMax++, alfa, beta));
 
                     if (alfa > caminoMax) {
                         caminoMax = alfa;
-                        nodoActual.matrizNodo = copiarMatriz(nodoActual.hijosNodos.elementAt(reCols).matrizNodo, reFilas, reCols);
+                        nodoActual.matrizNodo = copiarMatriz(nodoActual.hijosNodo.elementAt(reCols).matrizNodo, reFilas, reCols);
                         nodoActual.setheuristica(caminoMax);
                     }
                 }
@@ -133,7 +133,6 @@ public class IAPlayer extends Player {
         int termina = nodoActual.checkWin(conecta);
 
         if (termina != 0 || limiteMin > limite) {   //ToDo: Gestionar gane max o min o empate (tablero lleno) o nivel profundidad maximo
-
             return heuristicaCalcular(nodoActual, conecta);
 
         } else {
@@ -147,11 +146,11 @@ public class IAPlayer extends Player {
                         nodoActual.rellenarNodoHijo(reCols, conecta, Conecta4.PLAYER2);
                         nodoActual.mostrarMatrizNodo();
 
-                        beta = calcularMinimo2Num(beta, calcularMax(nodoActual.hijosNodos.elementAt(reCols), tablero, conecta, ++limiteMin, alfa, beta));
+                        beta = calcularMinimo2Num(beta, calcularMax(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, ++limiteMin, alfa, beta));
                         //aux = valorMax(nodoActual,tablero,conecta,++limiteMin);
                         if (beta < caminoMinimo) {
                             caminoMinimo = beta;
-                            nodoActual.matrizNodo = copiarMatriz(nodoActual.hijosNodos.elementAt(reCols).matrizNodo, reFilas, reCols);
+                            nodoActual.matrizNodo = copiarMatriz(nodoActual.hijosNodo.elementAt(reCols).matrizNodo, reFilas, reCols);
                             nodoActual.setheuristica(caminoMinimo);
                         }
                         nodoActual.matrizNodo[reFilas][reCols] = Conecta4.PLAYER2;
@@ -243,7 +242,7 @@ public class IAPlayer extends Player {
      */
     private int buscarFila(int col, Nodo tablero) {
         int cont = 0;
-        for (int fila = tablero.getFilaNodo() - 1; fila >= 0; fila--) {
+        for (int fila = tablero.numFilas - 1; fila >= 0; fila--) {
             if (tablero.matrizNodo[fila][col] != 1 && tablero.matrizNodo[fila][col] != -1) {
                 cont = fila;
                 break;
@@ -401,7 +400,7 @@ public class IAPlayer extends Player {
         int[][] matrizNodo;   //  matriz con el grid en enteros
         int ultimaCol;          //  ultima columna jugada
         int ultimaFila;         //  ultima fila jugada
-        Vector<Nodo> hijosNodos;//  vector con los nodos hijos
+        Vector<Nodo> hijosNodo;//  vector con los nodos hijos
         int valorHeuristicaNodo; 
 //        int alfaNodo,betaNodo;
         
@@ -418,7 +417,7 @@ public class IAPlayer extends Player {
             ultimaFila = tablero.getFilas()-1;  //valor de la fila de abajo
             
             valorHeuristicaNodo = 0;
-            this.hijosNodos = new Vector<Nodo>(numColumnas);
+            hijosNodo = new Vector<Nodo>(tablero.getColumnas()-1);
 //            alfaNodo = Integer.MAX_VALUE;
 //            betaNodo = Integer.MIN_VALUE;     
         }
@@ -440,11 +439,11 @@ public class IAPlayer extends Player {
 //            betaNodo = orig.betaNodo;
             int i=0;                    
             do {
-                if (orig.hijosNodos.size() != 0) {
-                    hijosNodos.add(orig.hijosNodos.get(i));
+                if (orig.hijosNodo.size() != 0) {
+                    hijosNodo.add(orig.hijosNodo.get(i));
                     i++;
                 }
-            }while (orig.hijosNodos.get(i-1)!= orig.hijosNodos.lastElement());
+            }while (orig.hijosNodo.get(i-1)!= orig.hijosNodo.lastElement());
                     
         }
         
@@ -503,7 +502,7 @@ public class IAPlayer extends Player {
         public boolean rellenarNodo(int fila, int col,int conecta, int jugador){
             this.matrizNodo[fila][col] = jugador;
             
-            this.hijosNodos.add(this);      //No se está usando
+            this.hijosNodo.add(this);      //No se está usando
             valorHeuristicaNodo = heuristicaCalcular(this, conecta);
             this.ultimaCol=col;
             this.ultimaFila=fila;
@@ -527,11 +526,14 @@ public class IAPlayer extends Player {
          */
         public void rellenarNodoHijo(int col,int conecta, int jugador){
             int fila = buscarFila(col, this);
-            this.hijosNodos.elementAt(col).matrizNodo[fila][col]=jugador;
+            int [][] aux = copiarMatriz(matrizNodo, this.numFilas, this.numColumnas);
+            Nodo auxNodo = new Nodo(this);
+            this.hijosNodo.add(auxNodo);
+            this.hijosNodo.elementAt(col).matrizNodo[fila][col]=jugador;
             
-            this.hijosNodos.elementAt(col).ultimaCol = col;
-            this.hijosNodos.elementAt(col).ultimaFila = fila;
-            //this.hijosNodos.elementAt(col).valorHeuristicaNodo = heuristicaCalcular(this, conecta);
+            this.hijosNodo.elementAt(col).ultimaCol = col;
+            this.hijosNodo.elementAt(col).ultimaFila = fila;
+            //this.hijosNodo.elementAt(col).valorHeuristicaNodo = heuristicaCalcular(this, conecta);
             
                
             
