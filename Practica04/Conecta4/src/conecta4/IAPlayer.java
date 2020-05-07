@@ -441,8 +441,8 @@ public class IAPlayer extends Player {
             do {
                 if (orig.hijosNodo.size() != 0) {
                     hijosNodo.add(orig.hijosNodo.get(i));
-                    i++;
                 }
+                i++;
             }while (orig.hijosNodo.get(i-1)!= orig.hijosNodo.lastElement());
                     
         }
