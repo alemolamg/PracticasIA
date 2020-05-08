@@ -21,18 +21,13 @@ import static mouserun.game.Mouse.UP;
 
 /**
  * Clase que contiene el esqueleto del raton base para las prácticas de Inteligencia Artificial del curso 2019-20.
- * 
  * @author Ana Montijano Zaragoza y Alejandro Molero Gómez
  */
 public class M20B10GRE extends Mouse {
 
-    /**
-     * Variable para almacenar la ultima celda visitada
-     */
-    private Grid lastGrid;                  
+    
+    private Grid lastGrid;             // Variable para almacenar la ultima celda visitada
     private LinkedList<Integer> camino;               //camino hasta el queso
-//    private TreeMap<Pair,Grid> visitadas;
-//    private long numCasillasVisitadas;
     private boolean firstQueso=true;
     private HashMap<Pair<Integer, Integer>, Grid> celdasVisitadas;
     private HashMap<Pair<Integer, Integer>, Grid> mapaAuxiliar;
@@ -56,13 +51,12 @@ public class M20B10GRE extends Mouse {
     }
 
     /**
-     * @brief Método principal para el movimiento del raton. Incluye la gestión de cuando un queso aparece o no.
+     * Método principal para el movimiento del raton. Incluye la gestión de cuando un queso aparece o no.
      * @param currentGrid Celda actual
      * @param cheese Queso
      */
     @Override
     public int move(Grid currentGrid, Cheese cheese) {  
-        //int salida =0;      // TODO: borrame
         if(!celdasVisitadas.containsKey(generarPair(currentGrid)) ){
             celdasVisitadas.put(generarPair(currentGrid), currentGrid);
             //añadir a la pila 
@@ -88,8 +82,22 @@ public class M20B10GRE extends Mouse {
         }
     }
     
+    
     /**
-     * @brief Método que se llama cuando aparece un nuevo queso
+     * Añade el queso al mapa que usamos para visitar las casillas
+     * @param queso     queso que buscamos
+     * @param tablero   tablero de la partida
+     */
+    private void aniadirQuesoMapa(Cheese queso, Grid tablero){
+         for(int x=0;x<tablero.getX();x++)
+                for(int y=0;y<tablero.getY();y++)
+                    celdasVisitadas.put(generarPair(queso),new Grid(queso.getX(), queso.getY()));
+            
+             System.out.println("Inicializamos el contenedor");   
+    }
+    
+    /**
+     * Método que se llama cuando aparece un nuevo queso
      */
     @Override
     public void newCheese() {
@@ -98,7 +106,7 @@ public class M20B10GRE extends Mouse {
     }
 
     /**
-     * @brief Método que se llama cuando el raton pisa una bomba
+     * Método que se llama cuando el raton pisa una bomba
      */
     @Override
     public void respawned() {
@@ -106,7 +114,7 @@ public class M20B10GRE extends Mouse {
     }
 
     /**
-     * @brief Método que devuelve si de una casilla dada, está contenida en el mapa de celdasVisitadas
+     * Método que devuelve si de una casilla dada, está contenida en el mapa de celdasVisitadas
      * @param casilla Casilla que se pasa para saber si ha sido visitada
      * @return True Si esa casilla ya la había visitado
      */
@@ -155,11 +163,30 @@ public class M20B10GRE extends Mouse {
         
     }
     
-    
+    /**
+     * Genera un pair a partir de un Grid
+     * @param gridToPair
+     * @return nuevo Pair generado
+     */
     private Pair generarPair(Grid gridToPair){
         return new Pair(gridToPair.getX(),gridToPair.getY());       
     }
     
+    /**
+     * Genera un pair a partir de un Cheese
+     * @param queso
+     * @return nuevo Pair generado
+     */
+    private Pair generarPair(Cheese queso){
+        return new Pair (queso.getX(),queso.getY());
+    }
+    
+    /**
+     * Genera un pair a partir de dos coordenadas
+     * @param x
+     * @param y
+     * @return nuevo Pair generado
+     */
     private Pair generarPair(int x,int y){
         return new Pair (x,y);
     }
@@ -168,14 +195,27 @@ public class M20B10GRE extends Mouse {
         return abs(xi - xq) + abs(yi - yq);
     } 
     
+    /**
+     * Calcula distancia con la fórmula de Manhattan
+     * @param coord
+     * @param queso
+     * @return num distancia Manhattan
+     */
     private int calcManhattan(Grid coord,Cheese queso){
         return abs(coord.getX() - queso.getX()) + abs(coord.getY() - queso.getY());
     } 
+    
     
     private int calcManhattan(Grid cas1,Grid cas2){        //No creo
         return abs(cas1.getX() - cas2.getX()) + abs(cas1.getX() - cas2.getY());
     }     
     
+    /**
+     * Calcula el camino para llegar al queso
+     * @param currentGrid   casilla en la que estamos
+     * @param cheese        posición del queso
+     * @return              movimiento deseado para llegar al queso.
+     */
     private int calcCaminoGreedy (Grid currentGrid, Cheese cheese){
         
         int x=currentGrid.getX();
@@ -258,7 +298,14 @@ public class M20B10GRE extends Mouse {
         
     }
     
-    
+    /**
+     * Verifica que un número es el mismo, en este caso int clave.
+     * @param clave valor que deseamos mínimo
+     * @param a     numero con quien comparar
+     * @param b     numero con quien comparar
+     * @param c     numero con quien comparar
+     * @return      true si "calve" es el mínimo, false en caso contrario.
+     */
     boolean minimo(int clave, int a, int b, int c){     
         if(clave > a){
             return false;
