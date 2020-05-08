@@ -461,7 +461,6 @@ public class IAPlayer extends Player {
         
         /**
          * Muestra el numero de filas que tiene la matriz del nodo
-         * 
          * @return devuelve el número de filas
          */
         public int getFilaNodo(){
