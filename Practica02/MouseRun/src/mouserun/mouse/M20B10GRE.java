@@ -318,5 +318,69 @@ public class M20B10GRE extends Mouse {
         }
         return true;
     }    
+    
+    /**
+     * Clase complementaria para contar las casillas por donde se avanza
+     */
+    private class Casilla {
+        // Atributos de Casilla
+        private int posX;
+        private int posY;
+        private Pair<Integer, Integer> pairCasilla;
+        private int numVecesRecorrida;
+        
+        // Funciones Casilla
+        
+        /**
+         * Constructor por defecto.
+         * @param x
+         * @param y 
+         */
+        Casilla(int x, int y){
+            posX = x;
+            posY = y;
+            pairCasilla = new Pair(x,y);
+            numVecesRecorrida=0;   
+        }
+        
+        /**
+         * Función que devuelve un entero con las veces que se ha recorrido
+         * la casilla actual.
+         * @return numVecesRecorrida
+         */
+        public int getVecesCasilla (){ return numVecesRecorrida; }
+        
+        /**
+         * Cuenta +1 a la casilla actual
+         */
+        private void contarCasilla(){
+            numVecesRecorrida++;
+        }
+
+        /**
+         * @return the posX
+         */
+        public int getPosX() {
+            return posX;
+        }
+
+        /**
+         * @return the posY
+         */
+        public int getPosY() {
+            return posY;
+        }
+
+        /**
+         * @return the pairCasilla
+         */
+        public Pair<Integer, Integer> getPairCasilla() {
+            return pairCasilla;
+        }
+        
+        
+    }
+    
+    
 }
 
