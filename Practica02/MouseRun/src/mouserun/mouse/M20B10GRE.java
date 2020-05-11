@@ -25,11 +25,12 @@ import static mouserun.game.Mouse.UP;
  */
 public class M20B10GRE extends Mouse {
 
-    
+    // Atributos clase
     private Grid lastGrid;             // Variable para almacenar la ultima celda visitada
     private LinkedList<Integer> camino;               //camino hasta el queso
     private boolean firstQueso=true;
-    private HashMap<Pair<Integer, Integer>, Grid> celdasVisitadas;
+//    private HashMap<Pair<Integer, Integer>, Grid> celdasVisitadas;
+    private HashMap<Pair<Integer, Integer>,Celda> celdasVisitadas;
     private HashMap<Pair<Integer, Integer>, Grid> mapaAuxiliar;
     Set<String> auxiliar;                               //estructura auxiliar
     private Stack<Integer> pilaMovimientos;
@@ -57,12 +58,15 @@ public class M20B10GRE extends Mouse {
      */
     @Override
     public int move(Grid currentGrid, Cheese cheese) {  
-        if(!celdasVisitadas.containsKey(generarPair(currentGrid)) ){
-            celdasVisitadas.put(generarPair(currentGrid), currentGrid);
+        Celda celdaActual = new Celda(currentGrid);
+        
+        if(!celdasVisitadas.containsKey(generarPair(celdaActual)) ){
+            celdasVisitadas.put(generarPair(celdaActual), celdaActual);
             //añadir a la pila 
         }
+        celdaActual.contarCasilla();
         
-        Pair pairQueso= generarPair(cheese.getX(),cheese.getY());
+        Pair pairQueso = generarPair(cheese.getX(),cheese.getY());
         
         if(!celdasVisitadas.containsKey(pairQueso)){  //ir a explorar
             if(!firstQueso)
@@ -78,7 +82,7 @@ public class M20B10GRE extends Mouse {
                 mapaAuxiliar.clear(); 
                 firstQueso=false;
             }
-            return calcCaminoGreedy(currentGrid, cheese);
+            return calcCaminoGreedy(celdaActual, cheese);
         }
     }
     
@@ -191,6 +195,10 @@ public class M20B10GRE extends Mouse {
         return new Pair (x,y);
     }
     
+    public Pair generarPair (Celda c){
+        return new Pair (c.getPosX(),c.getPosY());
+    }
+    
     private int calcManhattan(int xi, int yi, int xq, int yq){
         return abs(xi - xq) + abs(yi - yq);
     } 
@@ -212,44 +220,44 @@ public class M20B10GRE extends Mouse {
     
     /**
      * Calcula el camino para llegar al queso
-     * @param currentGrid   casilla en la que estamos
+     * @param celdaActual   casilla en la que estamos
      * @param cheese        posición del queso
      * @return              movimiento deseado para llegar al queso.
      */
-    private int calcCaminoGreedy (Grid currentGrid, Cheese cheese){
+    private int calcCaminoGreedy (Celda celdaActual, Cheese cheese){
         
-        int x=currentGrid.getX();
-        int y=currentGrid.getY();
+        int x=celdaActual.getPosX();
+        int y=celdaActual.getPosY();
         
-        if(celdasVisitadas.containsKey(generarPair(cheese.getX(), cheese.getY()))){
+//        if(celdasVisitadas.containsKey(generarPair(cheese.getX(), cheese.getY()))){
             int distUP;
             int distDown;
             int distLeft;
             int distRight;
             
-            if(currentGrid.canGoUp()){
+            if(celdaActual.getGridCasilla().canGoUp()){
                 distUP = calcManhattan(x, y + 1, cheese.getX(), cheese.getY());
             }else
                 distUP = 99999;
                 
-            if(currentGrid.canGoDown())
+            if(celdaActual.getGridCasilla().canGoDown())
                 distDown = calcManhattan(x, y - 1, cheese.getX(), cheese.getY());
             else
                 distDown = 99999;
             
-            if(currentGrid.canGoLeft())
+            if(celdaActual.getGridCasilla().canGoLeft())
                 distLeft =calcManhattan(x - 1, y, cheese.getX(), cheese.getY());
             else 
                 distLeft = 99999;
             
-            if(currentGrid.canGoRight())
+            if(celdaActual.getGridCasilla().canGoRight())
                 distRight = calcManhattan(x + 1, y, cheese.getX(), cheese.getY());
             else
                 distRight = 99999;
                 
             
             if(minimo(distUP, distRight, distLeft, distDown)){
-                if(!mapaAuxiliar.containsKey(generarPair(x,y+1)) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
+                if(!mapaAuxiliar.containsKey(generarPair(x,y+1)) && celdasVisitadas.containsKey(generarPair(celdaActual)) ){
                     mapaAuxiliar.put(generarPair(x,y+1), new Grid(x, y+1));
                     pilaMovAuxiliar.add(DOWN);
                     pilaMovimientos.add(DOWN);
@@ -260,7 +268,7 @@ public class M20B10GRE extends Mouse {
             }
             
             if(minimo(distRight, distUP, distLeft, distDown)){
-                if(!mapaAuxiliar.containsKey(generarPair(x+1, y)) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
+                if(!mapaAuxiliar.containsKey(generarPair(x+1, y)) && celdasVisitadas.containsKey(generarPair(celdaActual)) ){
                     mapaAuxiliar.put(generarPair(x+1, y), new Grid(x+1, y));
                     pilaMovAuxiliar.add(LEFT);
                     pilaMovimientos.add(LEFT);
@@ -269,7 +277,7 @@ public class M20B10GRE extends Mouse {
                     distRight=99999; }
             }
             if(minimo(distDown, distUP, distLeft, distRight)){
-                if(!mapaAuxiliar.containsKey(generarPair(x,y-1)) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
+                if(!mapaAuxiliar.containsKey(generarPair(x,y-1)) && celdasVisitadas.containsKey(generarPair(celdaActual)) ){
                     mapaAuxiliar.put(generarPair(x,y-1), new Grid(x, y-1));
                     pilaMovAuxiliar.add(UP);
                     pilaMovimientos.add(UP);
@@ -279,7 +287,7 @@ public class M20B10GRE extends Mouse {
                 }
             }
             if(minimo(distLeft, distUP, distRight, distDown)){
-                if(!mapaAuxiliar.containsKey(generarPair(x - 1, y)) && celdasVisitadas.containsKey(generarPair(currentGrid)) ){
+                if(!mapaAuxiliar.containsKey(generarPair(x - 1, y)) && celdasVisitadas.containsKey(generarPair(celdaActual)) ){
                     mapaAuxiliar.put(generarPair(x - 1, y), new Grid(x+1, y));
                     pilaMovAuxiliar.add(RIGHT);
                     pilaMovimientos.add(RIGHT);
@@ -293,7 +301,7 @@ public class M20B10GRE extends Mouse {
                 pilaMovimientos.add(pilaMovAuxiliar.peek());
                 return pilaMovAuxiliar.pop();
             } 
-        }
+//        }
         return pilaMovimientos.pop() ;
         
     }
@@ -322,8 +330,9 @@ public class M20B10GRE extends Mouse {
     /**
      * Clase complementaria para contar las casillas por donde se avanza
      */
-    private class Casilla {
+    private class Celda {
         // Atributos de Casilla
+        private Grid gridCasilla;
         private int posX;
         private int posY;
         private Pair<Integer, Integer> pairCasilla;
@@ -336,10 +345,11 @@ public class M20B10GRE extends Mouse {
          * @param x
          * @param y 
          */
-        Casilla(int x, int y){
-            posX = x;
-            posY = y;
-            pairCasilla = new Pair(x,y);
+        Celda(Grid casilla){
+            gridCasilla = casilla;
+            posX = casilla.getX();
+            posY = casilla.getY();
+            pairCasilla = new Pair(casilla.getX(),casilla.getY());
             numVecesRecorrida=0;   
         }
         
@@ -348,7 +358,9 @@ public class M20B10GRE extends Mouse {
          * la casilla actual.
          * @return numVecesRecorrida
          */
-        public int getVecesCasilla (){ return numVecesRecorrida; }
+        public int getVecesCasilla (){
+            return numVecesRecorrida; 
+        }
         
         /**
          * Cuenta +1 a la casilla actual
@@ -376,6 +388,13 @@ public class M20B10GRE extends Mouse {
          */
         public Pair<Integer, Integer> getPairCasilla() {
             return pairCasilla;
+        }
+
+        /**
+         * @return the gridCasilla
+         */
+        public Grid getGridCasilla() {
+            return gridCasilla;
         }
         
         
