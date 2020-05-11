@@ -95,7 +95,7 @@ public class M20B10GRE extends Mouse {
     private void aniadirQuesoMapa(Cheese queso, Grid tablero){
          for(int x=0;x<tablero.getX();x++)
                 for(int y=0;y<tablero.getY();y++)
-                    celdasVisitadas.put(generarPair(queso),new Grid(queso.getX(), queso.getY()));
+                    celdasVisitadas.put(generarPair(queso),new Grid(queso.getX(), queso.getY()) );
             
              System.out.println("Inicializamos el contenedor");   
     }
@@ -224,88 +224,119 @@ public class M20B10GRE extends Mouse {
      * @param cheese        posición del queso
      * @return              movimiento deseado para llegar al queso.
      */
-    private int calcCaminoGreedy (Celda celdaActual, Cheese cheese){
-        
-        int x=celdaActual.getPosX();
-        int y=celdaActual.getPosY();
-        
+    private int calcCaminoGreedy(Celda celdaActual, Cheese cheese) {
+
+        int x = celdaActual.getPosX();
+        int y = celdaActual.getPosY();
+
 //        if(celdasVisitadas.containsKey(generarPair(cheese.getX(), cheese.getY()))){
-            int distUP;
-            int distDown;
-            int distLeft;
-            int distRight;
-            
-            if(celdaActual.getGridCasilla().canGoUp()){
-                distUP = calcManhattan(x, y + 1, cheese.getX(), cheese.getY());
-            }else
-                distUP = 99999;
-                
-            if(celdaActual.getGridCasilla().canGoDown())
-                distDown = calcManhattan(x, y - 1, cheese.getX(), cheese.getY());
-            else
-                distDown = 99999;
-            
-            if(celdaActual.getGridCasilla().canGoLeft())
-                distLeft =calcManhattan(x - 1, y, cheese.getX(), cheese.getY());
-            else 
-                distLeft = 99999;
-            
-            if(celdaActual.getGridCasilla().canGoRight())
-                distRight = calcManhattan(x + 1, y, cheese.getX(), cheese.getY());
-            else
-                distRight = 99999;
-                
-            
-            if(minimo(distUP, distRight, distLeft, distDown)){
-                if(!mapaAuxiliar.containsKey(generarPair(x,y+1)) && celdasVisitadas.containsKey(generarPair(celdaActual)) ){
-                    mapaAuxiliar.put(generarPair(x,y+1), new Grid(x, y+1));
+        int distUP, vecesUp;
+        int distDown, vecesDown;
+        int distLeft, vecesLeft;
+        int distRight, vecesRight;
+
+        if (celdaActual.getGridCasilla().canGoUp()) {
+            distUP = calcManhattan(x, y + 1, cheese.getX(), cheese.getY());
+            if (celdasVisitadas.containsKey(generarPair(x, y + 1))) {
+                vecesUp = celdasVisitadas.get(generarPair(x, y + 1)).getVecesCasilla();
+            } else {
+                vecesUp = 0;
+            }
+        } else {
+            distUP = Integer.MAX_VALUE;
+            vecesUp = Integer.MAX_VALUE;
+        }
+
+        if (celdaActual.getGridCasilla().canGoDown()) {
+            distDown = calcManhattan(x, y - 1, cheese.getX(), cheese.getY());
+            if (celdasVisitadas.containsKey(generarPair(x, y + 1))) {
+                vecesDown = celdasVisitadas.get(generarPair(x, y + 1)).getVecesCasilla();
+            } else {
+                vecesDown = 0;
+            }
+        } else {
+            distDown = Integer.MAX_VALUE;
+            vecesDown = Integer.MAX_VALUE;
+        }
+
+        if (celdaActual.getGridCasilla().canGoLeft()) {
+            distLeft = calcManhattan(x - 1, y, cheese.getX(), cheese.getY());
+            if (celdasVisitadas.containsKey(generarPair(x, y + 1))) {
+                vecesLeft = celdasVisitadas.get(generarPair(x, y + 1)).getVecesCasilla();
+            } else {
+                vecesLeft = 0;
+            }
+        } else {
+            distLeft = Integer.MAX_VALUE;
+            vecesLeft = Integer.MAX_VALUE;
+        }
+
+        if (celdaActual.getGridCasilla().canGoRight()) {
+            distRight = calcManhattan(x + 1, y, cheese.getX(), cheese.getY());
+            if (celdasVisitadas.containsKey(generarPair(x, y + 1))) {
+                vecesRight = celdasVisitadas.get(generarPair(x, y + 1)).getVecesCasilla();
+            } else {
+                vecesRight = 0;
+            }
+        } else {
+            distRight = Integer.MAX_VALUE;
+            vecesRight = Integer.MAX_VALUE;
+        }
+
+        if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown)) {
+            if (minimo(distUP, distRight, distLeft, distDown)) {
+                if (!mapaAuxiliar.containsKey(generarPair(x, y + 1)) && celdasVisitadas.containsKey(generarPair(celdaActual))) {
+                    mapaAuxiliar.put(generarPair(x, y + 1), new Grid(x, y + 1));
                     pilaMovAuxiliar.add(DOWN);
                     pilaMovimientos.add(DOWN);
                     return UP;
-                } else{ 
-                    distUP=99999; 
+                } else {
+                    distUP = Integer.MAX_VALUE;
                 }
             }
-            
-            if(minimo(distRight, distUP, distLeft, distDown)){
-                if(!mapaAuxiliar.containsKey(generarPair(x+1, y)) && celdasVisitadas.containsKey(generarPair(celdaActual)) ){
-                    mapaAuxiliar.put(generarPair(x+1, y), new Grid(x+1, y));
-                    pilaMovAuxiliar.add(LEFT);
-                    pilaMovimientos.add(LEFT);
-                    return RIGHT;
-                }else{ 
-                    distRight=99999; }
+        }
+
+        if (minimo(distRight, distUP, distLeft, distDown)) {
+            if (!mapaAuxiliar.containsKey(generarPair(x + 1, y)) && celdasVisitadas.containsKey(generarPair(celdaActual))) {
+                mapaAuxiliar.put(generarPair(x + 1, y), new Grid(x + 1, y));
+                pilaMovAuxiliar.add(LEFT);
+                pilaMovimientos.add(LEFT);
+                return RIGHT;
+            } else {
+                distRight = 99999;
             }
-            if(minimo(distDown, distUP, distLeft, distRight)){
-                if(!mapaAuxiliar.containsKey(generarPair(x,y-1)) && celdasVisitadas.containsKey(generarPair(celdaActual)) ){
-                    mapaAuxiliar.put(generarPair(x,y-1), new Grid(x, y-1));
-                    pilaMovAuxiliar.add(UP);
-                    pilaMovimientos.add(UP);
-                    return DOWN;
-                }else{
-                    distDown=99999; 
-                }
-            }
-            if(minimo(distLeft, distUP, distRight, distDown)){
-                if(!mapaAuxiliar.containsKey(generarPair(x - 1, y)) && celdasVisitadas.containsKey(generarPair(celdaActual)) ){
-                    mapaAuxiliar.put(generarPair(x - 1, y), new Grid(x+1, y));
-                    pilaMovAuxiliar.add(RIGHT);
-                    pilaMovimientos.add(RIGHT);
-                    return LEFT;
-                }else{
-                    distLeft=99999; 
-                }
-            }
-            
-            if(pilaMovAuxiliar.size() >=1){
-                pilaMovimientos.add(pilaMovAuxiliar.peek());
-                return pilaMovAuxiliar.pop();
-            } 
-//        }
-        return pilaMovimientos.pop() ;
+        }
         
+        if (minimo(distDown, distUP, distLeft, distRight)) {
+            if (!mapaAuxiliar.containsKey(generarPair(x, y - 1)) && celdasVisitadas.containsKey(generarPair(celdaActual))) {
+                mapaAuxiliar.put(generarPair(x, y - 1), new Grid(x, y - 1));
+                pilaMovAuxiliar.add(UP);
+                pilaMovimientos.add(UP);
+                return DOWN;
+            } else {
+                distDown = 99999;
+            }
+        }
+        if (minimo(distLeft, distUP, distRight, distDown)) {
+            if (!mapaAuxiliar.containsKey(generarPair(x - 1, y)) && celdasVisitadas.containsKey(generarPair(celdaActual))) {
+                mapaAuxiliar.put(generarPair(x - 1, y), new Grid(x + 1, y));
+                pilaMovAuxiliar.add(RIGHT);
+                pilaMovimientos.add(RIGHT);
+                return LEFT;
+            } else {
+                distLeft = 99999;
+            }
+        }
+
+        if (pilaMovAuxiliar.size() >= 1) {
+            pilaMovimientos.add(pilaMovAuxiliar.peek());
+            return pilaMovAuxiliar.pop();
+        }
+//        }
+        return pilaMovimientos.pop();
+
     }
-    
+ 
     /**
      * Verifica que un número es el mismo, en este caso int clave.
      * @param clave valor que deseamos mínimo
