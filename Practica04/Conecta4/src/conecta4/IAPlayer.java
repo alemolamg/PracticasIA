@@ -18,6 +18,7 @@ import java.util.TreeSet;
 public class IAPlayer extends Player {  
     int limite = 3;
     
+    
     /**
      *
      * @param tablero Representación del tablero de juego
