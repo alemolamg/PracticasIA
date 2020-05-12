@@ -77,28 +77,28 @@ public class M20B10GRE extends Mouse {
 //        }else{
             
 //            System.out.println("Buscando el queso");
-            if(firstQueso){
-                pilaMovAuxiliar.clear();
-                mapaAuxiliar.clear(); 
-                firstQueso=false;
-            }
+//            if(firstQueso){
+//                pilaMovAuxiliar.clear();
+//                mapaAuxiliar.clear(); 
+//                firstQueso=false;
+//            }
             return calcCaminoGreedy(celdaActual, cheese);
 //        }
     }
     
     
-    /**
-     * Añade el queso al mapa que usamos para visitar las casillas
-     * @param queso     queso que buscamos
-     * @param tablero   tablero de la partida
-     */
-    private void aniadirQuesoMapa(Cheese queso, Grid tablero){
-         for(int x=0;x<tablero.getX();x++)
-                for(int y=0;y<tablero.getY();y++)
-                    celdasVisitadas.put(generarPair(queso),new Grid(queso.getX(), queso.getY()) );
-            
-             System.out.println("Inicializamos el contenedor");   
-    }
+//    /**
+//     * Añade el queso al mapa que usamos para visitar las casillas
+//     * @param queso     queso que buscamos
+//     * @param tablero   tablero de la partida
+//     */
+//    private void aniadirQuesoMapa(Cheese queso, Grid tablero){
+//         for(int x=0;x<tablero.getX();x++)
+//                for(int y=0;y<tablero.getY();y++)
+//                    celdasVisitadas.put(generarPair(queso),new Grid(queso.getX(), queso.getY()) );
+//            
+//             System.out.println("Inicializamos el contenedor");   
+//    }
     
     /**
      * Método que se llama cuando aparece un nuevo queso
@@ -283,9 +283,9 @@ public class M20B10GRE extends Mouse {
         }
 
         if (minimo(distUP, distRight, distLeft, distDown)) {    // no está terminado, tenemos que probar que no entre en bucle infinito
-            if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x+1, y)).getVecesCasilla() == 0) {
+            if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x, y+1)).getVecesCasilla() == 0) {
 //                if (!mapaAuxiliar.containsKey(generarPair(x, y + 1)) ) {
-                mapaAuxiliar.put(generarPair(x, y + 1), new Grid(x, y + 1));
+//                mapaAuxiliar.put(generarPair(x, y + 1), new Grid(x, y + 1));
                 pilaMovAuxiliar.add(DOWN);
                 pilaMovimientos.add(DOWN);
                 return UP;
@@ -297,8 +297,8 @@ public class M20B10GRE extends Mouse {
         }
 
         if (minimo(distRight, distUP, distLeft, distDown)) {
-            if (!mapaAuxiliar.containsKey(generarPair(x + 1, y)) && celdasVisitadas.containsKey(generarPair(celdaActual))) {
-                mapaAuxiliar.put(generarPair(x + 1, y), new Grid(x + 1, y));
+            if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x + 1, y)).getVecesCasilla() == 0) {
+//                mapaAuxiliar.put(generarPair(x + 1, y), new Grid(x + 1, y));
                 pilaMovAuxiliar.add(LEFT);
                 pilaMovimientos.add(LEFT);
                 return RIGHT;
@@ -308,25 +308,30 @@ public class M20B10GRE extends Mouse {
         }
 
         if (minimo(distDown, distUP, distLeft, distRight)) {
-            if (!mapaAuxiliar.containsKey(generarPair(x, y - 1)) && celdasVisitadas.containsKey(generarPair(celdaActual))) {
-                mapaAuxiliar.put(generarPair(x, y - 1), new Grid(x, y - 1));
+            if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x, y- 1)).getVecesCasilla() == 0) {
+//                mapaAuxiliar.put(generarPair(x, y - 1), new Grid(x, y - 1));
                 pilaMovAuxiliar.add(UP);
                 pilaMovimientos.add(UP);
                 return DOWN;
             } else {
-                distDown = 99999;
+                distDown = Integer.MAX_VALUE;
             }
         }
         if (minimo(distLeft, distUP, distRight, distDown)) {
-            if (!mapaAuxiliar.containsKey(generarPair(x - 1, y)) && celdasVisitadas.containsKey(generarPair(celdaActual))) {
-                mapaAuxiliar.put(generarPair(x - 1, y), new Grid(x + 1, y));
+           if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x - 1, y)).getVecesCasilla() == 0) {
+//                mapaAuxiliar.put(generarPair(x - 1, y), new Grid(x + 1, y));
                 pilaMovAuxiliar.add(RIGHT);
                 pilaMovimientos.add(RIGHT);
                 return LEFT;
             } else {
-                distLeft = 99999;
+                distLeft = Integer.MAX_VALUE;
             }
         }
+        
+//        if ( !(Integer.min(distDown, distUP) < Integer.MAX_VALUE ||  Integer.min(distLeft, distRight) < Integer.MAX_VALUE) ){
+//            
+//            
+//        }
 
         if (pilaMovAuxiliar.size() >= 1) {
             pilaMovimientos.add(pilaMovAuxiliar.peek());
