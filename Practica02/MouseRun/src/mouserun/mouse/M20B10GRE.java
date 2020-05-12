@@ -68,13 +68,13 @@ public class M20B10GRE extends Mouse {
         
         Pair pairQueso = generarPair(cheese.getX(),cheese.getY());
         
-        if(!celdasVisitadas.containsKey(pairQueso)){  //ir a explorar
-            if(!firstQueso)
-                firstQueso=true;
-//            System.out.println("Escaneando......");
-            return explorar(currentGrid);  
-            
-        }else{
+//        if(!celdasVisitadas.containsKey(pairQueso)){  //ir a explorar
+//            if(!firstQueso)
+//                firstQueso=true;
+////            System.out.println("Escaneando......");
+//            return explorar(currentGrid);  
+//            
+//        }else{
             
 //            System.out.println("Buscando el queso");
             if(firstQueso){
@@ -83,7 +83,7 @@ public class M20B10GRE extends Mouse {
                 firstQueso=false;
             }
             return calcCaminoGreedy(celdaActual, cheese);
-        }
+//        }
     }
     
     
@@ -127,45 +127,44 @@ public class M20B10GRE extends Mouse {
         return celdasVisitadas.containsKey(par);
     }
                
-    private int explorar(Grid currentGrid){
-        int x=currentGrid.getX();
-        int y=currentGrid.getY();
-           
-        if(!celdasVisitadas.containsKey(new Pair(x, y))){       //Vemos si la casilla actual esta en el mapa
-            this.incExploredGrids();                            //Aumentamos el numero de casillas visitadas                           //aumentamos las casillas visitadas
-            celdasVisitadas.put(new Pair(x, y), currentGrid);   //y guardamos la casilla en el mapa
-        }   
-        
-        if (currentGrid.canGoDown()) {                     
-                if(!celdasVisitadas.containsKey(new Pair(x, y - 1))){
-                    pilaMovimientos.add(UP);
-                    return Mouse.DOWN;              
-                }
-        }
-        
-        if (currentGrid.canGoRight()) {
-            if(!celdasVisitadas.containsKey(new Pair(x + 1, y))){
-                pilaMovimientos.add(LEFT);
-                return Mouse.RIGHT;
-            }
-        }
-        
-        if (currentGrid.canGoLeft()) {
-                if(!celdasVisitadas.containsKey(new Pair(x - 1, y))){
-                    pilaMovimientos.add(RIGHT);
-                    return Mouse.LEFT;
-                }
-        }
-        
-        if (currentGrid.canGoUp()) {
-            if(!celdasVisitadas.containsKey(new Pair(x , y + 1))){
-                pilaMovimientos.add(DOWN);
-                return Mouse.UP;
-            }
-        }
-        return pilaMovimientos.pop();     
-        
-    }
+//    private int explorar(Grid currentGrid){
+//        int x=currentGrid.getX();
+//        int y=currentGrid.getY();
+//           
+//        if(!celdasVisitadas.containsKey(new Pair(x, y))){       //Vemos si la casilla actual esta en el mapa
+//            this.incExploredGrids();                            //Aumentamos el numero de casillas visitadas                           //aumentamos las casillas visitadas
+//            celdasVisitadas.put(new Pair(x, y), currentGrid);   //y guardamos la casilla en el mapa
+//        }   
+//        
+//        if (currentGrid.canGoDown()) {                     
+//                if(!celdasVisitadas.containsKey(new Pair(x, y - 1))){
+//                    pilaMovimientos.add(UP);
+//                    return Mouse.DOWN;              
+//                }
+//        }
+//        
+//        if (currentGrid.canGoRight()) {
+//            if(!celdasVisitadas.containsKey(new Pair(x + 1, y))){
+//                pilaMovimientos.add(LEFT);
+//                return Mouse.RIGHT;
+//            }
+//        }
+//        
+//        if (currentGrid.canGoLeft()) {
+//                if(!celdasVisitadas.containsKey(new Pair(x - 1, y))){
+//                    pilaMovimientos.add(RIGHT);
+//                    return Mouse.LEFT;
+//                }
+//        }
+//        
+//        if (currentGrid.canGoUp()) {
+//            if(!celdasVisitadas.containsKey(new Pair(x , y + 1))){
+//                pilaMovimientos.add(DOWN);
+//                return Mouse.UP;
+//            }
+//        }
+//        return pilaMovimientos.pop();     
+//    }
     
     /**
      * Genera un pair a partir de un Grid
@@ -283,17 +282,18 @@ public class M20B10GRE extends Mouse {
             vecesRight = Integer.MAX_VALUE;
         }
 
-        if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown)) {
-            if (minimo(distUP, distRight, distLeft, distDown)) {
-                if (!mapaAuxiliar.containsKey(generarPair(x, y + 1)) && celdasVisitadas.containsKey(generarPair(celdaActual))) {
-                    mapaAuxiliar.put(generarPair(x, y + 1), new Grid(x, y + 1));
-                    pilaMovAuxiliar.add(DOWN);
-                    pilaMovimientos.add(DOWN);
-                    return UP;
-                } else {
-                    distUP = Integer.MAX_VALUE;
-                }
+        if (minimo(distUP, distRight, distLeft, distDown)) {
+            if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x+1, y)).getVecesCasilla() == 0) {
+//                if (!mapaAuxiliar.containsKey(generarPair(x, y + 1)) ) {
+                mapaAuxiliar.put(generarPair(x, y + 1), new Grid(x, y + 1));
+                pilaMovAuxiliar.add(DOWN);
+                pilaMovimientos.add(DOWN);
+                return UP;
+            } else {
+                distUP = Integer.MAX_VALUE;
+//                }
             }
+
         }
 
         if (minimo(distRight, distUP, distLeft, distDown)) {
@@ -306,7 +306,7 @@ public class M20B10GRE extends Mouse {
                 distRight = 99999;
             }
         }
-        
+
         if (minimo(distDown, distUP, distLeft, distRight)) {
             if (!mapaAuxiliar.containsKey(generarPair(x, y - 1)) && celdasVisitadas.containsKey(generarPair(celdaActual))) {
                 mapaAuxiliar.put(generarPair(x, y - 1), new Grid(x, y - 1));
@@ -335,7 +335,8 @@ public class M20B10GRE extends Mouse {
 //        }
         return pilaMovimientos.pop();
 
-    }
+    }// Fin clacCaminoGreedy
+    
  
     /**
      * Verifica que un número es el mismo, en este caso int clave.
