@@ -199,7 +199,7 @@ public class M20B10GRE extends Mouse {
         int distRight, vecesRight;
 
         //  Calculamos si podemos movernos
-        if (celdaActual.getGridCasilla().canGoUp()) {
+        if (celdaActual.getGridCasilla().canGoUp()) {       //Subir
             distUP = calcManhattan(x, y + 1, cheese.getX(), cheese.getY());
             if (celdasVisitadas.containsKey(generarPair(x, y + 1))) {
                 vecesUp = celdasVisitadas.get(generarPair(x, y + 1)).getVecesCasilla();
@@ -211,7 +211,7 @@ public class M20B10GRE extends Mouse {
             vecesUp = Integer.MAX_VALUE;
         }
 
-        if (celdaActual.getGridCasilla().canGoDown()) {
+        if (celdaActual.getGridCasilla().canGoDown()) {     //Bajar
             distDown = calcManhattan(x, y - 1, cheese.getX(), cheese.getY());
             if (celdasVisitadas.containsKey(generarPair(x, y - 1))) {
                 vecesDown = celdasVisitadas.get(generarPair(x, y - 1)).getVecesCasilla();
@@ -223,7 +223,7 @@ public class M20B10GRE extends Mouse {
             vecesDown = Integer.MAX_VALUE;
         }
 
-        if (celdaActual.getGridCasilla().canGoLeft()) {
+        if (celdaActual.getGridCasilla().canGoLeft()) {     //Izquierda
             distLeft = calcManhattan(x - 1, y, cheese.getX(), cheese.getY());
             if (celdasVisitadas.containsKey(generarPair(x-1, y ))) {
                 vecesLeft = celdasVisitadas.get(generarPair(x - 1, y)).getVecesCasilla();
@@ -235,7 +235,7 @@ public class M20B10GRE extends Mouse {
             vecesLeft = Integer.MAX_VALUE;
         }
 
-        if (celdaActual.getGridCasilla().canGoRight()) {
+        if (celdaActual.getGridCasilla().canGoRight()) {    //Derecha
             distRight = calcManhattan(x + 1, y, cheese.getX(), cheese.getY());
             if (celdasVisitadas.containsKey(generarPair(x + 1, y))) {
                 vecesRight = celdasVisitadas.get(generarPair(x + 1, y)).getVecesCasilla();
@@ -264,7 +264,7 @@ public class M20B10GRE extends Mouse {
         }
 
         if (minimo(distRight, distUP, distLeft, distDown)) {
-            if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x + 1, y)).getVecesCasilla() == 0) {
+            if (minimo(vecesRight, vecesUp, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x + 1, y)).getVecesCasilla() == 0) {
 //                mapaAuxiliar.put(generarPair(x + 1, y), new Grid(x + 1, y));
 //                pilaMovAuxiliar.add(LEFT);
                 pilaMovimientos.add(LEFT);
@@ -275,7 +275,7 @@ public class M20B10GRE extends Mouse {
         }
 
         if (minimo(distDown, distUP, distLeft, distRight)) {
-            if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x, y- 1)).getVecesCasilla() == 0) {
+            if (minimo(vecesDown, vecesRight, vecesLeft, vecesUp) || celdasVisitadas.get(generarPair(x, y- 1)).getVecesCasilla() == 0) {
 //                mapaAuxiliar.put(generarPair(x, y - 1), new Grid(x, y - 1));
 //                pilaMovAuxiliar.add(UP);
                 pilaMovimientos.add(UP);
@@ -285,7 +285,7 @@ public class M20B10GRE extends Mouse {
             }
         }
         if (minimo(distLeft, distUP, distRight, distDown)) {
-           if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x - 1, y)).getVecesCasilla() == 0) {
+           if (minimo(vecesLeft, vecesRight, vecesUp, vecesDown) || celdasVisitadas.get(generarPair(x - 1, y)).getVecesCasilla() == 0) {
 //                mapaAuxiliar.put(generarPair(x - 1, y), new Grid(x + 1, y));
 //                pilaMovAuxiliar.add(RIGHT);
                 pilaMovimientos.add(RIGHT);
@@ -295,8 +295,7 @@ public class M20B10GRE extends Mouse {
             }
         }
         
-//        if ( !(Integer.min(distDown, distUP) < Integer.MAX_VALUE ||  Integer.min(distLeft, distRight) < Integer.MAX_VALUE) ){
-//            
+//        if ( !(Integer.min(distDown, distUP) < Integer.MAX_VALUE ||  Integer.min(distLeft, distRight) < Integer.MAX_VALUE) ){    
 //            
 //        }
 //
