@@ -26,9 +26,10 @@ import static mouserun.game.Mouse.UP;
 public class M20B10GRE extends Mouse {
 
     // Atributos clase
-    private Grid lastGrid;             // Variable para almacenar la ultima celda visitada
+//    private Grid lastGrid;             // Variable para almacenar la ultima celda visitada
     private LinkedList<Integer> camino;               //camino hasta el queso
     private boolean firstQueso=true;
+    private int LimiteVisitas = 5;
 //    private HashMap<Pair<Integer, Integer>, Grid> celdasVisitadas;
     private HashMap<Pair<Integer, Integer>,Celda> celdasVisitadas;
     private HashMap<Pair<Integer, Integer>, Grid> mapaAuxiliar;
@@ -58,34 +59,19 @@ public class M20B10GRE extends Mouse {
      */
     @Override
     public int move(Grid currentGrid, Cheese cheese) {  
-        Celda celdaActual = new Celda(currentGrid);
-        
-        if(!celdasVisitadas.containsKey(generarPair(celdaActual)) ){
+        Celda celdaActual;
+        if( celdasVisitadas.containsKey(generarPair(currentGrid))){
+           celdaActual = celdasVisitadas.get(generarPair(currentGrid));
+        } else {
+            celdaActual = new Celda(currentGrid);
             celdasVisitadas.put(generarPair(celdaActual), celdaActual);
             this.incExploredGrids();
         }
         
-        celdasVisitadas.put(generarPair(celdaActual), celdaActual);
+//        celdasVisitadas.put(generarPair(celdaActual), celdaActual);
         celdaActual.contarCasilla();
         
-//        Pair pairQueso = generarPair(cheese.getX(),cheese.getY());
-        
-//        if(!celdasVisitadas.containsKey(pairQueso)){  //ir a explorar
-//            if(!firstQueso)
-//                firstQueso=true;
-////            System.out.println("Escaneando......");
-//            return explorar(currentGrid);  
-//            
-//        }else{
-            
-//            System.out.println("Buscando el queso");
-//            if(firstQueso){
-//                pilaMovAuxiliar.clear();
-//                mapaAuxiliar.clear(); 
-//                firstQueso=false;
-//            }
-            return calcCaminoGreedy(celdaActual, cheese);
-//        }
+        return calcCaminoGreedy(celdaActual, cheese);
     }
     
     
@@ -249,8 +235,9 @@ public class M20B10GRE extends Mouse {
 
         
         //  Calculamos el movimiento mas relevante
-        if (minimo(distUP, distRight, distLeft, distDown)) {    // no está terminado, tenemos que probar que no entre en bucle infinito
-            if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x, y+1)).getVecesCasilla() == 0) {
+        if (minimo(distUP, distRight, distLeft, distDown) || vecesUp+2 <= Integer.min(vecesDown, Integer.min(vecesLeft, vecesRight)) ) {    // no está terminado, tenemos que probar que no entre en bucle infinito
+            if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || vecesUp == 0) {
+                System.out.println("Numero veces en la casilla: "+ vecesUp);
 //                if (!mapaAuxiliar.containsKey(generarPair(x, y + 1)) ) {
 //                mapaAuxiliar.put(generarPair(x, y + 1), new Grid(x, y + 1));
 //                pilaMovAuxiliar.add(DOWN);
@@ -263,8 +250,9 @@ public class M20B10GRE extends Mouse {
 
         }
 
-        if (minimo(distRight, distUP, distLeft, distDown)) {
-            if (minimo(vecesRight, vecesUp, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x + 1, y)).getVecesCasilla() == 0) {
+        if (minimo(distRight, distUP, distLeft, distDown) || vecesRight + 2 <= Integer.min(vecesDown, Integer.min(vecesLeft, vecesUp)) ) {
+            if (minimo(vecesRight, vecesUp, vecesLeft, vecesDown) || vecesRight == 0) {
+                System.out.println("Numero veces en la casilla: "+vecesRight);
 //                mapaAuxiliar.put(generarPair(x + 1, y), new Grid(x + 1, y));
 //                pilaMovAuxiliar.add(LEFT);
                 pilaMovimientos.add(LEFT);
@@ -274,8 +262,9 @@ public class M20B10GRE extends Mouse {
             }
         }
 
-        if (minimo(distDown, distUP, distLeft, distRight)) {
-            if (minimo(vecesDown, vecesRight, vecesLeft, vecesUp) || celdasVisitadas.get(generarPair(x, y- 1)).getVecesCasilla() == 0) {
+        if (minimo(distDown, distUP, distLeft, distRight) || vecesDown +2 <= Integer.min(vecesUp, Integer.min(vecesLeft, vecesRight) )) {
+            if (minimo(vecesDown, vecesRight, vecesLeft, vecesUp) || vecesDown == 0) {
+                System.out.println("Numero veces en la casilla: "+vecesDown);
 //                mapaAuxiliar.put(generarPair(x, y - 1), new Grid(x, y - 1));
 //                pilaMovAuxiliar.add(UP);
                 pilaMovimientos.add(UP);
@@ -284,8 +273,9 @@ public class M20B10GRE extends Mouse {
                 distDown = Integer.MAX_VALUE;
             }
         }
-        if (minimo(distLeft, distUP, distRight, distDown)) {
-           if (minimo(vecesLeft, vecesRight, vecesUp, vecesDown) || celdasVisitadas.get(generarPair(x - 1, y)).getVecesCasilla() == 0) {
+        if (minimo(distLeft, distUP, distRight, distDown) || vecesLeft + 2 <= Integer.min(vecesDown, Integer.min(vecesUp, vecesRight)) ) {
+           if (minimo(vecesLeft, vecesRight, vecesUp, vecesDown) || vecesLeft == 0) {
+               System.out.println("Numero veces en la casilla: "+vecesLeft);
 //                mapaAuxiliar.put(generarPair(x - 1, y), new Grid(x + 1, y));
 //                pilaMovAuxiliar.add(RIGHT);
                 pilaMovimientos.add(RIGHT);
