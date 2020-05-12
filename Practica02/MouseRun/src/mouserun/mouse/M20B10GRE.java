@@ -282,7 +282,7 @@ public class M20B10GRE extends Mouse {
             vecesRight = Integer.MAX_VALUE;
         }
 
-        if (minimo(distUP, distRight, distLeft, distDown)) {
+        if (minimo(distUP, distRight, distLeft, distDown)) {    // no está terminado, tenemos que probar que no entre en bucle infinito
             if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || celdasVisitadas.get(generarPair(x+1, y)).getVecesCasilla() == 0) {
 //                if (!mapaAuxiliar.containsKey(generarPair(x, y + 1)) ) {
                 mapaAuxiliar.put(generarPair(x, y + 1), new Grid(x, y + 1));
