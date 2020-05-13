@@ -235,20 +235,26 @@ public class M20B10GRE extends Mouse {
 
         
         //  Calculamos el movimiento mas relevante
-        if (minimo(distUP, distRight, distLeft, distDown) || vecesUp+2 <= Integer.min(vecesDown, Integer.min(vecesLeft, vecesRight)) ) {    // no está terminado, tenemos que probar que no entre en bucle infinito
-            if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || vecesUp == 0) {
-                System.out.println("Numero veces en la casilla: "+ vecesUp);
-//                if (!mapaAuxiliar.containsKey(generarPair(x, y + 1)) ) {
-//                mapaAuxiliar.put(generarPair(x, y + 1), new Grid(x, y + 1));
+        if (minimo(distUP, distRight, distLeft, distDown) || vecesUp + 2 <= Integer.min(vecesDown, Integer.min(vecesLeft, vecesRight))) {    // no está terminado, tenemos que probar que no entre en bucle infinito
+            if (!mapaAuxiliar.containsKey(generarPair(x, y + 1))) {
+                
+                if (minimo(vecesUp, vecesRight, vecesLeft, vecesDown) || vecesUp == 0) {
+                    System.out.println("Numero veces en la casilla: " + vecesUp);
+
+                    mapaAuxiliar.put(generarPair(x, y + 1), new Grid(x, y + 1));
 //                pilaMovAuxiliar.add(DOWN);
-                pilaMovimientos.add(DOWN);
-                return UP;
-            } else {
-                distUP = Integer.MAX_VALUE;
-//                }
+
+                    pilaMovimientos.add(DOWN);
+                    return UP;
+                } else {
+                    distUP = Integer.MAX_VALUE;
+                }
+            }else{
+                
             }
 
         }
+        
 
         if (minimo(distRight, distUP, distLeft, distDown) || vecesRight + 2 <= Integer.min(vecesDown, Integer.min(vecesLeft, vecesUp)) ) {
             if (minimo(vecesRight, vecesUp, vecesLeft, vecesDown) || vecesRight == 0) {
@@ -319,6 +325,27 @@ public class M20B10GRE extends Mouse {
         }
         return true;
     }    
+
+    /**
+     * Calcula si el primer número es el mayor
+     * @param clave valor que deseamos mínimo
+     * @param a     numero con quien comparar
+     * @param b     numero con quien comparar
+     * @param c     numero con quien comparar
+     * @return      true si "calve" es el máximo, false en caso contrario.
+     */
+        boolean maximo(int clave, int a, int b, int c){     
+        if(clave < a){
+            return false;
+        }
+        if(clave < b){
+            return false;
+        }
+        if(clave < c){
+            return false;
+        }
+        return true;
+    }  
     
     /**
      * Clase complementaria para contar las casillas por donde se avanza
