@@ -140,7 +140,10 @@ public class IAPlayer extends Player {
      * @return Valor de la heurística total.
      */
     public int heuristicaCalcular(Nodo nodoActual, int conecta) {
-        int resultado = (Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1)) + (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
+        int heuristica1 = heuristica(nodoActual, conecta, Conecta4.PLAYER1);
+        int heuristica2 = heuristica(nodoActual, conecta, Conecta4.PLAYER2);
+//        int resultado = (Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1)) + (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
+        int resultado = heuristica1 - heuristica2;
         return resultado;
     }
 
@@ -498,18 +501,9 @@ public class IAPlayer extends Player {
          */
         public void rellenarNodoHijo(int col, int jugador) {
             int fila = buscarFila(col, this);
-
-//            this.hijosNodo.add(auxNodo);
             this.hijosNodo.add(col, new Nodo (this));
-            
-            this.hijosNodo.get(col).matrizNodo[fila][col] = jugador;  // Aquí falla
-//            this.hijosNodo.get(col).matrizNodo[fila][col] = jugador;
-//            this.hijosNodo.get(col).rellenarNodo(col, conecta, jugador) ;
-
+            this.hijosNodo.get(col).matrizNodo[fila][col] = jugador; 
             this.hijosNodo.get(col).ultimaCol = col;
-//            this.hijosNodo.elementAt(col).ultimaFila = fila;
-            //this.hijosNodo.elementAt(col).valorHeuristicaNodo = heuristicaCalcular(this, conecta);  
-
         }
 
         /**
