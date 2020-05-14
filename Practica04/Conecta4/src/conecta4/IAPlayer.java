@@ -96,7 +96,7 @@ public class IAPlayer extends Player {
             for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {
                 if (hayFilas(reCols, nodoActual)) {
                     nodoActual.rellenarNodoHijo(reCols, Conecta4.PLAYER1);
-                    nodoActual.hijosNodo.elementAt(reCols).setheuristica(calcularMin(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, limiteMax++, alfa, beta));
+                    nodoActual.hijosNodo.get(reCols).setheuristica(calcularMin(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, limiteMax++, alfa, beta));
 
                     if (nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo > caminoMaximo) {
                         caminoMaximo = nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo;
@@ -135,7 +135,7 @@ public class IAPlayer extends Player {
             for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {       //recorrer columnas
                 if (hayFilas(reCols, nodoActual)) {
                     nodoActual.rellenarNodoHijo(reCols, Conecta4.PLAYER2);
-                    nodoActual.hijosNodo.elementAt(reCols).setheuristica(calcularMax(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, limiteMin++, alfa, beta));
+                    nodoActual.hijosNodo.get(reCols).setheuristica(calcularMax(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, limiteMin++, alfa, beta));
 
                     if (nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo < caminoMinimo) {
                         caminoMinimo = nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo;
