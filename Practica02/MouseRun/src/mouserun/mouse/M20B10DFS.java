@@ -33,7 +33,7 @@ public class M20B10DFS extends Mouse {
     private boolean bomba;
     
     public M20B10DFS() {
-        super("Profundidad");
+        super("M20B10DFS");
         i = 0;
         exploredGrids=new HashMap<>();
         lastGrid = new Grid(0, 0);
