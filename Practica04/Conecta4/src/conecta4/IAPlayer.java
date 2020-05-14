@@ -4,7 +4,6 @@ import java.util.Vector;
 import java.util.TreeSet;
 
 /**
- *
  * @author José María Serrano
  * @version 1.5 Departamento de Informática. Universidad de Jáen
  *
@@ -29,19 +28,16 @@ public class IAPlayer extends Player {
         int limiteActual = 0;
 
         Nodo nodoJugada = new Nodo(tablero);
-        int mejorMov = 1;           // luego se cambia
-//        int x=tablero.getColumnas(), y=tablero.getFilas(); //ToDo: Asignación tamaño tablero
-        int minInicial, minActual;
+        int mejorMov = 1;                   // Columna 2 para ser orientativa          
+        int minInicial, valorHeuristico;
         minInicial = Integer.MAX_VALUE;
-        int filaAux = 0;
         int alfa = Integer.MIN_VALUE, beta = Integer.MAX_VALUE;
-        //unNodo.matrizNodo = tablero.toArray();
 
-        //int matrix[][] = nodoJugada.matrizNodo.clone();
-        minActual = calcularMin(nodoJugada, tablero, conecta, limiteActual, alfa, beta);
+        valorHeuristico = calcularMin(nodoJugada, conecta, limiteActual, alfa, beta);
         for (int recorro = 0; recorro < tablero.getColumnas(); recorro++) {
-            if (minActual == nodoJugada.hijosNodo.elementAt(recorro).valorHeuristicaNodo) {
+            if (valorHeuristico == nodoJugada.hijosNodo.get(recorro).valorHeuristicaNodo) {
                 mejorMov = recorro;
+                System.out.println("Valor deseado es: "+ valorHeuristico +" ,en la posicion: "+ recorro);
             } else {
                 System.out.println("Mejor valor no es " + recorro);
             }
@@ -49,22 +45,19 @@ public class IAPlayer extends Player {
 
         int meterButton = tablero.setButton(mejorMov, Conecta4.PLAYER2);
         return tablero.checkWin(mejorMov, meterButton, conecta);
-        //return tablero.checkWin(tablero.setButton(columna, Conecta4.PLAYER2), columna, conecta);
-
     } // Fin turnoJugada
 
     
     /**
      * Calcula el valor máximo, jugada deseada por el Jugador1
-     *
      * @param nodoActual
      * @param tablero
      * @param x
      * @param y
      * @param conecta
-     * @return
+     * @return Valor de la heurística
      */
-    private int calcularMax(Nodo nodoActual, Grid tablero, int conecta, int limiteMax, int alfa, int beta) {
+    private int calcularMax(Nodo nodoActual, int conecta, int limiteMax, int alfa, int beta) {
 
         System.out.println("Comenzamos valorMax");
         nodoActual.mostrarMatrizNodo();
@@ -77,10 +70,10 @@ public class IAPlayer extends Player {
             limiteMax++;
             int mejorMovHijo;
             int caminoMaximo = Integer.MIN_VALUE;
-            for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {
+            for (int reCols = 0; reCols < nodoActual.getColumnaNodo(); reCols++) {
                 if (hayFilas(reCols, nodoActual)) {
                     nodoActual.rellenarNodoHijo(reCols, Conecta4.PLAYER1);
-                    nodoActual.hijosNodo.get(reCols).setheuristica(calcularMin(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, limiteMax, alfa, beta));
+                    nodoActual.hijosNodo.get(reCols).setheuristica(calcularMin(nodoActual.hijosNodo.elementAt(reCols), conecta, limiteMax, alfa, beta));
 
                     if (nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo > caminoMaximo) {
                         caminoMaximo = nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo;
@@ -96,14 +89,14 @@ public class IAPlayer extends Player {
 
     /**
      * Calcula el valor mínimo, jugada deseada por el Jugador2
-     * @param nodoActual
+     * @param nodoActual nodo con el que trabajamos
      * @param tablero
      * @param x
      * @param y
      * @param conecta
-     * @return
+     * @return Valor de la heuríscica
      */
-    private int calcularMin(Nodo nodoActual, Grid tablero, int conecta, int limiteMin, int alfa, int beta) {
+    private int calcularMin(Nodo nodoActual, int conecta, int limiteMin, int alfa, int beta) {
 
         System.out.println("Comenzamos valorMin");
         nodoActual.mostrarMatrizNodo();
@@ -116,10 +109,10 @@ public class IAPlayer extends Player {
             limiteMin++;
             int mejorMovHijo;
             int caminoMinimo = Integer.MAX_VALUE;                   //Iniciamos al valor mas alto
-            for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {       //recorrer columnas
+            for (int reCols = 0; reCols < nodoActual.getColumnaNodo(); reCols++) {       //recorrer columnas
                 if (hayFilas(reCols, nodoActual)) {
                     nodoActual.rellenarNodoHijo(reCols, Conecta4.PLAYER2);
-                    nodoActual.hijosNodo.get(reCols).setheuristica(calcularMax(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, ++limiteMin, alfa, beta));
+                    nodoActual.hijosNodo.get(reCols).setheuristica(calcularMax(nodoActual.hijosNodo.elementAt(reCols), conecta, ++limiteMin, alfa, beta));
 
                     if (nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo < caminoMinimo) {
                         caminoMinimo = nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo;
@@ -140,8 +133,8 @@ public class IAPlayer extends Player {
      * @return Valor de la heurística total.
      */
     public int heuristicaCalcular(Nodo nodoActual, int conecta) {
-        int heuristica1 = heuristica(nodoActual, conecta, Conecta4.PLAYER1);
-        int heuristica2 = heuristica(nodoActual, conecta, Conecta4.PLAYER2);
+        int heuristica1 = heuristica(nodoActual, conecta, Conecta4.PLAYER1);    //Auxiliar
+        int heuristica2 = heuristica(nodoActual, conecta, Conecta4.PLAYER2);    //Auxiliar
 //        int resultado = (Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1)) + (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
         int resultado = heuristica1 - heuristica2;
         return resultado;
@@ -371,7 +364,6 @@ public class IAPlayer extends Player {
         int ultimaFila;         //  ultima fila jugada
         Vector<Nodo> hijosNodo;//  vector con los nodos hijos
         int valorHeuristicaNodo;
-//        int alfaNodo,betaNodo;
 
         /**
          * Crea un nodo a partir de un grid
@@ -387,9 +379,7 @@ public class IAPlayer extends Player {
             ultimaFila = tablero.getFilas() - 1;  //valor de la fila de abajo
 
             valorHeuristicaNodo = 0;
-            hijosNodo = new Vector<Nodo>(tablero.getColumnas() - 1);
-//            alfaNodo = Integer.MAX_VALUE;
-//            betaNodo = Integer.MIN_VALUE;     
+            hijosNodo = new Vector<Nodo>(tablero.getColumnas() - 1);  
         }
 
         /**
@@ -406,21 +396,12 @@ public class IAPlayer extends Player {
             
             valorHeuristicaNodo = orig.valorHeuristicaNodo;
             hijosNodo = new Vector<Nodo>(orig.getColumnaNodo() - 1);
-//            alfaNodo = orig.alfaNodo;
-//            betaNodo = orig.betaNodo;
-//            int i = 0;
-//            do {
-//                if (orig.hijosNodo.size() != 0 ) {
-//                    hijosNodo.add(orig.hijosNodo.get(i));
-//                }
-//                i++;
-//            } while (orig.hijosNodo.get(i - 1) != orig.hijosNodo.lastElement());
 
         }
 
         /**
          * Devuelve la matriz del nodo.
-         * @return
+         * @return devuelve la matriz
          */
         public int[][] getMatrizNodo() {
             return matrizNodo;
@@ -431,7 +412,6 @@ public class IAPlayer extends Player {
 //        }
         /**
          * Muestra el numero de filas que tiene la matriz del nodo
-         *
          * @return devuelve el número de filas
          */
         public int getFilaNodo() {
@@ -439,13 +419,12 @@ public class IAPlayer extends Player {
         }
 
         /**
-         *
          * @param columna Coordenada de columna
          * @param fila Coordenada de fila
-         * @return
+         * @return valor dada la posición de la matriz
          */
         public int getTableroNodo(int columna, int fila) {
-            return matrizNodo[columna][fila];
+            return matrizNodo[fila][columna];
         }
 
         public void setMatrizNodo(int matrizTablero[][]) {
@@ -467,7 +446,6 @@ public class IAPlayer extends Player {
 
         /**
          * Añade todos los datos de una jugada al nodo
-         *
          * @param fila Coordenada de la fila a añadir
          * @param col Coordenada de la columna a añadir
          * @param jugador jugador que se añade
@@ -476,11 +454,7 @@ public class IAPlayer extends Player {
         public boolean rellenarNodo(int col, int conecta, int jugador) {
             int fila = buscarFila(col, this);
             this.matrizNodo[fila][col] = jugador;
-//            this.hijosNodo.add(this);      //No se está usando
-//            valorHeuristicaNodo = heuristicaCalcular(this, conecta);
             this.ultimaCol = col;
-//            this.ultimaFila=fila;
-
             return true;
         }
 
