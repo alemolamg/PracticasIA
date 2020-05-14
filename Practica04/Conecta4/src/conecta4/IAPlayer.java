@@ -15,8 +15,7 @@ import java.util.TreeSet;
  *
  */
 public class IAPlayer extends Player {
-
-    int limite = 2;
+    int limite = 4; // Limite de nivel
 
     /**
      * @param tablero Representación del tablero de juego
