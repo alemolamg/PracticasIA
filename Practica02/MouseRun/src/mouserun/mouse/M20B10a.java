@@ -107,7 +107,7 @@ public class M20B10a extends Mouse {
      * @param celdaActual celda donde se encuentra el ratón
      * @return movimiento de regreso del raton
      */
-    int posRegreso(Grid celdaActual) {   //Falta un caso por tener en cuenta
+    private int posRegreso(Grid celdaActual) {   //Falta un caso por tener en cuenta
 
         if (pilaMovimientos.peek().getX() == celdaActual.getX()) {
             if (pilaMovimientos.peek().getY() < celdaActual.getY()) {
