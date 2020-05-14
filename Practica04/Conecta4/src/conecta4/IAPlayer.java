@@ -50,11 +50,11 @@ public class IAPlayer extends Player {
     
     /**
      * Calcula el valor máximo, jugada deseada por el Jugador1
-     * @param nodoActual
-     * @param tablero
-     * @param x
-     * @param y
-     * @param conecta
+     * @param nodoActual nodo sobre el que jugamos
+     * @param conecta    número de fichas seguidas para ganar
+     * @param limiteMax  límite de llamadas
+     * @param alfa       valor alfa para la poda
+     * @param beta       valor beta para la poda
      * @return Valor de la heurística
      */
     private int calcularMax(Nodo nodoActual, int conecta, int limiteMax, int alfa, int beta) {
@@ -87,15 +87,15 @@ public class IAPlayer extends Player {
             return caminoMaximo;
         }
     }   // Fin Max
-
+    
     /**
      * Calcula el valor mínimo, jugada deseada por el Jugador2
-     * @param nodoActual nodo con el que trabajamos
-     * @param tablero
-     * @param x
-     * @param y
-     * @param conecta
-     * @return Valor de la heuríscica
+     * @param nodoActual    nodo sobre el que jugamos
+     * @param conecta       número fichas seguidas para ganar
+     * @param limiteMin     límite de movimientos
+     * @param alfa          valor alfa para la poda
+     * @param beta          valor beta para la poda
+     * @return              Valor de la heuríscica
      */
     private int calcularMin(Nodo nodoActual, int conecta, int limiteMin, int alfa, int beta) {
 
