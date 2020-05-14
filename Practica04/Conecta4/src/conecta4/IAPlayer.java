@@ -67,6 +67,7 @@ public class IAPlayer extends Player {
             return heuristicaCalcular(nodoActual, conecta);
 
         } else {
+            
             limiteMax++;
             int mejorMovHijo;
             int caminoMaximo = Integer.MIN_VALUE;
@@ -106,6 +107,7 @@ public class IAPlayer extends Player {
             return heuristicaCalcular(nodoActual, conecta);
 
         } else {
+            
             limiteMin++;
             int mejorMovHijo;
             int caminoMinimo = Integer.MAX_VALUE;                   //Iniciamos al valor mas alto
@@ -135,8 +137,8 @@ public class IAPlayer extends Player {
     public int heuristicaCalcular(Nodo nodoActual, int conecta) {
         int heuristica1 = heuristica(nodoActual, conecta, Conecta4.PLAYER1);    //Auxiliar
         int heuristica2 = heuristica(nodoActual, conecta, Conecta4.PLAYER2);    //Auxiliar
-//        int resultado = (Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1)) + (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
-        int resultado = heuristica1 - heuristica2;
+        int resultado = (Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1)) + (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
+//        int resultado = heuristica1 - heuristica2;
         return resultado;
     }
 
@@ -367,7 +369,6 @@ public class IAPlayer extends Player {
 
         /**
          * Crea un nodo a partir de un grid
-         *
          * @param tablero grid desde el que partimos
          */
         private Nodo(Grid tablero) {
@@ -384,7 +385,6 @@ public class IAPlayer extends Player {
 
         /**
          * Constructor copia de nodo
-         *
          * @param orig Nodo original
          */
         private Nodo(Nodo orig) {
@@ -407,9 +407,6 @@ public class IAPlayer extends Player {
             return matrizNodo;
         }
 
-//        public void setFilaNodo(int num){
-//            ultimaFila=num;
-//        }
         /**
          * Muestra el numero de filas que tiene la matriz del nodo
          * @return devuelve el número de filas
@@ -446,9 +443,9 @@ public class IAPlayer extends Player {
 
         /**
          * Añade todos los datos de una jugada al nodo
-         * @param fila Coordenada de la fila a añadir
          * @param col Coordenada de la columna a añadir
          * @param jugador jugador que se añade
+         * @param conecta num fichas seguidas para ganar
          * @return Devuelve true siempre
          */
         public boolean rellenarNodo(int col, int conecta, int jugador) {
@@ -470,7 +467,6 @@ public class IAPlayer extends Player {
         /**
          * Rellena el nodo hijo en la posición de la columna
          * @param col columna donde se realiza la jugada
-         * @param conecta cantidad fichas seguidas a poner
          * @param jugador jugador que pone la ficha
          */
         public void rellenarNodoHijo(int col, int jugador) {
@@ -481,7 +477,7 @@ public class IAPlayer extends Player {
         }
 
         /**
-         * muestra la matriz del nodo por pantalla
+         * muestra la matriz del nodo por pantalla 
          */
         public void mostrarMatrizNodo() {
             for (int fila = 0; fila < numFilas; fila++) {
