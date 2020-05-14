@@ -135,10 +135,7 @@ public class IAPlayer extends Player {
      * @return Valor de la heurística total.
      */
     public int heuristicaCalcular(Nodo nodoActual, int conecta) {
-        int heuristica1 = heuristica(nodoActual, conecta, Conecta4.PLAYER1);    //Auxiliar
-        int heuristica2 = heuristica(nodoActual, conecta, Conecta4.PLAYER2);    //Auxiliar
         int resultado = (Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1)) + (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
-//        int resultado = heuristica1 - heuristica2;
         return resultado;
     }
 
