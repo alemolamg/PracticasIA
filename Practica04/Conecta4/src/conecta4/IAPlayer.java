@@ -345,10 +345,8 @@ public class IAPlayer extends Player {
             numColumnas = tablero.getColumnas();
             numFilas = tablero.getFilas();
             matrizNodo = copiarMatriz(tablero.toArray(), tablero.getFilas(), tablero.getColumnas());    // copia a través del tablero del Grid
-
             ultimaCol = 0;                      //valor aleatorio
             ultimaFila = tablero.getFilas() - 1;  //valor de la fila de abajo
-
             valorHeuristicaNodo = 0;
             hijosNodo = new Vector<Nodo>(tablero.getColumnas() - 1);  
         }
