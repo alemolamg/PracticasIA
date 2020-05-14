@@ -129,7 +129,7 @@ public class IAPlayer extends Player {
 
     
     /**
-     * Función intermedia para calcular la heurística total de un tablero
+     * Función intermedia para calcular la heurística total de dos jugadores
      * @param nodoActual Nodo con la tabla y los datos.
      * @param conecta Número de fichas seguidas para ganar.
      * @return Valor de la heurística total.
@@ -137,33 +137,6 @@ public class IAPlayer extends Player {
     public int heuristicaCalcular(Nodo nodoActual, int conecta) {
         int resultado = (Conecta4.PLAYER1 * heuristica(nodoActual, conecta, Conecta4.PLAYER1)) + (Conecta4.PLAYER2 * heuristica(nodoActual, conecta, Conecta4.PLAYER2));
         return resultado;
-    }
-
-    /**
-     * Calcula el mínimo entre dos números enteros
-     * @param num1 número 1 a comparar
-     * @param num2 número a comparar
-     * @return Devuelve el número más pequeño
-     */
-    private int calcularMinimo2Num(int num1, int num2) {
-        if (num1 >= num2) {
-            return num2;
-        } else {
-            return num1;
-        }
-    }
-
-    /**
-     * Calcula el máximo entre dos números enteros
-     * @param num1 número 1 a comparar
-     * @param num2 número 2 a comparar
-     * @return Devuelve el número más grande
-     */
-    private int calcularMaximo2Num(int num1, int num2) {
-        if (num1 >= num2)
-            return num1;
-         else 
-            return num2;
     }
 
     /**
@@ -358,11 +331,11 @@ public class IAPlayer extends Player {
 
         int numColumnas;        //  Número de columnas de la matriz
         int numFilas;           //  Número filas de la matriz
-        int[][] matrizNodo;   //  matriz con el grid en enteros
+        int[][] matrizNodo;     //  matriz con el grid en enteros
         int ultimaCol;          //  ultima columna jugada
         int ultimaFila;         //  ultima fila jugada
-        Vector<Nodo> hijosNodo;//  vector con los nodos hijos
-        int valorHeuristicaNodo;
+        Vector<Nodo> hijosNodo; //  vector con los nodos hijos
+        int valorHeuristicaNodo;//  Valor heurístico
 
         /**
          * Crea un nodo a partir de un grid
