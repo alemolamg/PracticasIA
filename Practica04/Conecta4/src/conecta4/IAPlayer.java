@@ -17,10 +17,9 @@ import java.util.TreeSet;
  */
 public class IAPlayer extends Player {
 
-    int limite = 3;
+    int limite = 2;
 
     /**
-     *
      * @param tablero Representación del tablero de juego
      * @param conecta Número de fichas consecutivas para ganar
      * @return Jugador ganador (si lo hay)
@@ -48,29 +47,13 @@ public class IAPlayer extends Player {
             }
         }
 
-//        
-//        for (int j = 0; j < tablero.getColumnas(); j++) {
-//            if (hayFilas(j, nodoJugada)) {
-//                int aux = buscarFila(j,nodoJugada);
-//                nodoJugada.matrizNodo[aux][j] = -1;
-//                mostrarMatriz(nodoJugada.matrizNodo, nodoJugada.getColumnaNodo(), nodoJugada.getFilaNodo());
-//                System.out.println("\nComenzamos el MiniMax");
-//                minActual = calcularMin(nodoJugada,tablero,conecta,limiteActual,alfa,beta);   //Empieza Minimax
-//                nodoJugada.matrizNodo[aux][j] = 0;
-//                if (minActual < minInicial) {
-//                    filaAux = aux;
-//                    minInicial = minActual;
-//                    mejorMov = j;
-//                }
-//            }
-//        }
         int meterButton = tablero.setButton(mejorMov, Conecta4.PLAYER2);
-
         return tablero.checkWin(mejorMov, meterButton, conecta);
         //return tablero.checkWin(tablero.setButton(columna, Conecta4.PLAYER2), columna, conecta);
 
     } // Fin turnoJugada
 
+    
     /**
      * Calcula el valor máximo, jugada deseada por el Jugador1
      *
@@ -91,12 +74,13 @@ public class IAPlayer extends Player {
             return heuristicaCalcular(nodoActual, conecta);
 
         } else {
+            limiteMax++;
             int mejorMovHijo;
             int caminoMaximo = Integer.MIN_VALUE;
             for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {
                 if (hayFilas(reCols, nodoActual)) {
                     nodoActual.rellenarNodoHijo(reCols, Conecta4.PLAYER1);
-                    nodoActual.hijosNodo.get(reCols).setheuristica(calcularMin(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, limiteMax++, alfa, beta));
+                    nodoActual.hijosNodo.get(reCols).setheuristica(calcularMin(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, limiteMax, alfa, beta));
 
                     if (nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo > caminoMaximo) {
                         caminoMaximo = nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo;
@@ -112,7 +96,6 @@ public class IAPlayer extends Player {
 
     /**
      * Calcula el valor mínimo, jugada deseada por el Jugador2
-     *
      * @param nodoActual
      * @param tablero
      * @param x
@@ -130,12 +113,13 @@ public class IAPlayer extends Player {
             return heuristicaCalcular(nodoActual, conecta);
 
         } else {
+            limiteMin++;
             int mejorMovHijo;
             int caminoMinimo = Integer.MAX_VALUE;                   //Iniciamos al valor mas alto
             for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {       //recorrer columnas
                 if (hayFilas(reCols, nodoActual)) {
                     nodoActual.rellenarNodoHijo(reCols, Conecta4.PLAYER2);
-                    nodoActual.hijosNodo.get(reCols).setheuristica(calcularMax(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, limiteMin++, alfa, beta));
+                    nodoActual.hijosNodo.get(reCols).setheuristica(calcularMax(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, ++limiteMin, alfa, beta));
 
                     if (nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo < caminoMinimo) {
                         caminoMinimo = nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo;
@@ -144,15 +128,13 @@ public class IAPlayer extends Player {
                     nodoActual.mostrarMatrizNodo();
                 }
             }
-            // Comprobamos que hijo es mas efectivo            
-
             return caminoMinimo;
         }
     }   // Fin Min
 
+    
     /**
      * Función intermedia para calcular la heurística total de un tablero
-     *
      * @param nodoActual Nodo con la tabla y los datos.
      * @param conecta Número de fichas seguidas para ganar.
      * @return Valor de la heurística total.
@@ -164,7 +146,6 @@ public class IAPlayer extends Player {
 
     /**
      * Calcula el mínimo entre dos números enteros
-     *
      * @param num1 número 1 a comparar
      * @param num2 número a comparar
      * @return Devuelve el número más pequeño
@@ -179,22 +160,19 @@ public class IAPlayer extends Player {
 
     /**
      * Calcula el máximo entre dos números enteros
-     *
      * @param num1 número 1 a comparar
      * @param num2 número 2 a comparar
      * @return Devuelve el número más grande
      */
     private int calcularMaximo2Num(int num1, int num2) {
-        if (num1 >= num2) {
+        if (num1 >= num2)
             return num1;
-        } else {
+         else 
             return num2;
-        }
     }
 
     /**
      * Calcula si la columna tiene filas libres
-     *
      * @param col Columna en la que buscar fila
      * @param tablero nodo con la matriz a añadir
      * @return Devuelve verdad si encuentra fila libre en una columna o falso si
@@ -211,7 +189,6 @@ public class IAPlayer extends Player {
 
     /**
      * Dada una matriz de Integer, copia los datos a otra matriz.
-     *
      * @param origMatriz Matriz de enteros
      * @param origFila Número filas matriz original
      * @param origCol Número columnas matriz original
@@ -229,7 +206,6 @@ public class IAPlayer extends Player {
 
     /**
      * Calcula la fila libre dada una columna.
-     *
      * @param col Columna en la que buscamos
      * @param tablero Nodo con la matriz
      * @return
@@ -247,7 +223,6 @@ public class IAPlayer extends Player {
 
     /**
      * Función que calcula el valor de ganar en cada casilla del nodo
-     *
      * @param nodoActual Nodo desde el que partimos
      * @param conecta número fichas seguidas para ganar
      * @param jugador identificador del jugador para hacer heurística
@@ -280,7 +255,6 @@ public class IAPlayer extends Player {
                     }
 
                 }
-
             }
         }   // Fin Diagonal Izquierda
 
@@ -366,7 +340,6 @@ public class IAPlayer extends Player {
 
     /**
      * Eleva una base a su exponente
-     *
      * @param base Número base (será siempre 10)
      * @param exponente Exponente (número veces que se repite una ficha)
      * @return potencia de exp base 10
