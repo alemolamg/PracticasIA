@@ -1,319 +1,335 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package mouserun.mouse;
 
-import java.util.TreeMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
-import java.util.Stack;
-import javafx.util.Pair;
-import mouserun.game.Mouse;
-import mouserun.game.Grid;
 import mouserun.game.Cheese;
+import mouserun.game.Grid;
+import mouserun.game.Mouse;
 import static mouserun.game.Mouse.DOWN;
 import static mouserun.game.Mouse.LEFT;
 import static mouserun.game.Mouse.RIGHT;
 import static mouserun.game.Mouse.UP;
 
 /**
- * Clase que contiene el esqueleto del raton base para las prácticas de Inteligencia Artificial del curso 2019-20.
- * 
- * @author Ana Montijano Zaragoza y Alejandro Molero Gómez
+ *
+ * @author Usuario
  */
 public class M20B10DFS extends Mouse {
 
-    /**
-     * Variable para almacenar la ultima celda visitada
-     */
-    private Grid lastGrid;
-    
+    private HashMap<Integer,Casilla> exploredGrids;
+    private int i;//indice del queso por donde voy
+    private HashMap<Integer, Casilla> visitadas;//mapa de casillas visitadas
+    private int ultimo = LEFT;//ultimo movimiento realizado(inverso)
+    private Grid lastGrid;//ultima casilla visitada
     Set<String> marcados;//estructura auxiliar para crear el camino
-    private LinkedList<Integer> camino;//camino hasta el queso
-    private TreeMap<Pair,Grid> visitadas;
+    private LinkedList camino;//camino hasta el queso
+    private boolean bomba;
     
-    /**
-     * Variable con el número de casillas recorridaas
-     */
-    private long numCasillasVisitadas;
-    
-    /**
-     * Tabla hash para almacenar las celdas visitadas por el raton:
-     * Clave: Coordenadas
-     * Valor: La celda
-     */
-    private HashMap<Pair<Integer, Integer>, Grid> celdasVisitadas;
-    
-    /**
-     * Pila para almacenar el camino recorrido.
-     */
-    private Stack<Grid> pilaMovimientos;
-    
-    
-    /**
-     * Constructor (Puedes modificar el nombre a tu gusto).
-     */
     public M20B10DFS() {
-        super("M20B10-DFS");
-        celdasVisitadas = new HashMap<>();
-        pilaMovimientos = new Stack<>();
-        camino          = new LinkedList<>();
-        marcados        = new HashSet<>();                
+        super("Profundidad");
+        i = 0;
+        exploredGrids=new HashMap<>();
+        lastGrid = new Grid(0, 0);
+        visitadas=new HashMap<>();
+        marcados = new HashSet<>();
+        camino=new LinkedList<>();
+        bomba=false;
     }
 
-    /**
-     * @brief Método principal para el movimiento del raton. Incluye la gestión de cuando un queso aparece o no.
-     * @param currentGrid Celda actual
-     * @param cheese Queso
-     */
     @Override
-    public int move(Grid currentGrid, Cheese cheese) {  
-        int salida;
+    public int move(Grid currentGrid, Cheese cheese) {
         
-        Pair pairQueso= generarPair(cheese.getX(),cheese.getY());
-        
-        if(!celdasVisitadas.containsKey(pairQueso)){ //aquí funciona, Pair=clave hashmap    
-            System.out.println("Escaneando......");
-            return salida = explorar(currentGrid, cheese);           
+        Casilla actual = new Casilla(currentGrid);
+        if (visitadas.get(clave(actual.getGrid())) == null) {//si no se ha pasado antes por la casilla
+            visitadas.put(clave(actual.getGrid()), actual);
+            if(exploredGrids.get(clave(actual.getGrid())) == null){
+                exploredGrids.put(clave(actual.getGrid()), actual);
+            }
+        }
+        //exploracion normal si el queso no esta en el mapa de visitadas
+        if (!visitadas.containsKey(clave(cheese.getX(), cheese.getY()))) {
+            return explorar(actual, currentGrid);
         }else{
-            
-            if (!camino.isEmpty()) {
+           if (!camino.isEmpty()) {
              return (int) camino.removeFirst();
             }
         marcados.clear();
         lastGrid = currentGrid;
-        planificarProfundidad(currentGrid,cheese);
+        planificarProfundidad(currentGrid.getX(),currentGrid.getY(),cheese);
         return (int)camino.removeFirst();}
-       
-    }
-    
-    /**
-     * 
-     * @param celdaActual celda donde se encuentra el ratón
-     * @return movimiento de regreso del raton
-     */
-    int posRegreso(Grid celdaActual){   
-        
-        if(pilaMovimientos.peek().equals(celdaActual))
-            return -1;  //Es la misma casilla, fallo grave
-        
-        if(pilaMovimientos.peek().getX()== celdaActual.getX()){
-             if(pilaMovimientos.peek().getY()<celdaActual.getY())
-                 return Mouse.DOWN;  //bajamos el ratón
-             else if(pilaMovimientos.peek().getY()>celdaActual.getY())
-                 return Mouse.UP;             
-        }  //else
-        if (pilaMovimientos.peek().getY()==celdaActual.getY()){
-            if(pilaMovimientos.peek().getX()<celdaActual.getX())
-                return Mouse.LEFT;
-            else if (pilaMovimientos.peek().getX()>celdaActual.getX())
-                return Mouse.RIGHT;
-        }
-        
-        return -2;  //fallo las dos coordenadas son diferentes, servirá para implementar bombas
     }
 
-    /**
-     * @brief Método que se llama cuando aparece un nuevo queso
-     */
-    @Override
-    public void newCheese() {
-        
-        
-    }
-
-    /**
-     * @brief Método que se llama cuando el raton pisa una bomba
-     */
-    @Override
-    public void respawned() {
-        this.pilaMovimientos=new Stack<>();
-    }
-
-    /**
-     * @brief Método que devuelve si de una casilla dada, está contenida en el mapa de celdasVisitadas
-     * @param casilla Casilla que se pasa para saber si ha sido visitada
-     * @return True Si esa casilla ya la había visitado
-     */
-    public boolean visitada(Grid casilla) {
-        Pair par = new Pair(casilla.getX(), casilla.getY());
-        return celdasVisitadas.containsKey(par);
-    }
-
-   /**
-     * @brief Método para calcular si una casilla está en una posición relativa respecto a otra
-     * @param actual Celda actual
-     * @param anterior Celda anterior
-     * @return True Si la posición Y de la actual es mayor que la de la anterior
-     */
-    public boolean actualArriba(Grid actual, Grid anterior) {
-        return actual.getY() > anterior.getY();
-    }
-
-    /**
-     * @brief Método para calcular si una casilla está en una posición relativa respecto a otra
-     * @param actual Celda actual
-     * @param anterior Celda anterior
-     * @return True Si la posición Y de la actual es menor que la de la anterior
-     */
-    public boolean actualAbajo(Grid actual, Grid anterior) {
-        return actual.getY() < anterior.getY();
-    }
-    
-    /**
-     * @brief Método para calcular si una casilla está en una posición relativa respecto a otra
-     * @param actual Celda actual
-     * @param anterior Celda anterior
-     * @return True Si la posición X de la actual es mayor que la de la anterior
-     */
-    public boolean actualDerecha(Grid actual, Grid anterior) {
-        return actual.getX() > anterior.getX();
-    }
-    
-    /**
-     * @brief Método para calcular si una casilla está en una posición relativa respecto a otra
-     * @param actual Celda actual
-     * @param anterior Celda anterior
-     * @return True Si la posición X de la actual es menor que la de la anterior
-     */
-    public boolean actualIzquierda(Grid actual, Grid anterior) {
-        return actual.getX() < anterior.getX();
-    }
-    
-    
-    private int explorar(Grid currentGrid, Cheese cheese){
-        int x=currentGrid.getX();
-        int y=currentGrid.getY();
-           
-        if(!celdasVisitadas.containsKey(new Pair(x, y))){      //Vemos si la casilla actual esta en el mapa
-            this.incExploredGrids();                            //Aumentamos el numero de casillas visitadas                           //aumentamos las casillas visitadas
-            celdasVisitadas.put(new Pair(x, y), currentGrid);  //y guardamos la casilla en el mapa
-        }   
-        
-        
-        if (currentGrid.canGoDown()) {                     
-                if(!celdasVisitadas.containsKey(new Pair(x, y - 1))){
-                    pilaMovimientos.push(currentGrid);
-                    return Mouse.DOWN;              
-                }
-        }
-        
-        if (currentGrid.canGoLeft()) {
-                if(!celdasVisitadas.containsKey(new Pair(x - 1, y))){
-                    pilaMovimientos.push(currentGrid);
-                    return Mouse.LEFT;
-                }
-        }
-        
-        if (currentGrid.canGoRight()) {
-            if(!celdasVisitadas.containsKey(new Pair(x + 1, y))){
-                pilaMovimientos.push(currentGrid);
-                return Mouse.RIGHT;
+//Metodo que devuelve el movimiento que nos lleva a la casilla menos visitada
+    private int explorar(Casilla actual, Grid currentGrid) {
+        Casilla cUP = new Casilla(currentGrid.getX(), currentGrid.getY() + 1);
+        Casilla cDOWN = new Casilla(currentGrid.getX(), currentGrid.getY() - 1);
+        Casilla cLEFT = new Casilla(currentGrid.getX() - 1, currentGrid.getY());
+        Casilla cRIGHT = new Casilla(currentGrid.getX() + 1, currentGrid.getY());
+        if (visitadas.get(clave(actual.getGrid())) == null) {//si no se ha pasado antes por la casilla
+            visitadas.put(clave(actual.getGrid()), actual);
+            if(exploredGrids.get(clave(actual.getGrid())) == null){
+                exploredGrids.put(clave(actual.getGrid()), actual);
             }
         }
-        
-        if (currentGrid.canGoUp()) {
-            if(!celdasVisitadas.containsKey(new Pair(x , y + 1))){
-                pilaMovimientos.push(currentGrid);
-                return Mouse.UP;
+        visitadas.get(clave(actual.getGrid())).incrementa();
+        int min = 9999;
+        int cont = 0;//vemos cual de las casillas de alrededor es la menos visitada
+        int narriba = 10000, nabajo = 10000, nizq = 10000, nder = 10000;
+        if (ultimo != UP && currentGrid.canGoUp()) {
+            cont++;
+            if (visitadas.containsKey(clave(cUP.getGrid()))) {
+                narriba = visitadas.get(clave(cUP.getGrid())).getNveces();
+            } else {
+                narriba = 0;
+            }
+            if (narriba < min) {
+                min = narriba;
             }
         }
-        
-        return posRegreso(currentGrid);    
+        if (ultimo != DOWN && currentGrid.canGoDown()) {
+            cont++;
+            if (visitadas.containsKey(clave(cDOWN.getGrid()))) {
+                nabajo = visitadas.get(clave(cDOWN.getGrid())).getNveces();
+            } else {
+                nabajo = 0;
+            }
+            if (nabajo < min) {
+                min = nabajo;
+            }
+        }
+        if (ultimo != LEFT && currentGrid.canGoLeft()) {
+            cont++;
+            if (visitadas.containsKey(clave(cLEFT.getGrid()))) {
+                nizq = visitadas.get(clave(cLEFT.getGrid())).getNveces();
+            } else {
+                nizq = 0;
+            }
+            if (nizq < min) {
+                min = nizq;
+            }
+        }
+        if (ultimo != RIGHT && currentGrid.canGoRight()) {
+            cont++;
+            if (visitadas.containsKey(clave(cRIGHT.getGrid()))) {
+                nder = visitadas.get(clave(cRIGHT.getGrid())).getNveces();
+            } else {
+                nder = 0;
+            }
+            if (nder < min) {
+                min = nder;
+            }
+        }
+        if (cont == 0) {//si esta en un callejon pone el numero de veces alto
+            visitadas.get(clave(actual.getGrid())).setNveces(300);
+            ultimo = inverso(ultimo);
+            lastGrid = currentGrid;
+            return ultimo;
+        }//si esta en un callejon al salir pone las casillas del callejon con un nveces alto
+        if (cont == 1 && visitadas.get(clave(lastGrid)).getNveces() >= 300) {
+            visitadas.get(clave(actual.getGrid())).setNveces(300);
+        }
+        lastGrid = currentGrid;
+        if (min == narriba) {
+            ultimo = DOWN;
+            return UP;
+        } else if (min == nabajo) {
+            ultimo = UP;
+            return DOWN;
+        } else if (min == nizq) {
+            ultimo = RIGHT;
+            return LEFT;
+        } else {
+            ultimo = LEFT;
+            return RIGHT;
+        }
     }
-    
-    public boolean planificarProfundidad(Grid actual, Cheese cheese) {
-                
-        if(actual.getX() == cheese.getX() && actual.getY() == cheese.getY()){   //Ver si ha terminado el camino
-            System.out.println("coinciden Queso y Casilla");
+
+//Metodo que planifica un camino de forma recursiva hasta el queso   
+    public boolean planificarProfundidad(int x,int y, Cheese cheese) {
+        int cX=x;
+        int cY=y;
+        
+        if(cX==cheese.getX()&&cY==cheese.getY()){
             return true;
         }
-        
-        int xGrid = actual.getX();
-        int yGrid = actual.getY();
-        
-        System.out.println("Entramos Planificar Profundidad");        
-        
-        //Grid g=new Grid(actual.getX(),actual.getY());
-        Grid gUP=new Grid(actual.getX(),actual.getY()+1);
-        Grid gDown=new Grid(actual.getX(),actual.getY()-1);
-        Grid gLeft=new Grid(actual.getX()-1,actual.getY());
-        Grid gRight=new Grid(actual.getX()+1,actual.getY());
+        Grid g=new Grid(x,y);
+        Casilla c=new Casilla(g);
 
-        String posActual = String.valueOf(xGrid) + String.valueOf(yGrid);
-        String sup = String.valueOf(xGrid) + String.valueOf(yGrid + 1);
-        String inf = String.valueOf(xGrid) +  String.valueOf(yGrid - 1);
-        String izq = String.valueOf(xGrid - 1) + String.valueOf(yGrid);
-        String der = String.valueOf(xGrid + 1) + String.valueOf(yGrid);
+        Grid gUP=new Grid(x,y+1);
+        Casilla cUP=new Casilla(gUP);
+        Grid gD=new Grid(x,y-1);
+        Casilla cDOWN=new Casilla(gD);
+        Grid gL=new Grid(x-1,y);
+        Casilla cLEFT=new Casilla(gL);
+        Grid gR=new Grid(x+1,y);
+        Casilla cRIGHT=new Casilla(gR);
+        String x1 = String.valueOf(x);
+        String y1 = String.valueOf(y);
+
+        String actual = x1 + y1;
+        String sup = x1 + String.valueOf(cY + 1);
+        String inf = x1 +  String.valueOf(cY - 1);
+        String izq = String.valueOf(cX - 1) + y1;
+        String der = String.valueOf(cX + 1) + y1;
         
-        marcados.add(posActual);
-        //if (celdasVisitadas.containsKey(gUP) && !marcados.contains(sup)) {
-        System.out.println("Vamos a calcular el camino correcto");
-        
-        if (celdasVisitadas.containsKey(generarPair(gUP)) && !marcados.contains(sup)) {    //el pair es la clave
-            System.out.println("gUP - existe en celdasVisitadas ");
-            if (celdasVisitadas.get(generarPair(actual)).canGoUp()) {     //
-                System.out.println("Podemos movernos hacia arriba");
-                camino.push(UP);
-                System.out.println("Encontrado camino UP");
-                if (planificarProfundidad(gUP, cheese)) {
-                    return true;
-                }
-                camino.removeLast();
+        marcados.add(actual);
+        if (visitadas.containsKey(clave(cUP.getGrid()))&& !marcados.contains(sup)) {
+            if(visitadas.get(clave(c.getGrid())).getGrid().canGoUp()){
+            camino.addLast(UP);
+            if(planificarProfundidad(x,cY+1,cheese)){
+                return true;
+            }
+            camino.removeLast();
             }
         }
-        
-        //if (celdasVisitadas.containsKey(gDown) && !marcados.contains(inf)) {
-        if (celdasVisitadas.containsKey(generarPair(gDown)) && !marcados.contains(inf)) {
-            System.out.println("gDOWN - existe en celdasVisitadas ");
-            if (celdasVisitadas.get(generarPair(actual)).canGoDown()) {
-                System.out.println("Podemos movernos hacia ABAJO");
-                camino.push(DOWN);
-                System.out.println("Encontrado camino DOWN");
-                if (planificarProfundidad(gDown, cheese)) {
-                    return true;
-                }
-                camino.removeLast();
+        if (visitadas.containsKey(clave(cDOWN.getGrid()))&& !marcados.contains(inf)) {
+            if(visitadas.get(clave(c.getGrid())).getGrid().canGoDown()){
+            camino.addLast(DOWN);
+            if(planificarProfundidad(x,cY-1,cheese)){
+                return true;
+            }
+            camino.removeLast();
             }
         }
-        
-        
-        
-//        if (celdasVisitadas.containsKey(gLeft) && !marcados.contains(izq)) {
-        if (celdasVisitadas.containsKey(generarPair(gLeft)) && !marcados.contains(izq)) {
-            System.out.println("gLEFT - existe en celdasVisitadas ");
-            if (celdasVisitadas.get(generarPair(actual)).canGoLeft()) {
-                System.out.println("Podemos movernos hacia IZQUIERDA");
-                camino.push(LEFT);
-                System.out.println("Encontrado camino LEFT");
-                if (planificarProfundidad(gLeft, cheese)) {
-                    return true;
-                }
-                camino.removeLast();
+        if (visitadas.containsKey(clave(cLEFT.getGrid()))&& !marcados.contains(izq)) {
+            if(visitadas.get(clave(c.getGrid())).getGrid().canGoLeft()){
+            camino.addLast(LEFT);
+            if(planificarProfundidad(cX-1,y,cheese)){
+                return true;
+            }
+            camino.removeLast();
             }
         }
-        //if (celdasVisitadas.containsKey(gRight) && !marcados.contains(der)) {
-        if (celdasVisitadas.containsKey(generarPair(gRight)) && !marcados.contains(der)) {
-            System.out.println("gRIGHT - existe en celdasVisitadas ");
-            if (celdasVisitadas.get(generarPair(actual)).canGoRight()) {
-                System.out.println("Podemos movernos hacia DERECHA");
-                camino.push(RIGHT);
-                System.out.println("Encontrado camino RIGHT");
-                if (planificarProfundidad(gRight, cheese)) {
-                    return true;
-                }
-                camino.removeLast();
+        if (visitadas.containsKey(clave(cRIGHT.getGrid()))&& !marcados.contains(der)) {
+            if(visitadas.get(clave(c.getGrid())).getGrid().canGoRight()){
+            camino.addLast(RIGHT);
+            if(planificarProfundidad(cX+1,y,cheese)){
+                return true;
+            }
+            camino.removeLast();
             }
         }
-        System.out.println("Falla, sale FALSE");
        return false;
     }
-    
-    private Pair generarPair(Grid gridToPair){
-        return new Pair(gridToPair.getX(),gridToPair.getY());       
+
+//funcion para asignar claves 
+    public int hashXY(Grid g, int movimiento) {
+        switch (movimiento) {
+            case UP:
+                Grid gUP = new Grid(g.getX(), g.getY() + 1);
+                return clave(gUP);
+            case DOWN:
+                Grid gDOWN = new Grid(g.getX(), g.getY() - 1);
+                return clave(gDOWN);
+            case LEFT:
+                Grid gLEFT = new Grid(g.getX() - 1, g.getY());
+                return clave(gLEFT);
+            case RIGHT:
+                Grid gRIGHT = new Grid(g.getX() + 1, g.getY());
+                return clave(gRIGHT);
+        }
+        return clave(g);
     }
-    
-    private Pair generarPair(int x,int y){
-        return new Pair (x,y);
+
+//asignamos una clave para añadir al mapahash
+    public int clave(Grid g) {
+        int x = g.getX();
+        int y = g.getY();
+        int res = (x * 10000) + y;
+        return res;
     }
-    
+
+//para asignar una clave a una casilla determinada segun las coordenadas    
+    public int clave(int x, int y) {
+        int res = (x * 10000) + y;
+        return res;
+    }
+
+//devuelve el movimiento inverso al realizado
+    public int inverso(int movimiento) {
+        switch (movimiento) {
+            case LEFT:
+                return RIGHT;
+            case RIGHT:
+                return LEFT;
+            case UP:
+                return DOWN;
+            case DOWN:
+                return UP;
+        }
+        return BOMB;
+    }
+
+    @Override
+    public void newCheese() {
+
+    }
+    //pensar 
+    @Override
+    public void respawned() {
+        bomba=true;
+    }
+
+    @Override
+    public long getExploredGrids() {
+        return exploredGrids.size();
+    }
+
+//clase auxiliar para contabilizar el numero de veces que hemos pasado por una casilla
+    class Casilla {
+
+        private Grid grid;
+        private int nveces;
+
+        public Casilla(Grid g) {
+            grid = g;
+            nveces = 0;
+
+        }
+
+        public Casilla(int x, int y) {
+            Grid g = new Grid(x, y);
+            grid = g;
+            nveces = 0;
+        }
+
+        public void incrementa() {
+            setNveces(getNveces() + 1);
+        }
+
+        /**
+         * @return the casilla
+         */
+        public Grid getGrid() {
+            return grid;
+        }
+
+        /**
+         * @param casilla the casilla to set
+         */
+        public void setGrid(Grid casilla) {
+            this.grid = casilla;
+        }
+
+        /**
+         * @return the nveces
+         */
+        public int getNveces() {
+            return nveces;
+        }
+
+        /**
+         * @param nveces the nveces to set
+         */
+        public void setNveces(int nveces) {
+            this.nveces = nveces;
+        }
+    }
 }
