@@ -427,8 +427,9 @@ public class IAPlayer extends Player {
             numFilas = orig.getFilaNodo();
             ultimaCol = orig.ultimaCol;
             ultimaFila = orig.ultimaFila;
-
+            
             valorHeuristicaNodo = orig.valorHeuristicaNodo;
+            hijosNodo = new Vector<Nodo>(orig.getColumnaNodo() - 1);
 //            alfaNodo = orig.alfaNodo;
 //            betaNodo = orig.betaNodo;
 //            int i = 0;
@@ -443,7 +444,6 @@ public class IAPlayer extends Player {
 
         /**
          * Devuelve la matriz del nodo.
-         *
          * @return
          */
         public int[][] getMatrizNodo() {
@@ -481,6 +481,10 @@ public class IAPlayer extends Player {
             this.matrizNodo[fila][col] = jugador;
         }
 
+        /**
+         * Devuelve el número de columnas de la matriz del nodo.
+         * @return num columnas nodo
+         */
         public int getColumnaNodo() {
             return numColumnas;
         }
