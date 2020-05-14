@@ -95,9 +95,8 @@ public class IAPlayer extends Player {
             int caminoMaximo = Integer.MIN_VALUE;
             for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {
                 if (hayFilas(reCols, nodoActual)) {
-
-                    nodoActual.rellenarNodoHijo(reCols, conecta, Conecta4.PLAYER2);
-                    nodoActual.hijosNodo.elementAt(reCols).setheuristica(calcularMax(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, limiteMax++, alfa, beta));
+                    nodoActual.rellenarNodoHijo(reCols, Conecta4.PLAYER1);
+                    nodoActual.hijosNodo.elementAt(reCols).setheuristica(calcularMin(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, limiteMax++, alfa, beta));
 
                     if (nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo > caminoMaximo) {
                         caminoMaximo = nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo;
@@ -135,7 +134,7 @@ public class IAPlayer extends Player {
             int caminoMinimo = Integer.MAX_VALUE;                   //Iniciamos al valor mas alto
             for (int reCols = 0; reCols < tablero.getColumnas(); reCols++) {       //recorrer columnas
                 if (hayFilas(reCols, nodoActual)) {
-                    nodoActual.rellenarNodoHijo(reCols, conecta, Conecta4.PLAYER2);
+                    nodoActual.rellenarNodoHijo(reCols, Conecta4.PLAYER2);
                     nodoActual.hijosNodo.elementAt(reCols).setheuristica(calcularMax(nodoActual.hijosNodo.elementAt(reCols), tablero, conecta, limiteMin++, alfa, beta));
 
                     if (nodoActual.hijosNodo.elementAt(reCols).valorHeuristicaNodo < caminoMinimo) {
@@ -201,7 +200,7 @@ public class IAPlayer extends Player {
      * @return Devuelve verdad si encuentra fila libre en una columna o falso si
      * no la encuentra
      */
-    private boolean hayFilas(int col, Nodo tablero) {
+    public boolean hayFilas(int col, Nodo tablero) {
         for (int fila = tablero.numFilas - 1; fila >= 0; fila--) {
             if (tablero.matrizNodo[fila][col] != Conecta4.PLAYER1 && tablero.matrizNodo[fila][col] != Conecta4.PLAYER2) {
                 return true;
@@ -235,7 +234,7 @@ public class IAPlayer extends Player {
      * @param tablero Nodo con la matriz
      * @return
      */
-    private int buscarFila(int col, Nodo tablero) {
+    public int buscarFila(int col, Nodo tablero) {
         int cont = 0;
         for (int fila = tablero.numFilas - 1; fila >= 0; fila--) {
             if (tablero.matrizNodo[fila][col] != 1 && tablero.matrizNodo[fila][col] != -1) {
@@ -423,23 +422,22 @@ public class IAPlayer extends Player {
          * @param orig Nodo original
          */
         private Nodo(Nodo orig) {
-            matrizNodo = copiarMatriz(matrizNodo, numFilas, ultimaCol);
+            matrizNodo = copiarMatriz(orig.matrizNodo, orig.numFilas, orig.numColumnas);
             numColumnas = orig.getColumnaNodo();
             numFilas = orig.getFilaNodo();
-
             ultimaCol = orig.ultimaCol;
             ultimaFila = orig.ultimaFila;
 
             valorHeuristicaNodo = orig.valorHeuristicaNodo;
 //            alfaNodo = orig.alfaNodo;
 //            betaNodo = orig.betaNodo;
-            int i = 0;
-            do {
-                if (orig.hijosNodo.size() != 0) {
-                    hijosNodo.add(orig.hijosNodo.get(i));
-                }
-                i++;
-            } while (orig.hijosNodo.get(i - 1) != orig.hijosNodo.lastElement());
+//            int i = 0;
+//            do {
+//                if (orig.hijosNodo.size() != 0 ) {
+//                    hijosNodo.add(orig.hijosNodo.get(i));
+//                }
+//                i++;
+//            } while (orig.hijosNodo.get(i - 1) != orig.hijosNodo.lastElement());
 
         }
 
@@ -495,11 +493,11 @@ public class IAPlayer extends Player {
          * @param jugador jugador que se añade
          * @return Devuelve true siempre
          */
-        public boolean rellenarNodo(int fila, int col, int conecta, int jugador) {
+        public boolean rellenarNodo(int col, int conecta, int jugador) {
+            int fila = buscarFila(col, this);
             this.matrizNodo[fila][col] = jugador;
-
 //            this.hijosNodo.add(this);      //No se está usando
-            valorHeuristicaNodo = heuristicaCalcular(this, conecta);
+//            valorHeuristicaNodo = heuristicaCalcular(this, conecta);
             this.ultimaCol = col;
 //            this.ultimaFila=fila;
 
@@ -517,19 +515,21 @@ public class IAPlayer extends Player {
 
         /**
          * Rellena el nodo hijo en la posición de la columna
-         *
          * @param col columna donde se realiza la jugada
          * @param conecta cantidad fichas seguidas a poner
          * @param jugador jugador que pone la ficha
          */
-        public void rellenarNodoHijo(int col, int conecta, int jugador) {
+        public void rellenarNodoHijo(int col, int jugador) {
             int fila = buscarFila(col, this);
-            int[][] aux = copiarMatriz(matrizNodo, this.numFilas, this.numColumnas);
-            Nodo auxNodo = new Nodo(this);
-            this.hijosNodo.add(auxNodo);
-            this.hijosNodo.elementAt(col).matrizNodo[fila][col] = jugador;
 
-            this.hijosNodo.elementAt(col).ultimaCol = col;
+//            this.hijosNodo.add(auxNodo);
+            this.hijosNodo.add(col, new Nodo (this));
+            
+            this.hijosNodo.get(col).matrizNodo[fila][col] = jugador;  // Aquí falla
+//            this.hijosNodo.get(col).matrizNodo[fila][col] = jugador;
+//            this.hijosNodo.get(col).rellenarNodo(col, conecta, jugador) ;
+
+            this.hijosNodo.get(col).ultimaCol = col;
 //            this.hijosNodo.elementAt(col).ultimaFila = fila;
             //this.hijosNodo.elementAt(col).valorHeuristicaNodo = heuristicaCalcular(this, conecta);  
 
