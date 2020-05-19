@@ -199,7 +199,32 @@ public class IAPlayer extends Player {
         int base = 10;    // base sobre la que elevar
 
         int sumaJugador = 0;
+        
 
+//        // Calcular Horizontal Izq
+//        for (int filaMirar = nodoActual.numFilas - 1; filaMirar >= 0; filaMirar--) {
+//            boolean calculoValido = true;
+//            int colMirar = 0;
+//
+//            for (; colMirar < colMirar - (conecta - 1); colMirar--) {
+//                int cantFichasHor = 0;
+//                if (colMirar + (conecta - 1) >= nodoActual.numColumnas && nodoActual.matrizNodo[filaMirar][colMirar] != 0) {   //ver si se puede avanzar
+//                    if (nodoActual.matrizNodo[filaMirar][colMirar] == jugador) {
+//                        cantFichasHor++;
+//                    } else if (nodoActual.matrizNodo[filaMirar][colMirar] != 0) {
+//                        calculoValido = false;
+//                    }
+//
+//                } else {
+//                    break;
+//                }
+//                if (calculoValido) {
+//                    sumaJugador += elevarPotencias(base, cantFichasHor);
+//                }
+//            }
+//
+//        }   // Fin Horizontal Izq
+        
         // Calcular Diagonal izquierda
         for (int filaMirar = nodoActual.numFilas - 1; filaMirar >= 0; filaMirar--) {
             for (int colMirar = 0; colMirar < nodoActual.numColumnas; colMirar++) {
@@ -277,7 +302,7 @@ public class IAPlayer extends Player {
             }
         }   // Fin Diagonal Derecha
 
-        // Calcular Horizontal
+        // Calcular Horizontal Der
         for (int filaMirar = nodoActual.numFilas - 1; filaMirar >= 0; filaMirar--) {
             boolean calculoValido = true;
             int colMirar = 0;
@@ -299,7 +324,7 @@ public class IAPlayer extends Player {
                 }
             }
 
-        }   // Fin Horizontal
+        }   // Fin Horizontal Der
 
         // Calcular Diagonal Derecha
         return sumaJugador;
